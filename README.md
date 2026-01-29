@@ -1,4 +1,4 @@
 # jacsaw.github.io
 
 # PRISM Mockup
-(CTC)[ctc-internal-tool.html]
+[CTC](ctc-internal-tool.html)
