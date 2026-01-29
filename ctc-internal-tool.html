@@ -1,0 +1,819 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CTC Policy Parameters - Internal Tool</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+            background: #f5f7fa;
+            padding: 40px 20px;
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+
+        .tabs {
+            display: flex;
+            gap: 5px;
+            margin-bottom: 30px;
+            background: white;
+            padding: 5px;
+            border-radius: 12px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+        }
+
+        .tab {
+            flex: 1;
+            padding: 12px 20px;
+            background: transparent;
+            border: none;
+            border-radius: 8px;
+            font-size: 14px;
+            font-weight: 600;
+            cursor: pointer;
+            color: #6b7280;
+            transition: all 0.3s;
+        }
+
+        .tab.active {
+            background: #1e3a8a;
+            color: white;
+        }
+
+        .tab:hover:not(.active) {
+            background: #f3f4f6;
+        }
+
+        .header {
+            background: #1e3a8a;
+            color: white;
+            padding: 30px;
+            border-radius: 12px;
+            margin-bottom: 30px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+
+        .header h1 {
+            font-size: 28px;
+            margin-bottom: 8px;
+        }
+
+        .header p {
+            opacity: 0.9;
+            font-size: 14px;
+        }
+
+        .section {
+            background: white;
+            padding: 30px;
+            border-radius: 12px;
+            margin-bottom: 30px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+        }
+
+        .section h2 {
+            color: #1e3a8a;
+            margin-bottom: 20px;
+            font-size: 20px;
+            padding-bottom: 10px;
+            border-bottom: 2px solid #e5e7eb;
+        }
+
+        .parameters-table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        .parameters-table thead tr {
+            background: #f9fafb;
+        }
+
+        .parameters-table th {
+            padding: 15px;
+            text-align: left;
+            font-weight: 600;
+            color: #374151;
+            font-size: 14px;
+            border-bottom: 2px solid #e5e7eb;
+        }
+
+        .parameters-table td {
+            padding: 15px;
+            border-bottom: 1px solid #e5e7eb;
+            font-size: 14px;
+        }
+
+        .parameters-table tr:hover {
+            background: #f9fafb;
+        }
+
+        .parameters-table tr.changed {
+            background: #fef3c7;
+        }
+
+        .parameters-table tr.changed:hover {
+            background: #fde68a;
+        }
+
+        .param-name {
+            font-weight: 500;
+            color: #1f2937;
+        }
+
+        .param-marker {
+            display: inline-block;
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            background: #fbbf24;
+            margin-right: 8px;
+        }
+
+        .current-value {
+            color: #6b7280;
+            font-weight: 500;
+        }
+
+        .input-cell {
+            position: relative;
+        }
+
+        .param-input {
+            width: 100%;
+            padding: 8px 12px;
+            border: 2px solid #e5e7eb;
+            border-radius: 6px;
+            font-size: 14px;
+            font-family: inherit;
+            transition: border-color 0.3s;
+        }
+
+        .param-input:focus {
+            outline: none;
+            border-color: #2563eb;
+        }
+
+        .param-input.changed {
+            border-color: #fbbf24;
+            background: #fffbeb;
+        }
+
+        .param-select {
+            width: 100%;
+            padding: 8px 12px;
+            border: 2px solid #e5e7eb;
+            border-radius: 6px;
+            font-size: 14px;
+            font-family: inherit;
+            cursor: pointer;
+            transition: border-color 0.3s;
+        }
+
+        .param-select:focus {
+            outline: none;
+            border-color: #2563eb;
+        }
+
+        .param-select.changed {
+            border-color: #fbbf24;
+            background: #fffbeb;
+        }
+
+        .actions-bar {
+            display: flex;
+            gap: 15px;
+            justify-content: flex-end;
+            margin-top: 20px;
+            padding-top: 20px;
+            border-top: 2px solid #e5e7eb;
+        }
+
+        .btn {
+            padding: 12px 24px;
+            border: none;
+            border-radius: 8px;
+            font-size: 14px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .btn-primary {
+            background: #2563eb;
+            color: white;
+        }
+
+        .btn-primary:hover {
+            background: #1d4ed8;
+        }
+
+        .btn-secondary {
+            background: white;
+            color: #6b7280;
+            border: 2px solid #e5e7eb;
+        }
+
+        .btn-secondary:hover {
+            background: #f9fafb;
+        }
+
+        .btn-reset {
+            background: #ef4444;
+            color: white;
+        }
+
+        .btn-reset:hover {
+            background: #dc2626;
+        }
+
+        .changes-summary {
+            background: #fef3c7;
+            padding: 20px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            border-left: 4px solid #fbbf24;
+        }
+
+        .changes-summary h3 {
+            color: #78350f;
+            margin-bottom: 10px;
+            font-size: 16px;
+        }
+
+        .changes-summary p {
+            color: #92400e;
+            font-size: 14px;
+        }
+
+        .changes-summary .count {
+            font-weight: 700;
+            color: #78350f;
+        }
+
+        .graph-container {
+            margin-top: 30px;
+        }
+
+        .filing-status-tabs {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 20px;
+        }
+
+        .filing-tab {
+            flex: 1;
+            padding: 12px;
+            background: #f3f4f6;
+            border: 2px solid #e5e7eb;
+            border-radius: 8px;
+            font-size: 14px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+            color: #6b7280;
+            text-align: center;
+        }
+
+        .filing-tab.active {
+            background: #2563eb;
+            color: white;
+            border-color: #2563eb;
+        }
+
+        .filing-tab:hover:not(.active) {
+            background: #e5e7eb;
+        }
+
+        svg {
+            width: 100%;
+            height: 400px;
+            overflow: visible;
+        }
+
+        .axis-label {
+            font-size: 14px;
+            fill: #6b7280;
+            font-weight: 500;
+        }
+
+        .axis-title {
+            font-size: 16px;
+            fill: #1f2937;
+            font-weight: 600;
+        }
+
+        .phase-in-zone {
+            fill: #dbeafe;
+            opacity: 0.5;
+        }
+
+        .max-credit-zone {
+            fill: #dcfce7;
+            opacity: 0.5;
+        }
+
+        .phase-out-zone {
+            fill: #fef3c7;
+            opacity: 0.5;
+        }
+
+        .credit-line {
+            stroke: #2563eb;
+            stroke-width: 3;
+            fill: none;
+        }
+
+        .credit-line-new {
+            stroke: #fbbf24;
+            stroke-width: 3;
+            fill: none;
+            stroke-dasharray: 5, 5;
+        }
+
+        .legend {
+            display: flex;
+            gap: 30px;
+            justify-content: center;
+            margin-top: 20px;
+            flex-wrap: wrap;
+        }
+
+        .legend-item {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .legend-line {
+            width: 40px;
+            height: 3px;
+            border-radius: 2px;
+        }
+
+        .legend-label {
+            font-size: 14px;
+            color: #4b5563;
+            font-weight: 500;
+        }
+
+        .hidden {
+            display: none;
+        }
+
+        .info-note {
+            background: #eff6ff;
+            padding: 15px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            border-left: 4px solid #3b82f6;
+            font-size: 14px;
+            color: #1e40af;
+            line-height: 1.5;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>Child Tax Credit Policy Parameters</h1>
+            <p>Internal tool for policy simulation and analysis</p>
+        </div>
+
+        <div class="tabs">
+            <button class="tab active" onclick="showTab('parameters')">Policy Parameters</button>
+            <button class="tab" onclick="showTab('structure')">Credit Structure</button>
+        </div>
+
+        <div id="parametersTab">
+            <div class="section">
+                <div class="info-note">
+                    <strong>Current Policy:</strong> FY 2026 baseline following the One Big Beautiful Bill Act (July 2025). 
+                    Modify parameters below to see how changes affect the credit structure.
+                </div>
+
+                <div id="changesSummary" class="changes-summary hidden">
+                    <h3>Unsaved Changes</h3>
+                    <p>You have modified <span class="count" id="changesCount">0</span> parameters. Review changes in the Credit Structure tab.</p>
+                </div>
+
+                <h2>Policy Parameters</h2>
+                
+                <table class="parameters-table">
+                    <thead>
+                        <tr>
+                            <th style="width: 40%;">Parameter</th>
+                            <th style="width: 25%;">Current Policy (FY 2026)</th>
+                            <th style="width: 35%;">Policy Simulation</th>
+                        </tr>
+                    </thead>
+                    <tbody id="parametersTableBody">
+                        <!-- Populated by JavaScript -->
+                    </tbody>
+                </table>
+
+                <div class="actions-bar">
+                    <button class="btn btn-reset" onclick="resetAll()">Reset All</button>
+                    <button class="btn btn-secondary" onclick="exportData()">Export Configuration</button>
+                    <button class="btn btn-primary" onclick="updateVisualization()">Update Visualization</button>
+                </div>
+            </div>
+        </div>
+
+        <div id="structureTab" class="hidden">
+            <div class="section">
+                <h2>Credit Structure Comparison</h2>
+                
+                <div class="filing-status-tabs">
+                    <button class="filing-tab active" onclick="showFilingStatus('single')">
+                        Single / Head of Household
+                    </button>
+                    <button class="filing-tab" onclick="showFilingStatus('married')">
+                        Married Filing Jointly
+                    </button>
+                </div>
+
+                <div class="graph-container">
+                    <svg id="creditGraph" viewBox="0 0 1000 400"></svg>
+                </div>
+
+                <div class="legend">
+                    <div class="legend-item">
+                        <div class="legend-line" style="background: #2563eb;"></div>
+                        <span class="legend-label">Current Policy</span>
+                    </div>
+                    <div class="legend-item">
+                        <div class="legend-line" style="background: #fbbf24; height: 3px; background-image: repeating-linear-gradient(90deg, #fbbf24, #fbbf24 5px, transparent 5px, transparent 10px);"></div>
+                        <span class="legend-label">Proposed Policy</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const parameters = [
+            { name: "Maximum Base Credit Value", current: "$2,200", key: "maxCredit", type: "currency" },
+            { name: "Minimum Base Credit Value Enabled", current: "No", key: "minCreditEnabled", type: "boolean" },
+            { name: "Minimum Base Credit Value", current: "N/A", key: "minCredit", type: "currency" },
+            { name: "Maximum Refundable Portion of the Credit", current: "$1,700", key: "maxRefundable", type: "currency" },
+            { name: "Include 17-Year-Olds?", current: "No", key: "include17", type: "boolean" },
+            { name: "Young Child Bonus Enabled", current: "No", key: "youngChildEnabled", type: "boolean" },
+            { name: "Young Child Bonus Age Range", current: "N/A", key: "youngChildAge", type: "text" },
+            { name: "Young Child Bonus Increment", current: "N/A", key: "youngChildIncrement", type: "text" },
+            { name: "Young Child Bonus Value ($)", current: "N/A", key: "youngChildValue", type: "currency" },
+            { name: "Young Child Bonus Value (%)", current: "N/A", key: "youngChildPercent", type: "percentage" },
+            { name: "Infant Bonus Enabled", current: "No", key: "infantEnabled", type: "boolean" },
+            { name: "Infant Bonus Value", current: "N/A", key: "infantValue", type: "currency" },
+            { name: "Minimum Earnings Requirement", current: "$2,500", key: "minEarnings", type: "currency" },
+            { name: "Phase-In Rate", current: "15%", key: "phaseInRate", type: "percentage" },
+            { name: "Phase-In Method", current: "Per Family", key: "phaseInMethod", type: "select", options: ["Per Family", "Per Child"] },
+            { name: "Phase-out Income Threshold (Single Head of Household)", current: "$200,000", key: "phaseOutSingle", type: "currency" },
+            { name: "Phase-out Income Threshold (Married Filing Jointly)", current: "$400,000", key: "phaseOutMarried", type: "currency" },
+            { name: "Phase-Out Rate", current: "5%", key: "phaseOutRate", type: "percentage" }
+        ];
+
+        let policyValues = {};
+        let currentFilingStatus = 'single';
+
+        function initializeParameters() {
+            const tbody = document.getElementById('parametersTableBody');
+            tbody.innerHTML = '';
+
+            parameters.forEach(param => {
+                const tr = document.createElement('tr');
+                tr.id = `row-${param.key}`;
+                
+                let inputHTML = '';
+                if (param.type === 'boolean') {
+                    inputHTML = `
+                        <select class="param-select" id="input-${param.key}" onchange="handleChange('${param.key}')">
+                            <option value="${param.current}">${param.current}</option>
+                            <option value="${param.current === 'Yes' ? 'No' : 'Yes'}">${param.current === 'Yes' ? 'No' : 'Yes'}</option>
+                        </select>
+                    `;
+                } else if (param.type === 'select') {
+                    inputHTML = `
+                        <select class="param-select" id="input-${param.key}" onchange="handleChange('${param.key}')">
+                            ${param.options.map(opt => `<option value="${opt}">${opt}</option>`).join('')}
+                        </select>
+                    `;
+                } else {
+                    inputHTML = `
+                        <input type="text" 
+                               class="param-input" 
+                               id="input-${param.key}" 
+                               placeholder="${param.current}"
+                               value="${param.current}"
+                               onchange="handleChange('${param.key}')"
+                        />
+                    `;
+                }
+
+                tr.innerHTML = `
+                    <td><span class="param-name">${param.name}</span></td>
+                    <td><span class="current-value">${param.current}</span></td>
+                    <td class="input-cell">${inputHTML}</td>
+                `;
+                
+                tbody.appendChild(tr);
+                policyValues[param.key] = param.current;
+            });
+        }
+
+        function handleChange(key) {
+            const input = document.getElementById(`input-${key}`);
+            const row = document.getElementById(`row-${key}`);
+            const param = parameters.find(p => p.key === key);
+            
+            const newValue = input.value;
+            policyValues[key] = newValue;
+            
+            if (newValue !== param.current && newValue !== '') {
+                row.classList.add('changed');
+                input.classList.add('changed');
+            } else {
+                row.classList.remove('changed');
+                input.classList.remove('changed');
+            }
+            
+            updateChangesSummary();
+        }
+
+        function updateChangesSummary() {
+            const changedCount = parameters.filter(p => {
+                const value = policyValues[p.key];
+                return value !== p.current && value !== '';
+            }).length;
+            
+            const summary = document.getElementById('changesSummary');
+            const countSpan = document.getElementById('changesCount');
+            
+            if (changedCount > 0) {
+                summary.classList.remove('hidden');
+                countSpan.textContent = changedCount;
+            } else {
+                summary.classList.add('hidden');
+            }
+        }
+
+        function resetAll() {
+            if (confirm('Reset all parameters to current policy values?')) {
+                parameters.forEach(param => {
+                    const input = document.getElementById(`input-${param.key}`);
+                    const row = document.getElementById(`row-${param.key}`);
+                    input.value = param.current;
+                    policyValues[param.key] = param.current;
+                    row.classList.remove('changed');
+                    input.classList.remove('changed');
+                });
+                updateChangesSummary();
+                updateVisualization();
+            }
+        }
+
+        function exportData() {
+            const config = {
+                currentPolicy: {},
+                proposedPolicy: {},
+                changes: []
+            };
+            
+            parameters.forEach(param => {
+                config.currentPolicy[param.key] = param.current;
+                config.proposedPolicy[param.key] = policyValues[param.key];
+                
+                if (policyValues[param.key] !== param.current && policyValues[param.key] !== '') {
+                    config.changes.push({
+                        parameter: param.name,
+                        from: param.current,
+                        to: policyValues[param.key]
+                    });
+                }
+            });
+            
+            const blob = new Blob([JSON.stringify(config, null, 2)], { type: 'application/json' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = `ctc-policy-config-${new Date().toISOString().split('T')[0]}.json`;
+            a.click();
+        }
+
+        function showTab(tab) {
+            document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+            event.target.classList.add('active');
+            
+            if (tab === 'parameters') {
+                document.getElementById('parametersTab').classList.remove('hidden');
+                document.getElementById('structureTab').classList.add('hidden');
+            } else {
+                document.getElementById('parametersTab').classList.add('hidden');
+                document.getElementById('structureTab').classList.remove('hidden');
+                updateVisualization();
+            }
+        }
+
+        function updateVisualization() {
+            drawGraph(currentFilingStatus);
+        }
+
+        function showFilingStatus(status) {
+            currentFilingStatus = status;
+            document.querySelectorAll('.filing-tab').forEach(btn => btn.classList.remove('active'));
+            event.target.classList.add('active');
+            drawGraph(status);
+        }
+
+        function parseValue(value) {
+            if (value === 'N/A' || value === '') return null;
+            const cleaned = value.replace(/[$,%]/g, '').replace(/,/g, '');
+            return parseFloat(cleaned);
+        }
+
+        function calculateCredit(income, status, isProposed = false) {
+            const maxCredit = parseValue(isProposed ? policyValues.maxCredit : parameters.find(p => p.key === 'maxCredit').current);
+            const phaseInRate = parseValue(isProposed ? policyValues.phaseInRate : parameters.find(p => p.key === 'phaseInRate').current) / 100;
+            const minEarnings = parseValue(isProposed ? policyValues.minEarnings : parameters.find(p => p.key === 'minEarnings').current);
+            const phaseOutRate = parseValue(isProposed ? policyValues.phaseOutRate : parameters.find(p => p.key === 'phaseOutRate').current) / 100;
+            
+            const phaseOutThreshold = parseValue(status === 'single' ? 
+                (isProposed ? policyValues.phaseOutSingle : parameters.find(p => p.key === 'phaseOutSingle').current) :
+                (isProposed ? policyValues.phaseOutMarried : parameters.find(p => p.key === 'phaseOutMarried').current)
+            );
+            
+            if (!maxCredit || !phaseInRate || !minEarnings || !phaseOutRate || !phaseOutThreshold) {
+                return calculateCredit(income, status, false); // Fallback to current
+            }
+            
+            if (income < minEarnings) return 0;
+            
+            const phaseInEnd = minEarnings + (maxCredit / phaseInRate);
+            
+            if (income < phaseInEnd) {
+                return (income - minEarnings) * phaseInRate;
+            }
+            
+            if (income < phaseOutThreshold) {
+                return maxCredit;
+            }
+            
+            const phaseOutEnd = phaseOutThreshold + (maxCredit / phaseOutRate);
+            
+            if (income < phaseOutEnd) {
+                const reduction = (income - phaseOutThreshold) * phaseOutRate;
+                return Math.max(0, maxCredit - reduction);
+            }
+            
+            return 0;
+        }
+
+        function formatCurrency(value) {
+            if (value >= 1000) {
+                return '$' + (value / 1000).toFixed(0) + 'K';
+            }
+            return '$' + value.toFixed(0);
+        }
+
+        function drawGraph(status) {
+            const svg = document.getElementById('creditGraph');
+            svg.innerHTML = '';
+            
+            const width = 1000;
+            const height = 400;
+            const margin = { top: 20, right: 40, bottom: 60, left: 80 };
+            const chartWidth = width - margin.left - margin.right;
+            const chartHeight = height - margin.top - margin.bottom;
+
+            const maxIncome = status === 'single' ? 260000 : 460000;
+            const maxCredit = Math.max(
+                parseValue(parameters.find(p => p.key === 'maxCredit').current) || 2200,
+                parseValue(policyValues.maxCredit) || 2200
+            );
+
+            const xScale = (income) => margin.left + (income / maxIncome) * chartWidth;
+            const yScale = (credit) => height - margin.bottom - (credit / maxCredit) * chartHeight;
+
+            const g = document.createElementNS('http://www.w3.org/2000/svg', 'g');
+
+            // Draw axes
+            const xAxis = document.createElementNS('http://www.w3.org/2000/svg', 'line');
+            xAxis.setAttribute('x1', margin.left);
+            xAxis.setAttribute('y1', height - margin.bottom);
+            xAxis.setAttribute('x2', width - margin.right);
+            xAxis.setAttribute('y2', height - margin.bottom);
+            xAxis.setAttribute('stroke', '#9ca3af');
+            xAxis.setAttribute('stroke-width', '2');
+            g.appendChild(xAxis);
+
+            const yAxis = document.createElementNS('http://www.w3.org/2000/svg', 'line');
+            yAxis.setAttribute('x1', margin.left);
+            yAxis.setAttribute('y1', margin.top);
+            yAxis.setAttribute('x2', margin.left);
+            yAxis.setAttribute('y2', height - margin.bottom);
+            yAxis.setAttribute('stroke', '#9ca3af');
+            yAxis.setAttribute('stroke-width', '2');
+            g.appendChild(yAxis);
+
+            // X-axis labels
+            const xLabels = [0, 50000, 100000, 150000, 200000, status === 'single' ? 200000 : 400000, maxIncome];
+            xLabels.forEach(income => {
+                const label = document.createElementNS('http://www.w3.org/2000/svg', 'text');
+                label.setAttribute('x', xScale(income));
+                label.setAttribute('y', height - margin.bottom + 25);
+                label.setAttribute('text-anchor', 'middle');
+                label.setAttribute('class', 'axis-label');
+                label.textContent = formatCurrency(income);
+                g.appendChild(label);
+
+                const tick = document.createElementNS('http://www.w3.org/2000/svg', 'line');
+                tick.setAttribute('x1', xScale(income));
+                tick.setAttribute('y1', height - margin.bottom);
+                tick.setAttribute('x2', xScale(income));
+                tick.setAttribute('y2', height - margin.bottom + 5);
+                tick.setAttribute('stroke', '#9ca3af');
+                tick.setAttribute('stroke-width', '2');
+                g.appendChild(tick);
+            });
+
+            // Y-axis labels
+            const yLabels = [0, 500, 1000, 1500, 2000, Math.ceil(maxCredit / 100) * 100];
+            yLabels.forEach(credit => {
+                const label = document.createElementNS('http://www.w3.org/2000/svg', 'text');
+                label.setAttribute('x', margin.left - 15);
+                label.setAttribute('y', yScale(credit) + 5);
+                label.setAttribute('text-anchor', 'end');
+                label.setAttribute('class', 'axis-label');
+                label.textContent = formatCurrency(credit);
+                g.appendChild(label);
+
+                const tick = document.createElementNS('http://www.w3.org/2000/svg', 'line');
+                tick.setAttribute('x1', margin.left - 5);
+                tick.setAttribute('y1', yScale(credit));
+                tick.setAttribute('x2', margin.left);
+                tick.setAttribute('y2', yScale(credit));
+                tick.setAttribute('stroke', '#9ca3af');
+                tick.setAttribute('stroke-width', '2');
+                g.appendChild(tick);
+            });
+
+            // Axis titles
+            const xAxisTitle = document.createElementNS('http://www.w3.org/2000/svg', 'text');
+            xAxisTitle.setAttribute('x', width / 2);
+            xAxisTitle.setAttribute('y', height - 10);
+            xAxisTitle.setAttribute('text-anchor', 'middle');
+            xAxisTitle.setAttribute('class', 'axis-title');
+            xAxisTitle.textContent = 'Family Income';
+            g.appendChild(xAxisTitle);
+
+            const yAxisTitle = document.createElementNS('http://www.w3.org/2000/svg', 'text');
+            yAxisTitle.setAttribute('x', -height / 2);
+            yAxisTitle.setAttribute('y', 20);
+            yAxisTitle.setAttribute('text-anchor', 'middle');
+            yAxisTitle.setAttribute('transform', `rotate(-90, 20, ${height / 2})`);
+            yAxisTitle.setAttribute('class', 'axis-title');
+            yAxisTitle.textContent = 'Credit Amount per Child';
+            g.appendChild(yAxisTitle);
+
+            // Draw current policy line
+            const currentPoints = [];
+            for (let income = 0; income <= maxIncome; income += 1000) {
+                const credit = calculateCredit(income, status, false);
+                currentPoints.push(`${xScale(income)},${yScale(credit)}`);
+            }
+
+            const currentLine = document.createElementNS('http://www.w3.org/2000/svg', 'polyline');
+            currentLine.setAttribute('points', currentPoints.join(' '));
+            currentLine.setAttribute('class', 'credit-line');
+            g.appendChild(currentLine);
+
+            // Draw proposed policy line
+            const proposedPoints = [];
+            for (let income = 0; income <= maxIncome; income += 1000) {
+                const credit = calculateCredit(income, status, true);
+                proposedPoints.push(`${xScale(income)},${yScale(credit)}`);
+            }
+
+            const proposedLine = document.createElementNS('http://www.w3.org/2000/svg', 'polyline');
+            proposedLine.setAttribute('points', proposedPoints.join(' '));
+            proposedLine.setAttribute('class', 'credit-line-new');
+            g.appendChild(proposedLine);
+
+            svg.appendChild(g);
+        }
+
+        // Initialize on page load
+        initializeParameters();
+        drawGraph('single');
+    </script>
+</body>
+</html>
