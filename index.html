@@ -3,38 +3,45 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Simple GitHub Pages Site</title>
+  <title>GitHub Pages · Personal Site</title>
+  <meta name="description" content="A simple personal landing page with projects, writing, and contact—plus light/dark mode." />
   <style>
     /* ---- Theme tokens (default: light) ---- */
     :root{
       --bg: #f7f8fb;
       --surface: #ffffff;
+      --surface-2: rgba(255,255,255,0.72);
       --text: #0f172a;
       --muted: #475569;
       --border: rgba(15, 23, 42, 0.12);
       --shadow: 0 12px 30px rgba(2, 6, 23, 0.10);
+      --shadow-soft: 0 10px 20px rgba(2,6,23,0.07);
       --accent: #2563eb;
       --accent-2: #16a34a;
       --ring: rgba(37, 99, 235, 0.25);
       --hero: radial-gradient(900px 360px at 20% 0%, rgba(37,99,235,0.18), transparent 60%),
               radial-gradient(700px 320px at 90% 10%, rgba(22,163,74,0.14), transparent 55%);
       --code: rgba(2, 6, 23, 0.06);
+      --chip: rgba(2,6,23,0.06);
     }
 
     /* ---- Dark mode overrides ---- */
     [data-theme="dark"]{
       --bg: #070a12;
       --surface: rgba(255, 255, 255, 0.06);
+      --surface-2: rgba(255, 255, 255, 0.04);
       --text: #e5e7eb;
       --muted: rgba(229, 231, 235, 0.72);
       --border: rgba(229, 231, 235, 0.18);
       --shadow: 0 16px 40px rgba(0, 0, 0, 0.45);
+      --shadow-soft: 0 14px 30px rgba(0,0,0,0.35);
       --accent: #60a5fa;
       --accent-2: #34d399;
       --ring: rgba(96, 165, 250, 0.28);
       --hero: radial-gradient(900px 360px at 20% 0%, rgba(96,165,250,0.22), transparent 60%),
               radial-gradient(700px 320px at 90% 10%, rgba(52,211,153,0.16), transparent 55%);
       --code: rgba(255, 255, 255, 0.08);
+      --chip: rgba(255,255,255,0.09);
     }
 
     /* ---- Base ---- */
@@ -57,9 +64,9 @@
 
     /* ---- Layout ---- */
     .wrap{
-      max-width: 980px;
+      max-width: 1040px;
       margin: 0 auto;
-      padding: 24px 20px 80px;
+      padding: 24px 20px 90px;
     }
 
     header{
@@ -72,7 +79,7 @@
     }
 
     .nav{
-      max-width: 980px;
+      max-width: 1040px;
       margin: 0 auto;
       padding: 14px 20px;
       display: flex;
@@ -85,8 +92,9 @@
       display: flex;
       align-items: center;
       gap: 10px;
-      font-weight: 650;
+      font-weight: 700;
       letter-spacing: -0.01em;
+      white-space: nowrap;
     }
 
     .dot{
@@ -120,7 +128,7 @@
       transform: translateY(-1px);
       border-color: color-mix(in srgb, var(--accent) 35%, var(--border));
     }
-    .pill small{ color: var(--muted); font-weight: 600; }
+    .pill small{ color: var(--muted); font-weight: 700; font-size: 11px; }
 
     .toggle{
       display: inline-flex;
@@ -144,7 +152,7 @@
       display: inline-block;
     }
     .toggle span{
-      font-weight: 650;
+      font-weight: 750;
       letter-spacing: -0.01em;
       color: var(--muted);
       font-size: 13px;
@@ -155,28 +163,94 @@
       margin-top: 18px;
       background: var(--hero);
       border: 1px solid var(--border);
-      border-radius: 20px;
-      padding: 28px;
+      border-radius: 22px;
+      padding: 26px;
       box-shadow: var(--shadow);
       overflow: hidden;
     }
+
+    .hero-grid{
+      display: grid;
+      grid-template-columns: 1.2fr 0.8fr;
+      gap: 18px;
+      align-items: center;
+    }
+
     .hero h1{
       margin: 0 0 10px;
-      font-size: clamp(24px, 3vw, 34px);
-      letter-spacing: -0.03em;
-      line-height: 1.15;
+      font-size: clamp(26px, 3.2vw, 38px);
+      letter-spacing: -0.04em;
+      line-height: 1.08;
     }
     .hero p{
-      margin: 0 0 18px;
+      margin: 0 0 14px;
       color: var(--muted);
-      max-width: 62ch;
+      max-width: 64ch;
+    }
+
+    .chips{
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin-top: 12px;
+    }
+    .chip{
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 8px 10px;
+      border-radius: 999px;
+      border: 1px solid var(--border);
+      background: var(--chip);
+      color: var(--muted);
+      font-size: 13px;
+      font-weight: 650;
+    }
+    .chip-dot{
+      width: 7px; height: 7px; border-radius: 50%;
+      background: linear-gradient(135deg, var(--accent), var(--accent-2));
+    }
+
+    .hero-card{
+      border: 1px solid var(--border);
+      background: color-mix(in srgb, var(--surface-2) 90%, transparent);
+      border-radius: 18px;
+      padding: 16px;
+      box-shadow: var(--shadow-soft);
+      display: grid;
+      gap: 12px;
+    }
+
+    .avatar-row{
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+    .avatar{
+      width: 62px;
+      height: 62px;
+      border-radius: 16px;
+      border: 1px solid var(--border);
+      object-fit: cover;
+      box-shadow: 0 10px 20px rgba(2,6,23,0.12);
+      background: #ddd;
+    }
+    .who h2{
+      margin: 0;
+      font-size: 16px;
+      letter-spacing: -0.02em;
+    }
+    .who p{
+      margin: 2px 0 0;
+      font-size: 13px;
+      color: var(--muted);
     }
 
     .cta-row{
       display: flex;
       flex-wrap: wrap;
       gap: 10px;
-      margin-top: 10px;
+      margin-top: 4px;
     }
     .btn{
       display: inline-flex;
@@ -188,7 +262,7 @@
       background: color-mix(in srgb, var(--surface) 92%, transparent);
       box-shadow: 0 10px 22px rgba(2,6,23,0.06);
       transition: transform .15s ease, border-color .15s ease;
-      font-weight: 650;
+      font-weight: 750;
     }
     .btn.primary{
       border-color: color-mix(in srgb, var(--accent) 45%, var(--border));
@@ -198,19 +272,35 @@
       );
       color: #0b1020;
     }
-    [data-theme="dark"] .btn.primary{
-      color: #06101b;
-    }
+    [data-theme="dark"] .btn.primary{ color: #06101b; }
     .btn:hover{
       transform: translateY(-1px);
       border-color: color-mix(in srgb, var(--accent) 40%, var(--border));
+    }
+
+    .mini-links{
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      color: var(--muted);
+      font-size: 13px;
+      font-weight: 650;
+    }
+    .mini-links a{
+      text-decoration: underline;
+      text-decoration-color: color-mix(in srgb, var(--muted) 45%, transparent);
+      text-underline-offset: 3px;
+    }
+    .mini-links a:hover{
+      color: var(--text);
+      text-decoration-color: color-mix(in srgb, var(--accent) 65%, transparent);
     }
 
     /* ---- Sections ---- */
     section{
       margin-top: 22px;
       border: 1px solid var(--border);
-      border-radius: 20px;
+      border-radius: 22px;
       background: color-mix(in srgb, var(--surface) 90%, transparent);
       box-shadow: 0 10px 24px rgba(2,6,23,0.05);
       overflow: hidden;
@@ -224,7 +314,7 @@
       display: inline-flex;
       align-items: center;
       gap: 10px;
-      font-weight: 700;
+      font-weight: 800;
       letter-spacing: -0.01em;
     }
     .badge{
@@ -235,7 +325,7 @@
       color: var(--muted);
       background: color-mix(in srgb, var(--surface) 92%, transparent);
     }
-    .section-inner p{ margin: 0; color: var(--muted); max-width: 70ch; }
+    .section-inner p{ margin: 0; color: var(--muted); max-width: 74ch; }
 
     .grid{
       margin-top: 10px;
@@ -246,7 +336,7 @@
     .card{
       grid-column: span 6;
       border: 1px solid var(--border);
-      border-radius: 16px;
+      border-radius: 18px;
       padding: 14px;
       background: color-mix(in srgb, var(--surface) 92%, transparent);
     }
@@ -260,11 +350,69 @@
       color: var(--muted);
       font-size: 14px;
     }
-    @media (max-width: 720px){
-      .card{ grid-column: span 12; }
-      .nav{ gap: 10px; }
-      .nav-links{ justify-content: flex-start; }
+
+    .list{
+      margin: 0;
+      padding-left: 18px;
+      color: var(--muted);
     }
+    .list li{ margin: 6px 0; }
+
+    .post{
+      grid-column: span 12;
+      display: grid;
+      gap: 10px;
+      padding: 16px;
+      border-radius: 18px;
+      border: 1px solid var(--border);
+      background: color-mix(in srgb, var(--surface) 92%, transparent);
+    }
+    .post-top{
+      display: flex;
+      align-items: baseline;
+      justify-content: space-between;
+      gap: 10px;
+      flex-wrap: wrap;
+    }
+    .post-title{
+      font-weight: 850;
+      letter-spacing: -0.01em;
+    }
+    .post-date{
+      font-size: 13px;
+      color: var(--muted);
+      font-weight: 650;
+    }
+    .post a{
+      color: var(--accent);
+      text-decoration: underline;
+      text-underline-offset: 3px;
+      text-decoration-color: color-mix(in srgb, var(--accent) 35%, transparent);
+    }
+    .post a:hover{
+      text-decoration-color: color-mix(in srgb, var(--accent) 80%, transparent);
+    }
+
+    .contact-row{
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 12px;
+      margin-top: 10px;
+    }
+    .contact-row .card{ grid-column: span 1; }
+
+    .copy{
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      font-weight: 750;
+      border: 1px solid var(--border);
+      background: color-mix(in srgb, var(--surface) 92%, transparent);
+      border-radius: 14px;
+      padding: 10px 12px;
+      cursor: pointer;
+    }
+    .copy:hover{ border-color: color-mix(in srgb, var(--accent) 40%, var(--border)); }
 
     /* ---- Footer ---- */
     footer{
@@ -275,6 +423,18 @@
       justify-content: space-between;
       gap: 10px;
       flex-wrap: wrap;
+      padding: 0 2px;
+    }
+
+    @media (max-width: 860px){
+      .hero-grid{ grid-template-columns: 1fr; }
+    }
+    @media (max-width: 720px){
+      .card{ grid-column: span 12; }
+      .contact-row{ grid-template-columns: 1fr; }
+      .contact-row .card{ grid-column: span 1; }
+      .nav{ gap: 10px; }
+      .nav-links{ justify-content: flex-start; }
     }
 
     /* ---- Reduce motion ---- */
@@ -290,7 +450,7 @@
     <div class="nav">
       <div class="brand" aria-label="Site title">
         <span class="dot" aria-hidden="true"></span>
-        <span>My GitHub Pages Site</span>
+        <span>Your Name</span>
       </div>
 
       <nav class="nav-links" aria-label="Top navigation">
@@ -308,109 +468,229 @@
   </header>
 
   <main class="wrap">
+    <!-- HERO -->
     <div class="hero">
-      <h1>Clean, basic site you can publish with GitHub Pages.</h1>
-      <p>
-        Three top links jump to Section 1, 2, and 3. Use the sun/moon toggle to switch
-        between light and dark mode. Your preference is saved.
-      </p>
+      <div class="hero-grid">
+        <div>
+          <h1>Hi — I’m <span style="color: var(--accent);">Your Name</span>.</h1>
+          <p>
+            I build practical, human-friendly tools. This is a simple GitHub Pages site you can customize
+            with projects, writing, and ways to get in touch.
+          </p>
 
-      <div class="cta-row">
-        <a class="btn primary" href="#section-1">
-          Jump to Section 1
-          <span aria-hidden="true">→</span>
-        </a>
-        <a class="btn" href="#section-2">Go to Section 2</a>
-        <a class="btn" href="#section-3">Go to Section 3</a>
+          <div class="cta-row">
+            <a class="btn primary" href="#section-2">See Projects <span aria-hidden="true">→</span></a>
+            <a class="btn" href="#section-1">About</a>
+            <a class="btn" href="#section-3">Contact</a>
+          </div>
+
+          <div class="chips" aria-label="Topics">
+            <span class="chip"><span class="chip-dot" aria-hidden="true"></span> Product</span>
+            <span class="chip"><span class="chip-dot" aria-hidden="true"></span> Data</span>
+            <span class="chip"><span class="chip-dot" aria-hidden="true"></span> Civic Tech</span>
+            <span class="chip"><span class="chip-dot" aria-hidden="true"></span> Writing</span>
+          </div>
+        </div>
+
+        <aside class="hero-card" aria-label="Profile card">
+          <div class="avatar-row">
+            <img
+              class="avatar"
+              alt="Placeholder profile image"
+              src="https://picsum.photos/seed/profile/160"
+              width="62"
+              height="62"
+              loading="lazy"
+            />
+            <div class="who">
+              <h2>Your Name</h2>
+              <p>Short one-liner: what you do / care about.</p>
+            </div>
+          </div>
+
+          <div class="mini-links" aria-label="Quick links">
+            <a href="#" title="GitHub">GitHub</a>
+            <a href="#" title="LinkedIn">LinkedIn</a>
+            <a href="#" title="Email">Email</a>
+            <a href="#" title="CV">CV</a>
+          </div>
+
+          <div style="display:grid; gap:10px;">
+            <div style="font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, 'Liberation Mono', 'Courier New', monospace;
+                        background: var(--code); border: 1px solid var(--border); padding: 10px; border-radius: 14px; color: var(--muted); font-size: 13px;">
+              Tip: edit this file and push to <strong>main</strong> to update your site.
+            </div>
+          </div>
+        </aside>
       </div>
     </div>
 
+    <!-- SECTION 1: About -->
     <section id="section-1" aria-label="Section 1">
       <div class="section-inner">
         <div class="kicker">
           <span class="badge">Section 1</span>
-          <span>Overview</span>
+          <span>About</span>
         </div>
         <p>
-          Use this section for a short intro. Keep it readable, add a few cards, and link out as needed.
+          Write a short, friendly bio here. Keep it specific: what you build, who you build for, and what you’re focused on right now.
         </p>
 
         <div class="grid">
           <div class="card">
-            <h3>Card A</h3>
-            <p>Add a brief detail, a callout, or a quick note about what’s here.</p>
+            <h3>What I do</h3>
+            <p>
+              A concise description of your work. Example: product + data work, translating complex problems into usable tools.
+            </p>
           </div>
           <div class="card">
-            <h3>Card B</h3>
-            <p>This layout stays simple and clean on desktop and mobile.</p>
+            <h3>What I care about</h3>
+            <p>
+              A sentence or two on your themes: equity, usability, impact, durability, public interest tech, or whatever fits.
+            </p>
+          </div>
+          <div class="card">
+            <h3>Now</h3>
+            <p>
+              What you’re doing this season: a project, a research focus, a teaching role, a studio practice, etc.
+            </p>
+          </div>
+          <div class="card">
+            <h3>Toolbox</h3>
+            <p>
+              <span class="badge" style="margin-right:6px;">Python</span>
+              <span class="badge" style="margin-right:6px;">SQL</span>
+              <span class="badge" style="margin-right:6px;">Design</span>
+              <span class="badge">Policy</span>
+            </p>
           </div>
         </div>
       </div>
     </section>
 
+    <!-- SECTION 2: Projects -->
     <section id="section-2" aria-label="Section 2">
       <div class="section-inner">
         <div class="kicker">
           <span class="badge">Section 2</span>
-          <span>Details</span>
+          <span>Projects</span>
         </div>
         <p>
-          Put the main content here: notes, project info, documentation links, or anything you want people to read.
+          Add a few featured projects with short descriptions and links. Keep it scannable.
         </p>
 
         <div class="grid">
           <div class="card">
-            <h3>Quick list</h3>
+            <h3>Project One</h3>
             <p>
-              • Item one<br/>
-              • Item two<br/>
-              • Item three
+              One sentence on what it is and why it matters. <a href="#">Read more</a>
             </p>
           </div>
           <div class="card">
-            <h3>Code-style block</h3>
-            <p style="font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, 'Liberation Mono', 'Courier New', monospace;
-                      background: var(--code); border: 1px solid var(--border); padding: 10px; border-radius: 12px;">
-              /docs<br/>
-              /posts<br/>
-              /projects
+            <h3>Project Two</h3>
+            <p>
+              One sentence on what you built and for whom. <a href="#">Read more</a>
             </p>
           </div>
+          <div class="card">
+            <h3>Project Three</h3>
+            <p>
+              A short description and a link to a demo or repo. <a href="#">View repo</a>
+            </p>
+          </div>
+          <div class="card">
+            <h3>Speaking / Teaching</h3>
+            <p>
+              Add talks, workshops, or courses here. <a href="#">See notes</a>
+            </p>
+          </div>
+        </div>
+
+        <div class="card" style="margin-top:12px;">
+          <h3>Projects I’m exploring</h3>
+          <ul class="list">
+            <li>Idea or experiment (one line).</li>
+            <li>Small tool, dataset, or prototype (one line).</li>
+            <li>Collaboration or community work (one line).</li>
+          </ul>
         </div>
       </div>
     </section>
 
+    <!-- SECTION 3: Writing + Contact -->
     <section id="section-3" aria-label="Section 3">
       <div class="section-inner">
         <div class="kicker">
           <span class="badge">Section 3</span>
-          <span>Contact / Next steps</span>
+          <span>Writing & Contact</span>
         </div>
         <p>
-          Add a simple contact line, a link to your GitHub, or a short “what’s next” plan.
+          A simple “recent posts” area plus contact options. Replace the placeholders with real links.
         </p>
 
-        <div class="grid">
+        <div class="grid" aria-label="Recent writing">
+          <article class="post">
+            <div class="post-top">
+              <div class="post-title">Post title one: a short, specific headline</div>
+              <div class="post-date">Jan 2026</div>
+            </div>
+            <div style="color: var(--muted);">
+              Two lines of context about what this post covers. <a href="#">Read</a>
+            </div>
+          </article>
+
+          <article class="post">
+            <div class="post-top">
+              <div class="post-title">Post title two: what I learned building X</div>
+              <div class="post-date">Dec 2025</div>
+            </div>
+            <div style="color: var(--muted);">
+              One or two sentences that make it easy to decide if it’s worth clicking. <a href="#">Read</a>
+            </div>
+          </article>
+
+          <article class="post">
+            <div class="post-top">
+              <div class="post-title">Post title three: notes on tools, care, and maintenance</div>
+              <div class="post-date">Nov 2025</div>
+            </div>
+            <div style="color: var(--muted);">
+              A short teaser. <a href="#">Read</a>
+            </div>
+          </article>
+        </div>
+
+        <div class="contact-row" aria-label="Contact">
           <div class="card">
-            <h3>Link out</h3>
+            <h3>Say hello</h3>
             <p>
-              Replace these with your real links:<br/>
-              <a href="#" style="color: var(--accent); text-decoration: underline;">GitHub</a> ·
-              <a href="#" style="color: var(--accent); text-decoration: underline;">Notes</a> ·
-              <a href="#" style="color: var(--accent); text-decoration: underline;">Email</a>
+              Email: <a id="emailLink" href="mailto:hello@example.com">hello@example.com</a><br/>
+              Location: Your city (optional)
+            </p>
+            <div style="margin-top:10px;">
+              <button class="copy" id="copyEmail" type="button" aria-label="Copy email to clipboard">
+                Copy email
+              </button>
+              <span id="copyStatus" style="margin-left:10px; color: var(--muted); font-weight:650;"></span>
+            </div>
+          </div>
+
+          <div class="card">
+            <h3>Elsewhere</h3>
+            <p>
+              <a href="#" style="color: var(--accent); text-decoration: underline; text-underline-offset: 3px;">GitHub</a><br/>
+              <a href="#" style="color: var(--accent); text-decoration: underline; text-underline-offset: 3px;">LinkedIn</a><br/>
+              <a href="#" style="color: var(--accent); text-decoration: underline; text-underline-offset: 3px;">Newsletter</a>
             </p>
           </div>
-          <div class="card">
-            <h3>Small note</h3>
-            <p>This page is a single HTML file—easy to fork, edit, and publish.</p>
-          </div>
         </div>
+
       </div>
     </section>
 
     <footer>
       <span>© <span id="year"></span> Your Name</span>
-      <span>Built for GitHub Pages · Light/Dark mode included</span>
+      <span>Built with one HTML file · Light/Dark mode + saved preference</span>
     </footer>
   </main>
 
@@ -458,6 +738,22 @@
 
     // Footer year
     document.getElementById("year").textContent = new Date().getFullYear();
+
+    // Copy email button
+    const email = "hello@example.com";
+    const copyBtn = document.getElementById("copyEmail");
+    const statusEl = document.getElementById("copyStatus");
+
+    copyBtn.addEventListener("click", async () => {
+      try {
+        await navigator.clipboard.writeText(email);
+        statusEl.textContent = "Copied!";
+        setTimeout(() => statusEl.textContent = "", 1400);
+      } catch (e) {
+        statusEl.textContent = "Copy failed (browser blocked).";
+        setTimeout(() => statusEl.textContent = "", 2000);
+      }
+    });
   </script>
 </body>
 </html>
