@@ -414,6 +414,26 @@
     }
     .copy:hover{ border-color: color-mix(in srgb, var(--accent) 40%, var(--border)); }
 
+    a {
+      color: var(--accent);
+      text-decoration: underline;
+      text-decoration-color: color-mix(in srgb, var(--accent) 35%, transparent);
+      text-underline-offset: 3px;
+      transition: color 0.15s ease, text-decoration-color 0.15s ease;
+    }
+    
+    a:hover {
+      color: color-mix(in srgb, var(--accent) 85%, var(--text));
+      text-decoration-color: color-mix(in srgb, var(--accent) 85%, transparent);
+    }
+    
+    a:focus-visible {
+      outline: none;
+      box-shadow: 0 0 0 4px var(--ring);
+      border-radius: 6px;
+    }
+
+
     /* ---- Footer ---- */
     footer{
       margin-top: 26px;
