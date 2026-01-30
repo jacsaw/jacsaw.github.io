@@ -1,0 +1,463 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Simple GitHub Pages Site</title>
+  <style>
+    /* ---- Theme tokens (default: light) ---- */
+    :root{
+      --bg: #f7f8fb;
+      --surface: #ffffff;
+      --text: #0f172a;
+      --muted: #475569;
+      --border: rgba(15, 23, 42, 0.12);
+      --shadow: 0 12px 30px rgba(2, 6, 23, 0.10);
+      --accent: #2563eb;
+      --accent-2: #16a34a;
+      --ring: rgba(37, 99, 235, 0.25);
+      --hero: radial-gradient(900px 360px at 20% 0%, rgba(37,99,235,0.18), transparent 60%),
+              radial-gradient(700px 320px at 90% 10%, rgba(22,163,74,0.14), transparent 55%);
+      --code: rgba(2, 6, 23, 0.06);
+    }
+
+    /* ---- Dark mode overrides ---- */
+    [data-theme="dark"]{
+      --bg: #070a12;
+      --surface: rgba(255, 255, 255, 0.06);
+      --text: #e5e7eb;
+      --muted: rgba(229, 231, 235, 0.72);
+      --border: rgba(229, 231, 235, 0.18);
+      --shadow: 0 16px 40px rgba(0, 0, 0, 0.45);
+      --accent: #60a5fa;
+      --accent-2: #34d399;
+      --ring: rgba(96, 165, 250, 0.28);
+      --hero: radial-gradient(900px 360px at 20% 0%, rgba(96,165,250,0.22), transparent 60%),
+              radial-gradient(700px 320px at 90% 10%, rgba(52,211,153,0.16), transparent 55%);
+      --code: rgba(255, 255, 255, 0.08);
+    }
+
+    /* ---- Base ---- */
+    *{ box-sizing: border-box; }
+    html{ scroll-behavior: smooth; }
+    body{
+      margin: 0;
+      font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, "Apple Color Emoji","Segoe UI Emoji";
+      background: var(--bg);
+      color: var(--text);
+      line-height: 1.5;
+    }
+
+    a{ color: inherit; text-decoration: none; }
+    a:focus-visible, button:focus-visible{
+      outline: none;
+      box-shadow: 0 0 0 4px var(--ring);
+      border-radius: 12px;
+    }
+
+    /* ---- Layout ---- */
+    .wrap{
+      max-width: 980px;
+      margin: 0 auto;
+      padding: 24px 20px 80px;
+    }
+
+    header{
+      position: sticky;
+      top: 0;
+      z-index: 10;
+      backdrop-filter: blur(10px);
+      background: color-mix(in srgb, var(--bg) 70%, transparent);
+      border-bottom: 1px solid var(--border);
+    }
+
+    .nav{
+      max-width: 980px;
+      margin: 0 auto;
+      padding: 14px 20px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+    }
+
+    .brand{
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      font-weight: 650;
+      letter-spacing: -0.01em;
+    }
+
+    .dot{
+      width: 10px;
+      height: 10px;
+      border-radius: 50%;
+      background: linear-gradient(135deg, var(--accent), var(--accent-2));
+      box-shadow: 0 0 0 4px color-mix(in srgb, var(--accent) 18%, transparent);
+    }
+
+    .nav-links{
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      flex-wrap: wrap;
+      justify-content: flex-end;
+    }
+
+    .pill{
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 10px 12px;
+      border: 1px solid var(--border);
+      background: color-mix(in srgb, var(--surface) 88%, transparent);
+      border-radius: 999px;
+      box-shadow: 0 8px 20px rgba(2,6,23,0.05);
+      transition: transform .15s ease, border-color .15s ease, background .15s ease;
+    }
+    .pill:hover{
+      transform: translateY(-1px);
+      border-color: color-mix(in srgb, var(--accent) 35%, var(--border));
+    }
+    .pill small{ color: var(--muted); font-weight: 600; }
+
+    .toggle{
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 10px 12px;
+      border: 1px solid var(--border);
+      background: color-mix(in srgb, var(--surface) 88%, transparent);
+      border-radius: 999px;
+      cursor: pointer;
+      user-select: none;
+      transition: transform .15s ease, border-color .15s ease, background .15s ease;
+    }
+    .toggle:hover{
+      transform: translateY(-1px);
+      border-color: color-mix(in srgb, var(--accent) 35%, var(--border));
+    }
+    .icon{
+      width: 18px;
+      height: 18px;
+      display: inline-block;
+    }
+    .toggle span{
+      font-weight: 650;
+      letter-spacing: -0.01em;
+      color: var(--muted);
+      font-size: 13px;
+    }
+
+    /* ---- Hero ---- */
+    .hero{
+      margin-top: 18px;
+      background: var(--hero);
+      border: 1px solid var(--border);
+      border-radius: 20px;
+      padding: 28px;
+      box-shadow: var(--shadow);
+      overflow: hidden;
+    }
+    .hero h1{
+      margin: 0 0 10px;
+      font-size: clamp(24px, 3vw, 34px);
+      letter-spacing: -0.03em;
+      line-height: 1.15;
+    }
+    .hero p{
+      margin: 0 0 18px;
+      color: var(--muted);
+      max-width: 62ch;
+    }
+
+    .cta-row{
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      margin-top: 10px;
+    }
+    .btn{
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      padding: 11px 14px;
+      border-radius: 14px;
+      border: 1px solid var(--border);
+      background: color-mix(in srgb, var(--surface) 92%, transparent);
+      box-shadow: 0 10px 22px rgba(2,6,23,0.06);
+      transition: transform .15s ease, border-color .15s ease;
+      font-weight: 650;
+    }
+    .btn.primary{
+      border-color: color-mix(in srgb, var(--accent) 45%, var(--border));
+      background: linear-gradient(135deg,
+        color-mix(in srgb, var(--accent) 85%, #ffffff 15%),
+        color-mix(in srgb, var(--accent-2) 55%, #ffffff 45%)
+      );
+      color: #0b1020;
+    }
+    [data-theme="dark"] .btn.primary{
+      color: #06101b;
+    }
+    .btn:hover{
+      transform: translateY(-1px);
+      border-color: color-mix(in srgb, var(--accent) 40%, var(--border));
+    }
+
+    /* ---- Sections ---- */
+    section{
+      margin-top: 22px;
+      border: 1px solid var(--border);
+      border-radius: 20px;
+      background: color-mix(in srgb, var(--surface) 90%, transparent);
+      box-shadow: 0 10px 24px rgba(2,6,23,0.05);
+      overflow: hidden;
+    }
+    .section-inner{
+      padding: 22px;
+      display: grid;
+      gap: 10px;
+    }
+    .kicker{
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      font-weight: 700;
+      letter-spacing: -0.01em;
+    }
+    .badge{
+      font-size: 12px;
+      padding: 6px 10px;
+      border-radius: 999px;
+      border: 1px solid var(--border);
+      color: var(--muted);
+      background: color-mix(in srgb, var(--surface) 92%, transparent);
+    }
+    .section-inner p{ margin: 0; color: var(--muted); max-width: 70ch; }
+
+    .grid{
+      margin-top: 10px;
+      display: grid;
+      grid-template-columns: repeat(12, 1fr);
+      gap: 12px;
+    }
+    .card{
+      grid-column: span 6;
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      padding: 14px;
+      background: color-mix(in srgb, var(--surface) 92%, transparent);
+    }
+    .card h3{
+      margin: 0 0 8px;
+      font-size: 15px;
+      letter-spacing: -0.01em;
+    }
+    .card p{
+      margin: 0;
+      color: var(--muted);
+      font-size: 14px;
+    }
+    @media (max-width: 720px){
+      .card{ grid-column: span 12; }
+      .nav{ gap: 10px; }
+      .nav-links{ justify-content: flex-start; }
+    }
+
+    /* ---- Footer ---- */
+    footer{
+      margin-top: 26px;
+      color: var(--muted);
+      font-size: 13px;
+      display: flex;
+      justify-content: space-between;
+      gap: 10px;
+      flex-wrap: wrap;
+    }
+
+    /* ---- Reduce motion ---- */
+    @media (prefers-reduced-motion: reduce){
+      html{ scroll-behavior: auto; }
+      .pill, .toggle, .btn{ transition: none; }
+    }
+  </style>
+</head>
+
+<body>
+  <header>
+    <div class="nav">
+      <div class="brand" aria-label="Site title">
+        <span class="dot" aria-hidden="true"></span>
+        <span>My GitHub Pages Site</span>
+      </div>
+
+      <nav class="nav-links" aria-label="Top navigation">
+        <a class="pill" href="#section-1"><small>01</small> Section 1</a>
+        <a class="pill" href="#section-2"><small>02</small> Section 2</a>
+        <a class="pill" href="#section-3"><small>03</small> Section 3</a>
+
+        <!-- Icon toggle near the links (sun/moon) -->
+        <button class="toggle" id="themeToggle" type="button" aria-label="Toggle dark mode">
+          <span class="icon" id="themeIcon" aria-hidden="true"></span>
+          <span id="themeLabel">Light</span>
+        </button>
+      </nav>
+    </div>
+  </header>
+
+  <main class="wrap">
+    <div class="hero">
+      <h1>Clean, basic site you can publish with GitHub Pages.</h1>
+      <p>
+        Three top links jump to Section 1, 2, and 3. Use the sun/moon toggle to switch
+        between light and dark mode. Your preference is saved.
+      </p>
+
+      <div class="cta-row">
+        <a class="btn primary" href="#section-1">
+          Jump to Section 1
+          <span aria-hidden="true">→</span>
+        </a>
+        <a class="btn" href="#section-2">Go to Section 2</a>
+        <a class="btn" href="#section-3">Go to Section 3</a>
+      </div>
+    </div>
+
+    <section id="section-1" aria-label="Section 1">
+      <div class="section-inner">
+        <div class="kicker">
+          <span class="badge">Section 1</span>
+          <span>Overview</span>
+        </div>
+        <p>
+          Use this section for a short intro. Keep it readable, add a few cards, and link out as needed.
+        </p>
+
+        <div class="grid">
+          <div class="card">
+            <h3>Card A</h3>
+            <p>Add a brief detail, a callout, or a quick note about what’s here.</p>
+          </div>
+          <div class="card">
+            <h3>Card B</h3>
+            <p>This layout stays simple and clean on desktop and mobile.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section id="section-2" aria-label="Section 2">
+      <div class="section-inner">
+        <div class="kicker">
+          <span class="badge">Section 2</span>
+          <span>Details</span>
+        </div>
+        <p>
+          Put the main content here: notes, project info, documentation links, or anything you want people to read.
+        </p>
+
+        <div class="grid">
+          <div class="card">
+            <h3>Quick list</h3>
+            <p>
+              • Item one<br/>
+              • Item two<br/>
+              • Item three
+            </p>
+          </div>
+          <div class="card">
+            <h3>Code-style block</h3>
+            <p style="font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, 'Liberation Mono', 'Courier New', monospace;
+                      background: var(--code); border: 1px solid var(--border); padding: 10px; border-radius: 12px;">
+              /docs<br/>
+              /posts<br/>
+              /projects
+            </p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section id="section-3" aria-label="Section 3">
+      <div class="section-inner">
+        <div class="kicker">
+          <span class="badge">Section 3</span>
+          <span>Contact / Next steps</span>
+        </div>
+        <p>
+          Add a simple contact line, a link to your GitHub, or a short “what’s next” plan.
+        </p>
+
+        <div class="grid">
+          <div class="card">
+            <h3>Link out</h3>
+            <p>
+              Replace these with your real links:<br/>
+              <a href="#" style="color: var(--accent); text-decoration: underline;">GitHub</a> ·
+              <a href="#" style="color: var(--accent); text-decoration: underline;">Notes</a> ·
+              <a href="#" style="color: var(--accent); text-decoration: underline;">Email</a>
+            </p>
+          </div>
+          <div class="card">
+            <h3>Small note</h3>
+            <p>This page is a single HTML file—easy to fork, edit, and publish.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <footer>
+      <span>© <span id="year"></span> Your Name</span>
+      <span>Built for GitHub Pages · Light/Dark mode included</span>
+    </footer>
+  </main>
+
+  <script>
+    // --- Inline icons (sun / moon) as SVG strings ---
+    const icons = {
+      sun: `
+        <svg viewBox="0 0 24 24" width="18" height="18" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M12 18a6 6 0 1 0 0-12 6 6 0 0 0 0 12Z" stroke="currentColor" stroke-width="1.8"/>
+          <path d="M12 2v2.4M12 19.6V22M4.2 4.2l1.7 1.7M18.1 18.1l1.7 1.7M2 12h2.4M19.6 12H22M4.2 19.8l1.7-1.7M18.1 5.9l1.7-1.7"
+                stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/>
+        </svg>
+      `,
+      moon: `
+        <svg viewBox="0 0 24 24" width="18" height="18" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M20.3 14.5A7.8 7.8 0 0 1 9.5 3.7a7.9 7.9 0 1 0 10.8 10.8Z"
+                stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/>
+        </svg>
+      `
+    };
+
+    const root = document.documentElement;
+    const toggleBtn = document.getElementById("themeToggle");
+    const themeIcon = document.getElementById("themeIcon");
+    const themeLabel = document.getElementById("themeLabel");
+
+    function setTheme(theme) {
+      root.setAttribute("data-theme", theme);
+      const isDark = theme === "dark";
+      themeIcon.innerHTML = isDark ? icons.moon : icons.sun;
+      themeLabel.textContent = isDark ? "Dark" : "Light";
+      toggleBtn.setAttribute("aria-label", isDark ? "Switch to light mode" : "Switch to dark mode");
+      localStorage.setItem("theme", theme);
+    }
+
+    // Load saved theme or respect system preference
+    const saved = localStorage.getItem("theme");
+    const prefersDark = window.matchMedia && window.matchMedia("(prefers-color-scheme: dark)").matches;
+    setTheme(saved || (prefersDark ? "dark" : "light"));
+
+    toggleBtn.addEventListener("click", () => {
+      const current = root.getAttribute("data-theme") || "light";
+      setTheme(current === "dark" ? "light" : "dark");
+    });
+
+    // Footer year
+    document.getElementById("year").textContent = new Date().getFullYear();
+  </script>
+</body>
+</html>
