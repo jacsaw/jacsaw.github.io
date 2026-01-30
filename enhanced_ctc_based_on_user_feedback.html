@@ -1,0 +1,1539 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Child Tax Credit Policy Simulation</title>
+    <link href="https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --navy: #1e3a8a;
+            --navy-dark: #1e3a5f;
+            --light-blue: #eff6ff;
+            --light-gray: #f3f4f6;
+            --text-dark: #1a1a1a;
+            --text-gray: #6b7280;
+            --border: #e5e7eb;
+            --accent-blue: #3b82f6;
+            --teal: #0891b2;
+        }
+
+        body {
+            font-family: 'Geist', -apple-system, BlinkMacSystemFont, sans-serif;
+            background: #f9fafb;
+            color: var(--text-dark);
+            line-height: 1.5;
+            margin: 0;
+            padding: 0;
+        }
+
+        /* Header */
+        .header {
+            background: var(--navy);
+            color: white;
+            padding: 2rem;
+        }
+
+        .header-content {
+            max-width: 1400px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 3rem;
+            align-items: start;
+        }
+
+        .header-left h2 {
+            font-size: 0.75rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            margin-bottom: 0.5rem;
+            opacity: 0.9;
+        }
+
+        .header-left h1 {
+            font-size: 2.5rem;
+            font-weight: 700;
+            margin-bottom: 0;
+            color: white;
+        }
+
+        .header-right h3 {
+            font-size: 0.875rem;
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+        }
+
+        .header-right p {
+            font-size: 0.875rem;
+            line-height: 1.6;
+            opacity: 0.95;
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 2rem;
+        }
+
+        /* Current Law Section */
+        .current-law-section {
+            background: var(--light-blue);
+            border-radius: 8px;
+            padding: 1.5rem;
+            margin-bottom: 2rem;
+            border: 1px solid #dbeafe;
+        }
+
+        .current-law-title {
+            font-size: 1rem;
+            font-weight: 700;
+            color: var(--navy-dark);
+            margin-bottom: 0.5rem;
+        }
+
+        .current-law-subtitle {
+            font-size: 0.8125rem;
+            color: var(--text-gray);
+            margin-bottom: 1.25rem;
+        }
+
+        .current-law-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 1rem;
+            margin-bottom: 1.25rem;
+        }
+
+        .law-card {
+            background: white;
+            border-radius: 6px;
+            padding: 1rem;
+            border: 1px solid var(--border);
+            box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
+        }
+
+        .law-card-title {
+            font-size: 0.75rem;
+            color: var(--text-gray);
+            margin-bottom: 0.25rem;
+            font-weight: 500;
+        }
+
+        .law-card-value {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--navy-dark);
+        }
+
+        .law-card-subtitle {
+            font-size: 0.6875rem;
+            color: var(--text-gray);
+            margin-top: 0.125rem;
+        }
+
+        .phase-out-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1rem;
+        }
+
+        .phase-out-card {
+            background: white;
+            border-radius: 6px;
+            padding: 1rem;
+            border: 1px solid var(--border);
+            box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
+        }
+
+        .phase-out-title {
+            font-size: 0.75rem;
+            color: var(--text-gray);
+            margin-bottom: 0.5rem;
+            font-weight: 500;
+        }
+
+        .phase-out-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0.25rem 0;
+        }
+
+        .phase-out-label {
+            font-size: 0.8125rem;
+            color: var(--text-dark);
+        }
+
+        .phase-out-value {
+            font-size: 0.9375rem;
+            font-weight: 600;
+            color: var(--navy-dark);
+        }
+
+        /* Ready Banner */
+        .ready-banner {
+            background: #fef9f3;
+            border-radius: 8px;
+            padding: 1.5rem;
+            margin-bottom: 2rem;
+            border: 1px solid #fed7aa;
+        }
+
+        .ready-banner-title {
+            font-size: 1.125rem;
+            font-weight: 600;
+            color: var(--text-dark);
+            margin-bottom: 0.5rem;
+        }
+
+        .ready-banner-text {
+            font-size: 0.875rem;
+            color: var(--text-gray);
+            line-height: 1.6;
+        }
+
+        /* Main Grid */
+        .main-grid {
+            display: grid;
+            grid-template-columns: 450px 1fr;
+            gap: 2rem;
+            align-items: start;
+        }
+
+        /* Left Column - Levers */
+        .levers-column {
+            display: flex;
+            flex-direction: column;
+            gap: 1.5rem;
+        }
+
+        .section-title {
+            font-size: 1.25rem;
+            font-weight: 700;
+            color: var(--navy-dark);
+            margin-bottom: 0.5rem;
+        }
+
+        .section-subtitle {
+            font-size: 0.8125rem;
+            color: var(--text-gray);
+            line-height: 1.5;
+            margin-bottom: 1rem;
+        }
+
+        .lever-card {
+            background: white;
+            border-radius: 6px;
+            padding: 1.25rem;
+            border: 1px solid var(--border);
+            box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
+        }
+
+        .lever-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 0.75rem;
+        }
+
+        .lever-title {
+            font-size: 0.9375rem;
+            font-weight: 600;
+            color: var(--text-dark);
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .info-icon {
+            width: 14px;
+            height: 14px;
+            border: 1.5px solid var(--text-gray);
+            border-radius: 50%;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.625rem;
+            color: var(--text-gray);
+            cursor: help;
+            font-weight: 600;
+        }
+
+        .toggle-switch {
+            position: relative;
+            width: 44px;
+            height: 24px;
+            background: #d1d5db;
+            border-radius: 12px;
+            cursor: pointer;
+            transition: background 0.3s;
+        }
+
+        .toggle-switch.active {
+            background: #0891b2;
+        }
+
+        .toggle-switch::after {
+            content: '';
+            position: absolute;
+            top: 2px;
+            left: 2px;
+            width: 20px;
+            height: 20px;
+            background: white;
+            border-radius: 50%;
+            transition: transform 0.3s;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+        }
+
+        .toggle-switch.active::after {
+            transform: translateX(20px);
+        }
+
+        .lever-description {
+            font-size: 0.8125rem;
+            color: var(--text-gray);
+            line-height: 1.5;
+            font-style: italic;
+        }
+
+        .lever-input {
+            margin-top: 1rem;
+            display: none;
+        }
+
+        .lever-input.active {
+            display: block;
+        }
+
+        .slider-container {
+            margin-top: 0.75rem;
+        }
+
+        .slider-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 0.5rem;
+        }
+
+        .slider-label {
+            font-size: 0.8125rem;
+            color: var(--text-gray);
+        }
+
+        .slider-value {
+            font-size: 1rem;
+            font-weight: 600;
+            color: var(--text-dark);
+        }
+
+        .slider {
+            width: 100%;
+            height: 4px;
+            border-radius: 2px;
+            background: #e5e7eb;
+            outline: none;
+            -webkit-appearance: none;
+        }
+
+        .slider::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            appearance: none;
+            width: 18px;
+            height: 18px;
+            border-radius: 50%;
+            background: var(--teal);
+            cursor: pointer;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+        }
+
+        .slider::-moz-range-thumb {
+            width: 18px;
+            height: 18px;
+            border-radius: 50%;
+            background: var(--teal);
+            cursor: pointer;
+            border: none;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+        }
+
+        .checkbox-group {
+            display: flex;
+            flex-direction: column;
+            gap: 0.75rem;
+            margin-top: 0.75rem;
+        }
+
+        .checkbox-item {
+            display: flex;
+            align-items: flex-start;
+            gap: 0.5rem;
+        }
+
+        .checkbox-item input[type="checkbox"] {
+            width: 18px;
+            height: 18px;
+            cursor: pointer;
+            margin-top: 2px;
+            flex-shrink: 0;
+        }
+
+        .checkbox-item label {
+            font-size: 0.875rem;
+            cursor: pointer;
+            line-height: 1.5;
+        }
+
+        .phase-method {
+            display: flex;
+            gap: 0.5rem;
+            margin-top: 0.75rem;
+        }
+
+        .phase-btn {
+            flex: 1;
+            padding: 0.5rem 1rem;
+            border: 2px solid var(--border);
+            background: white;
+            border-radius: 6px;
+            cursor: pointer;
+            font-family: 'Geist', sans-serif;
+            font-weight: 500;
+            font-size: 0.8125rem;
+            transition: all 0.2s;
+        }
+
+        .phase-btn.active {
+            background: var(--navy-dark);
+            color: white;
+            border-color: var(--navy-dark);
+        }
+
+        .age-range-input {
+            display: flex;
+            gap: 0.5rem;
+            align-items: center;
+            margin-top: 0.5rem;
+        }
+
+        .age-input {
+            width: 60px;
+            padding: 0.375rem 0.5rem;
+            border: 1px solid var(--border);
+            border-radius: 4px;
+            font-family: 'Geist', sans-serif;
+            font-size: 0.875rem;
+        }
+
+        /* Right Column - Charts */
+        .charts-column {
+            position: sticky;
+            top: 1rem;
+            align-self: start;
+            display: flex;
+            flex-direction: column;
+            gap: 1.5rem;
+            max-height: calc(100vh - 2rem);
+            overflow-y: auto;
+        }
+
+        .chart-container {
+            background: white;
+            border-radius: 8px;
+            padding: 1.5rem;
+            border: 1px solid var(--border);
+            box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
+        }
+
+        .chart-title {
+            font-size: 1.125rem;
+            font-weight: 600;
+            color: var(--text-dark);
+            margin-bottom: 0.5rem;
+        }
+
+        .chart-subtitle {
+            font-size: 0.8125rem;
+            color: var(--text-gray);
+            line-height: 1.5;
+            margin-bottom: 1rem;
+        }
+
+        .chart-wrapper {
+            position: relative;
+            height: 350px;
+            margin-bottom: 1rem;
+        }
+
+        canvas {
+            width: 100% !important;
+            height: 100% !important;
+        }
+
+        .chart-legend {
+            display: flex;
+            justify-content: center;
+            gap: 1.5rem;
+            font-size: 0.8125rem;
+            flex-wrap: wrap;
+        }
+
+        .legend-item {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .legend-line {
+            width: 24px;
+            height: 3px;
+            border-radius: 1.5px;
+        }
+
+        .legend-dashed {
+            background: repeating-linear-gradient(
+                to right,
+                currentColor 0px,
+                currentColor 4px,
+                transparent 4px,
+                transparent 8px
+            );
+        }
+
+        /* Tally Card */
+        .tally-card {
+            background: linear-gradient(135deg, #d1fae5 0%, #a7f3d0 100%);
+            border-radius: 8px;
+            padding: 2rem;
+        }
+
+        .tally-comparison {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 2rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .tally-column {
+            text-align: center;
+        }
+
+        .tally-column-title {
+            font-size: 0.75rem;
+            font-weight: 600;
+            color: var(--text-gray);
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            margin-bottom: 0.75rem;
+        }
+
+        .tally-main {
+            font-size: 1.75rem;
+            font-weight: 700;
+            color: var(--navy-dark);
+            margin-bottom: 0.5rem;
+        }
+
+        .tally-refundable {
+            font-size: 1rem;
+            font-weight: 500;
+            color: #059669;
+            margin-bottom: 0.5rem;
+        }
+
+        .tally-difference {
+            font-size: 0.875rem;
+            font-weight: 600;
+            padding: 0.25rem 0.75rem;
+            border-radius: 4px;
+            display: inline-block;
+            margin-top: 0.5rem;
+        }
+
+        .tally-difference.positive {
+            background: rgba(5, 150, 105, 0.15);
+            color: #059669;
+        }
+
+        .tally-difference.negative {
+            background: rgba(220, 38, 38, 0.15);
+            color: #dc2626;
+        }
+
+        .tally-difference.neutral {
+            background: rgba(107, 114, 128, 0.15);
+            color: var(--text-gray);
+        }
+
+        .tally-context {
+            font-size: 0.875rem;
+            color: var(--text-gray);
+            text-align: center;
+            padding-top: 1.5rem;
+            border-top: 1px solid rgba(5, 150, 105, 0.2);
+        }
+
+        .income-slider-container {
+            background: white;
+            border-radius: 8px;
+            padding: 1rem;
+            border: 1px solid var(--border);
+            box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
+        }
+
+        .family-tabs {
+            display: flex;
+            gap: 0.5rem;
+            margin-bottom: 1rem;
+        }
+
+        .family-tab {
+            flex: 1;
+            padding: 0.625rem 0.5rem;
+            border: 1px solid var(--border);
+            background: white;
+            border-radius: 6px;
+            cursor: pointer;
+            font-family: 'Geist', sans-serif;
+            font-weight: 500;
+            font-size: 0.75rem;
+            transition: all 0.2s;
+            text-align: center;
+        }
+
+        .family-tab.active {
+            background: #ff6b35;
+            color: white;
+            border-color: #ff6b35;
+        }
+
+        .family-tab-title {
+            display: block;
+            font-weight: 600;
+        }
+
+        .family-tab-subtitle {
+            display: block;
+            font-size: 0.6875rem;
+            margin-top: 0.125rem;
+            opacity: 0.9;
+        }
+
+        .reset-button {
+            width: 100%;
+            background: white;
+            border: 2px solid #ff6b35;
+            border-radius: 6px;
+            padding: 0.875rem 1.5rem;
+            font-family: 'Geist', sans-serif;
+            font-size: 0.875rem;
+            font-weight: 600;
+            color: #ff6b35;
+            cursor: pointer;
+            transition: all 0.2s;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+
+        .reset-button:hover {
+            border-color: #e55a28;
+            color: #e55a28;
+            background: #fff5f0;
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <div class="header">
+        <div class="header-content">
+            <div class="header-left">
+                <h2>CTC</h2>
+                <h1>Child Tax Credit</h1>
+            </div>
+            <div class="header-right">
+                <h3>What is CTC?</h3>
+                <p>The IRS's Child Tax Credit provides financial relief to families by offering up to $2,000 per qualifying child under age 17, with up to $1,500 of it refundable. Eligibility is based on income, filing status, the child's residency, citizenship, and dependent status.</p>
+            </div>
+        </div>
+    </div>
+
+    <div class="container">
+        <!-- Current Law Section -->
+        <div class="current-law-section">
+            <div class="current-law-title">Current Law (2024): How the Child Tax Credit Works</div>
+            <div class="current-law-subtitle">Here's what families can receive under today's policy structure</div>
+
+            <div class="current-law-grid">
+                <div class="law-card">
+                    <div class="law-card-title">Maximum Credit</div>
+                    <div class="law-card-value">$2,000</div>
+                    <div class="law-card-subtitle">per child</div>
+                </div>
+                <div class="law-card">
+                    <div class="law-card-title">Earnings Requirement</div>
+                    <div class="law-card-value">$2,500</div>
+                    <div class="law-card-subtitle">minimum to qualify</div>
+                </div>
+                <div class="law-card">
+                    <div class="law-card-title">Refundable Portion</div>
+                    <div class="law-card-value">$1,700</div>
+                    <div class="law-card-subtitle">maximum cash benefit</div>
+                </div>
+                <div class="law-card">
+                    <div class="law-card-title">Phase-in Rate</div>
+                    <div class="law-card-value">15%</div>
+                    <div class="law-card-subtitle">of earnings above $2,500</div>
+                </div>
+            </div>
+
+            <div class="phase-out-grid">
+                <div class="phase-out-card">
+                    <div class="phase-out-title">Phase-out Thresholds</div>
+                    <div class="phase-out-row">
+                        <span class="phase-out-label">Single/Head of Household:</span>
+                        <span class="phase-out-value">$200,000</span>
+                    </div>
+                    <div class="phase-out-row">
+                        <span class="phase-out-label">Married Filing Jointly:</span>
+                        <span class="phase-out-value">$400,000</span>
+                    </div>
+                </div>
+
+                <div class="phase-out-card">
+                    <div class="phase-out-title">Additional Features</div>
+                    <div class="phase-out-row">
+                        <span class="phase-out-label">Young child bonus:</span>
+                        <span class="phase-out-value" style="color: #dc2626;">None</span>
+                    </div>
+                    <div class="phase-out-row">
+                        <span class="phase-out-label">Minimum benefit:</span>
+                        <span class="phase-out-value" style="color: #dc2626;">None</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Ready Banner -->
+        <div class="ready-banner">
+            <div class="ready-banner-title">Ready to Improve This Policy?</div>
+            <div class="ready-banner-text">The current Child Tax Credit leaves many families behind. Use the controls below to explore how policy changes could better support working families with children.</div>
+        </div>
+
+        <!-- Main Grid -->
+        <div class="main-grid">
+            <!-- Left Column: All Levers -->
+            <div class="levers-column">
+                <div>
+                    <div class="section-title">Credit Values</div>
+                    <div class="section-subtitle">The base credit values before any adjustments based on age.</div>
+                </div>
+
+                <!-- Maximum Base Credit Value -->
+                <div class="lever-card">
+                    <div class="lever-header">
+                        <div class="lever-title">
+                            Maximum Base Credit Value
+                            <span class="info-icon">i</span>
+                        </div>
+                        <div class="toggle-switch" data-lever="maxCredit"></div>
+                    </div>
+                    <div class="lever-description">The largest credit amount, before any adjustments based on age.</div>
+                    <div class="lever-input" data-input="maxCredit">
+                        <div class="slider-container">
+                            <div class="slider-row">
+                                <span class="slider-label">Amount</span>
+                                <span class="slider-value" id="maxCreditValue">$2,000</span>
+                            </div>
+                            <input type="range" min="0" max="10000" step="100" value="2000" class="slider" id="maxCreditSlider">
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Add Minimum Base Credit Value -->
+                <div class="lever-card">
+                    <div class="lever-header">
+                        <div class="lever-title">
+                            Add a Minimum Base Credit Value?
+                            <span class="info-icon">i</span>
+                        </div>
+                        <div class="toggle-switch" data-lever="minBaseCredit"></div>
+                    </div>
+                    <div class="lever-description">A guaranteed credit amount per child available to all eligible children.</div>
+                    <div class="lever-input" data-input="minBaseCredit">
+                        <div class="slider-container">
+                            <div class="slider-row">
+                                <span class="slider-label">Amount</span>
+                                <span class="slider-value" id="minBaseCreditValue">$500</span>
+                            </div>
+                            <input type="range" min="0" max="2000" step="50" value="500" class="slider" id="minBaseCreditSlider">
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Maximum Refundable Portion -->
+                <div class="lever-card">
+                    <div class="lever-header">
+                        <div class="lever-title">
+                            Maximum Refundable Portion of the Credit
+                            <span class="info-icon">i</span>
+                        </div>
+                        <div class="toggle-switch" data-lever="maxRefund"></div>
+                    </div>
+                    <div class="lever-description">The largest per-child credit families can receive as a tax refund.</div>
+                    <div class="lever-input" data-input="maxRefund">
+                        <div class="slider-container">
+                            <div class="slider-row">
+                                <span class="slider-label">Amount</span>
+                                <span class="slider-value" id="maxRefundValue">$1,700</span>
+                            </div>
+                            <input type="range" min="0" max="10000" step="100" value="1700" class="slider" id="maxRefundSlider">
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Adjust Credit Values by Age -->
+                <div class="lever-card">
+                    <div class="lever-header">
+                        <div class="lever-title">
+                            Adjust Credit Values by Age
+                            <span class="info-icon">i</span>
+                        </div>
+                        <div class="toggle-switch" data-lever="ageAdjust"></div>
+                    </div>
+                    <div class="lever-description">Assign different credit amounts to children by age group.</div>
+                    <div class="lever-input" data-input="ageAdjust">
+                        <div class="checkbox-group">
+                            <div class="checkbox-item">
+                                <input type="checkbox" id="include17">
+                                <label for="include17">Include 17-Year-Olds? Choose whether 17-year-olds are eligible for the credit.</label>
+                            </div>
+                            <div class="checkbox-item">
+                                <input type="checkbox" id="increaseYounger">
+                                <label for="increaseYounger">Increase the Credit for Younger Children? Add a top-up to the maximum base credit value for children under a certain age.</label>
+                            </div>
+                            <div id="youngerAgeRange" style="display: none; margin-left: 1.75rem;">
+                                <div class="age-range-input">
+                                    <span style="font-size: 0.8125rem; color: var(--text-gray);">Bonus Credit Age Range:</span>
+                                    <input type="number" class="age-input" id="ageMin" value="0" min="0" max="17">
+                                    <span style="font-size: 0.8125rem;">-</span>
+                                    <input type="number" class="age-input" id="ageMax" value="5" min="0" max="17">
+                                    <span style="font-size: 0.8125rem;">yrs</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div style="margin-top: 2rem;">
+                    <div class="section-title">Qualifying Income</div>
+                    <div class="section-subtitle">Total earnings necessary to qualify for the credit.</div>
+                </div>
+
+                <!-- Minimum Earnings Requirement -->
+                <div class="lever-card">
+                    <div class="lever-header">
+                        <div class="lever-title">
+                            Minimum Earnings Requirement
+                            <span class="info-icon">i</span>
+                        </div>
+                        <div class="toggle-switch" data-lever="minEarnings"></div>
+                    </div>
+                    <div class="lever-description">Choose if and how much in earnings a family must have to qualify for the credit.</div>
+                    <div class="lever-input" data-input="minEarnings">
+                        <div class="slider-container">
+                            <div class="slider-row">
+                                <span class="slider-label">Amount</span>
+                                <span class="slider-value" id="minEarningsValue">$2,500</span>
+                            </div>
+                            <input type="range" min="0" max="10000" step="100" value="2500" class="slider" id="minEarningsSlider">
+                        </div>
+                    </div>
+                </div>
+
+                <div style="margin-top: 2rem;">
+                    <div class="section-title">Phase-In Rate and Phase-Out Structure</div>
+                    <div class="section-subtitle">Whether and how the credit phases in and/or phases out as family income rises.</div>
+                </div>
+
+                <!-- Phase-In Rate -->
+                <div class="lever-card">
+                    <div class="lever-header">
+                        <div class="lever-title">
+                            Phase-In Rate
+                            <span class="info-icon">i</span>
+                        </div>
+                        <div class="toggle-switch" data-lever="phaseInRate"></div>
+                    </div>
+                    <div class="lever-description">How fast the credit amount increases with family income.</div>
+                    <div class="lever-input" data-input="phaseInRate">
+                        <div class="slider-container">
+                            <div class="slider-row">
+                                <span class="slider-label">Rate</span>
+                                <span class="slider-value" id="phaseInRateValue">15%</span>
+                            </div>
+                            <input type="range" min="0" max="100" step="1" value="15" class="slider" id="phaseInRateSlider">
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Phase-In Method -->
+                <div class="lever-card">
+                    <div class="lever-header">
+                        <div class="lever-title">
+                            Phase-In Method
+                            <span class="info-icon">i</span>
+                        </div>
+                        <div class="toggle-switch" data-lever="phaseInMethod"></div>
+                    </div>
+                    <div class="lever-description">Whether the credit phases in at the per-child or per-family level.</div>
+                    <div class="lever-input" data-input="phaseInMethod">
+                        <div class="phase-method">
+                            <button class="phase-btn" data-method="family">Per Family</button>
+                            <button class="phase-btn active" data-method="child">Per Child</button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Phase-Out Income Thresholds -->
+                <div class="lever-card">
+                    <div class="lever-header">
+                        <div class="lever-title">
+                            Phase-Out Income Thresholds
+                            <span class="info-icon">i</span>
+                        </div>
+                        <div class="toggle-switch" data-lever="phaseOut"></div>
+                    </div>
+                    <div class="lever-description">The income levels at which the credit begins to decrease (if you increased credit value).</div>
+                    <div class="lever-input" data-input="phaseOut">
+                        <div class="slider-container">
+                            <div class="slider-row">
+                                <span class="slider-label">Head of Household</span>
+                                <span class="slider-value" id="phaseOutHOHValue">$200,000</span>
+                            </div>
+                            <input type="range" min="50000" max="500000" step="10000" value="200000" class="slider" id="phaseOutHOHSlider">
+                        </div>
+                        <div class="slider-container" style="margin-top: 1rem;">
+                            <div class="slider-row">
+                                <span class="slider-label">Married Filing Jointly</span>
+                                <span class="slider-value" id="phaseOutMFJValue">$400,000</span>
+                            </div>
+                            <input type="range" min="100000" max="1000000" step="10000" value="400000" class="slider" id="phaseOutMFJSlider">
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Reset Button -->
+                <button class="reset-button" id="resetButton">RESET TO CURRENT LAW</button>
+            </div>
+
+            <!-- Right Column: Charts -->
+            <div class="charts-column">
+                <!-- Income Slider -->
+                <div class="income-slider-container">
+                    <div class="slider-row">
+                        <span class="slider-label">Annual Income</span>
+                        <span class="slider-value" id="annualIncomeValue">$35,000</span>
+                    </div>
+                    <input type="range" min="0" max="200000" step="1000" value="35000" class="slider" id="annualIncomeSlider">
+                </div>
+
+                <!-- Family Tabs -->
+                <div class="family-tabs">
+                    <button class="family-tab active" data-family="single-1">
+                        <span class="family-tab-title">Single</span>
+                        <span class="family-tab-subtitle">One Child</span>
+                    </button>
+                    <button class="family-tab" data-family="single-2">
+                        <span class="family-tab-title">Single</span>
+                        <span class="family-tab-subtitle">Two Children</span>
+                    </button>
+                    <button class="family-tab" data-family="single-3">
+                        <span class="family-tab-title">Single</span>
+                        <span class="family-tab-subtitle">Three+ Children</span>
+                    </button>
+                    <button class="family-tab" data-family="married">
+                        <span class="family-tab-title">Married Filing</span>
+                        <span class="family-tab-subtitle">Jointly</span>
+                    </button>
+                </div>
+
+                <!-- Main Chart ($0-$500k) -->
+                <div class="chart-container">
+                    <div class="chart-title">Credit Structure: Full Income Range</div>
+                    <div class="chart-subtitle">This reflects a sample family of one newborn (less than 1 year of age) and one 5-year-old child. In this example, Adjusted Gross Income (AGI) is equivalent to a family's earned income.</div>
+
+                    <div class="chart-wrapper">
+                        <canvas id="mainChart"></canvas>
+                    </div>
+
+                    <div class="chart-legend">
+                        <div class="legend-item">
+                            <div class="legend-line" style="background: #ef4444;"></div>
+                            <span>Single (Current Law)</span>
+                        </div>
+                        <div class="legend-item">
+                            <div class="legend-line" style="background: #1e3a5f;"></div>
+                            <span>Married (Current Law)</span>
+                        </div>
+                        <div class="legend-item">
+                            <div class="legend-line legend-dashed" style="color: #f97316;"></div>
+                            <span>Single (Your Policy)</span>
+                        </div>
+                        <div class="legend-item">
+                            <div class="legend-line legend-dashed" style="color: #3b82f6;"></div>
+                            <span>Married (Your Policy)</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Zoomed Chart ($0-$50k) -->
+                <div class="chart-container">
+                    <div class="chart-title">Low-Income Detail ($0 - $50,000)</div>
+                    <div class="chart-subtitle">Zoomed view showing how the credit phases in at lower income levels based on the minimum earnings requirement and phase-in rate.</div>
+
+                    <div class="chart-wrapper">
+                        <canvas id="zoomedChart"></canvas>
+                    </div>
+
+                    <div class="chart-legend">
+                        <div class="legend-item">
+                            <div class="legend-line" style="background: #ef4444;"></div>
+                            <span>Single (Current Law)</span>
+                        </div>
+                        <div class="legend-item">
+                            <div class="legend-line" style="background: #1e3a5f;"></div>
+                            <span>Married (Current Law)</span>
+                        </div>
+                        <div class="legend-item">
+                            <div class="legend-line legend-dashed" style="color: #f97316;"></div>
+                            <span>Single (Your Policy)</span>
+                        </div>
+                        <div class="legend-item">
+                            <div class="legend-line legend-dashed" style="color: #3b82f6;"></div>
+                            <span>Married (Your Policy)</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Tally Card -->
+                <div class="tally-card">
+                    <div class="tally-comparison">
+                        <div class="tally-column">
+                            <div class="tally-column-title">Current Law</div>
+                            <div class="tally-main" id="tallyBaselineTotal">$2,000</div>
+                            <div class="tally-refundable" id="tallyBaselineRefundable">Refundable: $1,700</div>
+                        </div>
+                        <div class="tally-column">
+                            <div class="tally-column-title">Your Policy</div>
+                            <div class="tally-main" id="tallyModifiedTotal">$2,000</div>
+                            <div class="tally-refundable" id="tallyModifiedRefundable">Refundable: $1,700</div>
+                            <div class="tally-difference neutral" id="tallyDifference">No change</div>
+                        </div>
+                    </div>
+                    <div class="tally-context" id="tallyContext">For $35,000 income with 3-year-old child</div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script>
+        // State management
+        const baselineState = {
+            maxCredit: 2000,
+            minBaseCredit: 0,
+            maxRefund: 1700,
+            minEarnings: 2500,
+            phaseInRate: 15,
+            phaseInMethod: 'child',
+            phaseOutHOH: 200000,
+            phaseOutMFJ: 400000,
+            include17: false,
+            increaseYounger: false,
+            ageMin: 0,
+            ageMax: 5
+        };
+
+        const state = {
+            maxCredit: 2000,
+            minBaseCredit: 0,
+            maxRefund: 1700,
+            minEarnings: 2500,
+            phaseInRate: 15,
+            phaseInMethod: 'child',
+            phaseOutHOH: 200000,
+            phaseOutMFJ: 400000,
+            include17: false,
+            increaseYounger: false,
+            ageMin: 0,
+            ageMax: 5,
+            activeLevers: new Set()
+        };
+
+        let annualIncome = 35000;
+        let selectedFamily = 'single-1';
+
+        // Toggle switches
+        document.querySelectorAll('.toggle-switch').forEach(toggle => {
+            toggle.addEventListener('click', () => {
+                const lever = toggle.dataset.lever;
+                const input = document.querySelector(`[data-input="${lever}"]`);
+                
+                toggle.classList.toggle('active');
+                if (input) {
+                    input.classList.toggle('active');
+                }
+
+                if (toggle.classList.contains('active')) {
+                    state.activeLevers.add(lever);
+                } else {
+                    state.activeLevers.delete(lever);
+                }
+
+                updateCharts();
+                updateTally();
+            });
+        });
+
+        // Sliders
+        const sliders = [
+            { id: 'maxCredit', valueId: 'maxCreditValue', format: v => `$${v.toLocaleString()}` },
+            { id: 'minBaseCredit', valueId: 'minBaseCreditValue', format: v => `$${v.toLocaleString()}` },
+            { id: 'maxRefund', valueId: 'maxRefundValue', format: v => `$${v.toLocaleString()}` },
+            { id: 'minEarnings', valueId: 'minEarningsValue', format: v => `$${v.toLocaleString()}` },
+            { id: 'phaseInRate', valueId: 'phaseInRateValue', format: v => `${v}%` },
+            { id: 'phaseOutHOH', valueId: 'phaseOutHOHValue', format: v => `$${v.toLocaleString()}` },
+            { id: 'phaseOutMFJ', valueId: 'phaseOutMFJValue', format: v => `$${v.toLocaleString()}` }
+        ];
+
+        sliders.forEach(({ id, valueId, format }) => {
+            const slider = document.getElementById(`${id}Slider`);
+            const valueDisplay = document.getElementById(valueId);
+            
+            slider.addEventListener('input', (e) => {
+                const value = parseFloat(e.target.value);
+                state[id] = value;
+                valueDisplay.textContent = format(value);
+                updateCharts();
+                updateTally();
+            });
+        });
+
+        // Phase-in method buttons
+        document.querySelectorAll('.phase-btn').forEach(btn => {
+            btn.addEventListener('click', () => {
+                document.querySelectorAll('.phase-btn').forEach(b => b.classList.remove('active'));
+                btn.classList.add('active');
+                state.phaseInMethod = btn.dataset.method;
+                updateCharts();
+                updateTally();
+            });
+        });
+
+        // Checkboxes
+        document.getElementById('include17').addEventListener('change', (e) => {
+            state.include17 = e.target.checked;
+            updateCharts();
+            updateTally();
+        });
+
+        document.getElementById('increaseYounger').addEventListener('change', (e) => {
+            state.increaseYounger = e.target.checked;
+            document.getElementById('youngerAgeRange').style.display = e.target.checked ? 'block' : 'none';
+            updateCharts();
+            updateTally();
+        });
+
+        document.getElementById('ageMin').addEventListener('input', (e) => {
+            state.ageMin = parseInt(e.target.value);
+            updateCharts();
+            updateTally();
+        });
+
+        document.getElementById('ageMax').addEventListener('input', (e) => {
+            state.ageMax = parseInt(e.target.value);
+            updateCharts();
+            updateTally();
+        });
+
+        // Annual income slider
+        document.getElementById('annualIncomeSlider').addEventListener('input', (e) => {
+            annualIncome = parseInt(e.target.value);
+            document.getElementById('annualIncomeValue').textContent = `$${annualIncome.toLocaleString()}`;
+            updateTally();
+        });
+
+        // Family tabs
+        document.querySelectorAll('.family-tab').forEach(tab => {
+            tab.addEventListener('click', () => {
+                document.querySelectorAll('.family-tab').forEach(t => t.classList.remove('active'));
+                tab.classList.add('active');
+                selectedFamily = tab.dataset.family;
+                updateCharts();
+                updateTally();
+            });
+        });
+
+        // Calculate credit
+        function calculateCredit(income, numChildren, filingStatus, policyState, activeLevers) {
+            // Use baseline values unless lever is active
+            const minEarnings = activeLevers.has('minEarnings') ? policyState.minEarnings : 2500;
+            const maxCreditPerChild = activeLevers.has('maxCredit') ? policyState.maxCredit : 2000;
+            const phaseInRate = activeLevers.has('phaseInRate') ? policyState.phaseInRate : 15;
+            const maxRefundable = activeLevers.has('maxRefund') ? policyState.maxRefund : 1700;
+            const phaseOutHOH = activeLevers.has('phaseOut') ? policyState.phaseOutHOH : 200000;
+            const phaseOutMFJ = activeLevers.has('phaseOut') ? policyState.phaseOutMFJ : 400000;
+            
+            // Check minimum earnings requirement
+            if (income < minEarnings) {
+                return 0;
+            }
+            
+            const maxTotalCredit = maxCreditPerChild * numChildren;
+            let credit = 0;
+            
+            // Phase-in logic
+            if (activeLevers.has('phaseInRate') && phaseInRate > 0) {
+                // Apply phase-in rate
+                const excessEarnings = income - minEarnings;
+                credit = Math.min(
+                    maxTotalCredit,
+                    (excessEarnings * phaseInRate / 100)
+                );
+            } else if (!activeLevers.has('phaseInRate')) {
+                // Lever is OFF - use baseline phase-in (15%)
+                const excessEarnings = income - minEarnings;
+                credit = Math.min(
+                    maxTotalCredit,
+                    (excessEarnings * 15 / 100)
+                );
+            } else {
+                // Phase-in rate is toggled ON but set to 0% - immediate full credit
+                credit = maxTotalCredit;
+            }
+            
+            // Phase-out logic
+            const phaseOutThreshold = filingStatus === 'single' ? phaseOutHOH : phaseOutMFJ;
+            if (income > phaseOutThreshold) {
+                const excessIncome = income - phaseOutThreshold;
+                const reduction = Math.floor(excessIncome / 1000) * 50;
+                credit = Math.max(0, credit - reduction);
+            }
+            
+            return credit;
+        }
+
+        // Charts
+        let mainChart, zoomedChart;
+
+        function createChart(canvasId, minIncome, maxIncome) {
+            const ctx = document.getElementById(canvasId).getContext('2d');
+            
+            // Determine family details
+            let numChildren = 1;
+            let filingStatus = 'single';
+            
+            if (selectedFamily === 'single-1') {
+                numChildren = 1;
+                filingStatus = 'single';
+            } else if (selectedFamily === 'single-2') {
+                numChildren = 2;
+                filingStatus = 'single';
+            } else if (selectedFamily === 'single-3') {
+                numChildren = 3;
+                filingStatus = 'single';
+            } else if (selectedFamily === 'married') {
+                numChildren = 2;
+                filingStatus = 'married';
+            }
+
+            const incomes = [];
+            const step = (maxIncome - minIncome) / 100;
+            for (let i = minIncome; i <= maxIncome; i += step) {
+                incomes.push(i);
+            }
+            
+            // Baseline (current law)
+            const baselineSingleData = incomes.map(income => calculateCredit(income, numChildren, 'single', baselineState, new Set()));
+            const baselineMarriedData = incomes.map(income => calculateCredit(income, numChildren, 'married', baselineState, new Set()));
+            
+            // Modified (user choices)
+            const modifiedSingleData = incomes.map(income => calculateCredit(income, numChildren, 'single', state, state.activeLevers));
+            const modifiedMarriedData = incomes.map(income => calculateCredit(income, numChildren, 'married', state, state.activeLevers));
+            
+            // Check if user has made any changes
+            const hasChanges = state.activeLevers.size > 0;
+            
+            const datasets = [
+                {
+                    label: 'Single (Current Law)',
+                    data: baselineSingleData,
+                    borderColor: '#ef4444',
+                    backgroundColor: 'transparent',
+                    borderWidth: 2,
+                    pointRadius: 0,
+                    tension: 0.1,
+                    borderDash: []
+                },
+                {
+                    label: 'Married (Current Law)',
+                    data: baselineMarriedData,
+                    borderColor: '#1e3a5f',
+                    backgroundColor: 'transparent',
+                    borderWidth: 2,
+                    pointRadius: 0,
+                    tension: 0.1,
+                    borderDash: []
+                }
+            ];
+
+            // Only show modified lines if user has made changes
+            if (hasChanges) {
+                datasets.push(
+                    {
+                        label: 'Single (Your Policy)',
+                        data: modifiedSingleData,
+                        borderColor: '#f97316',
+                        backgroundColor: 'transparent',
+                        borderWidth: 3,
+                        pointRadius: 0,
+                        tension: 0.1,
+                        borderDash: [8, 4]
+                    },
+                    {
+                        label: 'Married (Your Policy)',
+                        data: modifiedMarriedData,
+                        borderColor: '#3b82f6',
+                        backgroundColor: 'transparent',
+                        borderWidth: 3,
+                        pointRadius: 0,
+                        tension: 0.1,
+                        borderDash: [8, 4]
+                    }
+                );
+            }
+            
+            return new Chart(ctx, {
+                type: 'line',
+                data: {
+                    labels: incomes.map(i => `$${(i/1000).toFixed(0)}k`),
+                    datasets: datasets
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: {
+                            display: false
+                        },
+                        tooltip: {
+                            mode: 'index',
+                            intersect: false,
+                            callbacks: {
+                                label: function(context) {
+                                    return `${context.dataset.label}: $${context.parsed.y.toLocaleString()}`;
+                                }
+                            }
+                        }
+                    },
+                    scales: {
+                        x: {
+                            title: {
+                                display: true,
+                                text: 'Adjusted Gross Income',
+                                font: {
+                                    family: 'Geist',
+                                    size: 11
+                                }
+                            },
+                            ticks: {
+                                maxTicksLimit: 10,
+                                font: {
+                                    family: 'Geist',
+                                    size: 10
+                                }
+                            },
+                            grid: {
+                                color: '#f3f4f6'
+                            }
+                        },
+                        y: {
+                            title: {
+                                display: true,
+                                text: 'Credit Amount',
+                                font: {
+                                    family: 'Geist',
+                                    size: 11
+                                }
+                            },
+                            ticks: {
+                                callback: function(value) {
+                                    return '$' + value.toLocaleString();
+                                },
+                                font: {
+                                    family: 'Geist',
+                                    size: 10
+                                }
+                            },
+                            grid: {
+                                color: '#f3f4f6'
+                            },
+                            beginAtZero: true
+                        }
+                    },
+                    interaction: {
+                        mode: 'nearest',
+                        axis: 'x',
+                        intersect: false
+                    }
+                }
+            });
+        }
+
+        function updateCharts() {
+            if (mainChart) mainChart.destroy();
+            if (zoomedChart) zoomedChart.destroy();
+            
+            mainChart = createChart('mainChart', 0, 500000);
+            zoomedChart = createChart('zoomedChart', 0, 50000);
+        }
+
+        function updateTally() {
+            let numChildren = 1;
+            let filingStatus = 'single';
+            
+            if (selectedFamily === 'single-1') {
+                numChildren = 1;
+                filingStatus = 'single';
+            } else if (selectedFamily === 'single-2') {
+                numChildren = 2;
+                filingStatus = 'single';
+            } else if (selectedFamily === 'single-3') {
+                numChildren = 3;
+                filingStatus = 'single';
+            } else if (selectedFamily === 'married') {
+                numChildren = 2;
+                filingStatus = 'married';
+            }
+
+            // Calculate baseline (current law)
+            const baselineCredit = calculateCredit(annualIncome, numChildren, filingStatus, baselineState, new Set());
+            const baselineRefundable = Math.min(baselineCredit, 1700 * numChildren);
+
+            // Calculate modified (your policy)
+            const modifiedCredit = calculateCredit(annualIncome, numChildren, filingStatus, state, state.activeLevers);
+            const maxRefundable = state.activeLevers.has('maxRefund') ? state.maxRefund : 1700;
+            const modifiedRefundable = Math.min(modifiedCredit, maxRefundable * numChildren);
+
+            // Update baseline column
+            document.getElementById('tallyBaselineTotal').textContent = `$${Math.round(baselineCredit).toLocaleString()}`;
+            document.getElementById('tallyBaselineRefundable').textContent = `Refundable: $${Math.round(baselineRefundable).toLocaleString()}`;
+
+            // Update modified column
+            document.getElementById('tallyModifiedTotal').textContent = `$${Math.round(modifiedCredit).toLocaleString()}`;
+            document.getElementById('tallyModifiedRefundable').textContent = `Refundable: $${Math.round(modifiedRefundable).toLocaleString()}`;
+
+            // Calculate and display difference
+            const difference = modifiedCredit - baselineCredit;
+            const differenceElement = document.getElementById('tallyDifference');
+            
+            if (Math.abs(difference) < 1) {
+                differenceElement.textContent = 'No change';
+                differenceElement.className = 'tally-difference neutral';
+            } else if (difference > 0) {
+                differenceElement.textContent = `+$${Math.round(difference).toLocaleString()} more`;
+                differenceElement.className = 'tally-difference positive';
+            } else {
+                differenceElement.textContent = `-$${Math.round(Math.abs(difference)).toLocaleString()} less`;
+                differenceElement.className = 'tally-difference negative';
+            }
+            
+            const childText = numChildren === 1 ? '3-year-old child' : `${numChildren} children`;
+            document.getElementById('tallyContext').textContent = `For $${annualIncome.toLocaleString()} income with ${childText}`;
+        }
+
+        // Initialize
+        updateCharts();
+        updateTally();
+
+        // Reset Button
+        document.getElementById('resetButton').addEventListener('click', () => {
+            // Turn off all toggles
+            document.querySelectorAll('.toggle-switch').forEach(toggle => {
+                toggle.classList.remove('active');
+            });
+            
+            // Hide all inputs
+            document.querySelectorAll('.lever-input').forEach(input => {
+                input.classList.remove('active');
+            });
+            
+            // Reset state to baseline
+            state.maxCredit = 2000;
+            state.minBaseCredit = 0;
+            state.maxRefund = 1700;
+            state.minEarnings = 2500;
+            state.phaseInRate = 15;
+            state.phaseInMethod = 'child';
+            state.phaseOutHOH = 200000;
+            state.phaseOutMFJ = 400000;
+            state.include17 = false;
+            state.increaseYounger = false;
+            state.ageMin = 0;
+            state.ageMax = 5;
+            state.activeLevers.clear();
+            
+            // Reset all slider values
+            document.getElementById('maxCreditSlider').value = 2000;
+            document.getElementById('maxCreditValue').textContent = '$2,000';
+            
+            document.getElementById('minBaseCreditSlider').value = 500;
+            document.getElementById('minBaseCreditValue').textContent = '$500';
+            
+            document.getElementById('maxRefundSlider').value = 1700;
+            document.getElementById('maxRefundValue').textContent = '$1,700';
+            
+            document.getElementById('minEarningsSlider').value = 2500;
+            document.getElementById('minEarningsValue').textContent = '$2,500';
+            
+            document.getElementById('phaseInRateSlider').value = 15;
+            document.getElementById('phaseInRateValue').textContent = '15%';
+            
+            document.getElementById('phaseOutHOHSlider').value = 200000;
+            document.getElementById('phaseOutHOHValue').textContent = '$200,000';
+            
+            document.getElementById('phaseOutMFJSlider').value = 400000;
+            document.getElementById('phaseOutMFJValue').textContent = '$400,000';
+            
+            // Reset checkboxes
+            document.getElementById('include17').checked = false;
+            document.getElementById('increaseYounger').checked = false;
+            document.getElementById('youngerAgeRange').style.display = 'none';
+            
+            document.getElementById('ageMin').value = 0;
+            document.getElementById('ageMax').value = 5;
+            
+            // Reset phase-in method buttons
+            document.querySelectorAll('.phase-btn').forEach(btn => {
+                btn.classList.remove('active');
+                if (btn.dataset.method === 'child') {
+                    btn.classList.add('active');
+                }
+            });
+            
+            // Update charts and tally
+            updateCharts();
+            updateTally();
+        });
+    </script>
+</body>
+</html>

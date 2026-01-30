@@ -1,0 +1,1797 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SNAP Policy Simulator</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+            background: #f5f7fa;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+
+        .header {
+            background: #1e3a8a;
+            color: white;
+            padding: 30px;
+            border-radius: 12px;
+            margin-bottom: 30px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+
+        .header h1 {
+            font-size: 32px;
+            margin-bottom: 10px;
+        }
+
+        .header p {
+            opacity: 0.95;
+            font-size: 16px;
+            line-height: 1.6;
+        }
+
+        .context-card {
+            background: white;
+            padding: 25px;
+            border-radius: 12px;
+            margin-bottom: 30px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+            border-left: 4px solid #2563eb;
+        }
+
+        .context-card h3 {
+            color: #1e3a8a;
+            margin-bottom: 10px;
+            font-size: 18px;
+        }
+
+        .context-card p {
+            color: #4b5563;
+            line-height: 1.6;
+            margin-bottom: 8px;
+        }
+
+        .context-card strong {
+            color: #1f2937;
+        }
+
+        .adjustment-toggle {
+            margin-top: 20px;
+            padding: 20px;
+            background: #f9fafb;
+            border-radius: 8px;
+            border: 2px solid #e5e7eb;
+        }
+
+        .adjustment-toggle h4 {
+            color: #1e3a8a;
+            margin-bottom: 10px;
+            font-size: 16px;
+            font-weight: 600;
+        }
+
+        .adjustment-toggle p {
+            color: #6b7280;
+            font-size: 14px;
+            margin-bottom: 12px;
+            line-height: 1.5;
+        }
+
+        .toggle-control {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .toggle-switch {
+            position: relative;
+            display: inline-block;
+            width: 50px;
+            height: 26px;
+        }
+
+        .toggle-switch input {
+            opacity: 0;
+            width: 0;
+            height: 0;
+        }
+
+        .slider {
+            position: absolute;
+            cursor: pointer;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-color: #d1d5db;
+            transition: .3s;
+            border-radius: 26px;
+        }
+
+        .slider:before {
+            position: absolute;
+            content: "";
+            height: 20px;
+            width: 20px;
+            left: 3px;
+            bottom: 3px;
+            background-color: white;
+            transition: .3s;
+            border-radius: 50%;
+        }
+
+        input:checked + .slider {
+            background-color: #2563eb;
+        }
+
+        input:checked + .slider:before {
+            transform: translateX(24px);
+        }
+
+        .toggle-label {
+            font-weight: 600;
+            color: #1f2937;
+            font-size: 15px;
+        }
+
+        .adjustment-badge {
+            display: inline-block;
+            padding: 4px 10px;
+            background: #dbeafe;
+            color: #1e40af;
+            border-radius: 12px;
+            font-size: 12px;
+            font-weight: 600;
+            margin-left: 10px;
+        }
+
+        .show-structure-btn {
+            margin-top: 20px;
+            padding: 12px 24px;
+            background: #2563eb;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-size: 15px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            width: 100%;
+            justify-content: center;
+        }
+
+        .show-structure-btn:hover {
+            background: #1d4ed8;
+        }
+
+        #structureBtnIcon {
+            transition: transform 0.3s;
+            font-size: 12px;
+        }
+
+        .show-structure-btn.open #structureBtnIcon {
+            transform: rotate(180deg);
+        }
+
+        .benefit-structure-section {
+            background: white;
+            padding: 0;
+            border-radius: 12px;
+            margin-bottom: 30px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+            overflow: hidden;
+            max-height: 0;
+            transition: max-height 0.5s ease-out, padding 0.3s ease-out;
+        }
+
+        .benefit-structure-section.hidden {
+            max-height: 0;
+            padding: 0;
+        }
+
+        .benefit-structure-section.visible {
+            max-height: 5000px;
+            padding: 30px;
+        }
+
+        .structure-content h2 {
+            color: #1e3a8a;
+            margin-bottom: 10px;
+            font-size: 24px;
+        }
+
+        .benefits-table-container {
+            overflow-x: auto;
+            margin-bottom: 30px;
+        }
+
+        .benefits-table {
+            width: 100%;
+            border-collapse: collapse;
+            background: white;
+        }
+
+        .benefits-table th {
+            background: #f9fafb;
+            padding: 15px;
+            text-align: left;
+            font-weight: 600;
+            color: #374151;
+            border-bottom: 2px solid #e5e7eb;
+            font-size: 14px;
+        }
+
+        .benefits-table td {
+            padding: 15px;
+            border-bottom: 1px solid #e5e7eb;
+            font-size: 15px;
+            color: #1f2937;
+        }
+
+        .benefits-table tr:hover {
+            background: #f9fafb;
+        }
+
+        .highlight-row {
+            background: #eff6ff !important;
+        }
+
+        .highlight-value {
+            font-weight: 600;
+            color: #2563eb;
+        }
+
+        .calculation-explainer {
+            background: #f9fafb;
+            padding: 30px;
+            border-radius: 12px;
+            margin-bottom: 30px;
+        }
+
+        .explainer-step {
+            display: flex;
+            align-items: start;
+            gap: 20px;
+            margin-bottom: 25px;
+        }
+
+        .explainer-step:last-child {
+            margin-bottom: 0;
+        }
+
+        .step-number {
+            width: 40px;
+            height: 40px;
+            background: #2563eb;
+            color: white;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 700;
+            font-size: 18px;
+            flex-shrink: 0;
+        }
+
+        .step-content h4 {
+            color: #1e3a8a;
+            margin-bottom: 5px;
+            font-size: 16px;
+        }
+
+        .step-content p {
+            color: #6b7280;
+            font-size: 14px;
+            line-height: 1.5;
+        }
+
+        .example-calculation {
+            background: #eff6ff;
+            padding: 25px;
+            border-radius: 12px;
+            border-left: 4px solid #2563eb;
+        }
+
+        .example-calculation h4 {
+            color: #1e3a8a;
+            margin-bottom: 20px;
+            font-size: 18px;
+        }
+
+        .calc-row {
+            display: flex;
+            justify-content: space-between;
+            padding: 10px 0;
+            border-bottom: 1px solid #dbeafe;
+        }
+
+        .calc-row:last-child {
+            border-bottom: none;
+        }
+
+        .calc-label {
+            color: #4b5563;
+            font-size: 15px;
+        }
+
+        .calc-value {
+            color: #1f2937;
+            font-weight: 500;
+            font-size: 15px;
+        }
+
+        .total-row {
+            margin-top: 10px;
+            padding-top: 15px;
+            border-top: 2px solid #2563eb;
+        }
+
+        .total-row .calc-label,
+        .total-row .calc-value {
+            color: #1e3a8a;
+        }
+
+        .final-row {
+            margin-top: 15px;
+            padding: 15px;
+            background: white;
+            border-radius: 8px;
+            border: 2px solid #2563eb;
+        }
+
+        .final-row .calc-label,
+        .final-row .calc-value {
+            color: #2563eb;
+            font-size: 18px;
+        }
+
+        .mode-selector {
+            display: flex;
+            gap: 15px;
+            margin-bottom: 30px;
+            background: white;
+            padding: 20px;
+            border-radius: 12px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+        }
+
+        .mode-button {
+            flex: 1;
+            padding: 20px;
+            background: #f9fafb;
+            border: 2px solid #e5e7eb;
+            border-radius: 12px;
+            cursor: pointer;
+            transition: all 0.3s;
+            text-align: center;
+        }
+
+        .mode-button:hover {
+            background: #f3f4f6;
+            border-color: #d1d5db;
+        }
+
+        .mode-button.active {
+            background: #dbeafe;
+            border-color: #2563eb;
+        }
+
+        .mode-button h3 {
+            color: #1e3a8a;
+            margin-bottom: 8px;
+            font-size: 18px;
+        }
+
+        .mode-button p {
+            color: #6b7280;
+            font-size: 14px;
+            line-height: 1.5;
+        }
+
+        .mode-button.active p {
+            color: #1e40af;
+        }
+
+        .query-section {
+            background: white;
+            padding: 30px;
+            border-radius: 12px;
+            margin-bottom: 30px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+        }
+
+        .query-section h2 {
+            color: #1e3a8a;
+            margin-bottom: 15px;
+            font-size: 24px;
+        }
+
+        .example-queries {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 15px;
+            margin-top: 20px;
+        }
+
+        .scenario-card {
+            padding: 20px;
+            background: #f0f9ff;
+            border: 2px solid #bfdbfe;
+            border-radius: 12px;
+            cursor: pointer;
+            transition: all 0.3s;
+            position: relative;
+        }
+
+        .scenario-card:hover {
+            background: #e0f2fe;
+            border-color: #60a5fa;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(37, 99, 235, 0.15);
+        }
+
+        .scenario-title {
+            font-weight: 600;
+            color: #1e40af;
+            margin-bottom: 8px;
+            font-size: 16px;
+        }
+
+        .scenario-description {
+            font-size: 14px;
+            color: #1e40af;
+            line-height: 1.5;
+        }
+
+        .input-wrapper {
+            display: flex;
+            gap: 15px;
+            margin-bottom: 20px;
+        }
+
+        .query-input {
+            flex: 1;
+            padding: 15px;
+            border: 2px solid #e5e7eb;
+            border-radius: 8px;
+            font-size: 16px;
+            transition: border-color 0.3s;
+        }
+
+        .query-input:focus {
+            outline: none;
+            border-color: #2563eb;
+        }
+
+        .analyze-btn {
+            padding: 15px 30px;
+            background: #2563eb;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: background 0.3s;
+        }
+
+        .analyze-btn:hover {
+            background: #1d4ed8;
+        }
+
+        .analyze-btn:disabled {
+            background: #9ca3af;
+            cursor: not-allowed;
+        }
+
+        .goal-selection-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 15px;
+            margin-bottom: 25px;
+        }
+
+        .goal-card {
+            padding: 20px;
+            background: white;
+            border: 2px solid #e5e7eb;
+            border-radius: 12px;
+            cursor: pointer;
+            transition: all 0.3s;
+            position: relative;
+        }
+
+        .goal-card:hover {
+            border-color: #93c5fd;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(37, 99, 235, 0.1);
+        }
+
+        .goal-card.selected {
+            background: #dbeafe;
+            border-color: #2563eb;
+        }
+
+        .goal-card .checkbox {
+            position: absolute;
+            top: 15px;
+            right: 15px;
+            width: 24px;
+            height: 24px;
+            border: 2px solid #d1d5db;
+            border-radius: 6px;
+            background: white;
+            transition: all 0.3s;
+        }
+
+        .goal-card.selected .checkbox {
+            background: #2563eb;
+            border-color: #2563eb;
+        }
+
+        .goal-card.selected .checkbox::after {
+            content: "✓";
+            color: white;
+            font-weight: bold;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 16px;
+        }
+
+        .build-action-bar {
+            display: flex;
+            gap: 15px;
+            align-items: center;
+            padding: 20px;
+            background: #f9fafb;
+            border-radius: 12px;
+            margin-top: 20px;
+        }
+
+        .selected-count {
+            flex: 1;
+            color: #4b5563;
+            font-weight: 500;
+        }
+
+        .build-policy-btn {
+            padding: 15px 30px;
+            background: #2563eb;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: background 0.3s;
+        }
+
+        .build-policy-btn:hover {
+            background: #1d4ed8;
+        }
+
+        .build-policy-btn:disabled {
+            background: #9ca3af;
+            cursor: not-allowed;
+        }
+
+        .clear-selections-btn {
+            padding: 15px 30px;
+            background: white;
+            color: #6b7280;
+            border: 2px solid #e5e7eb;
+            border-radius: 8px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .clear-selections-btn:hover {
+            background: #f9fafb;
+            border-color: #d1d5db;
+        }
+
+        .loading {
+            text-align: center;
+            padding: 40px;
+            color: #6b7280;
+        }
+
+        .spinner {
+            border: 3px solid #f3f4f6;
+            border-top: 3px solid #2563eb;
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            animation: spin 1s linear infinite;
+            margin: 0 auto 15px;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        .results-section {
+            background: white;
+            padding: 30px;
+            border-radius: 12px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+        }
+
+        .strength-indicator {
+            background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+            color: white;
+            padding: 20px;
+            border-radius: 12px;
+            margin-bottom: 25px;
+        }
+
+        .strength-indicator h3 {
+            margin-bottom: 10px;
+            font-size: 18px;
+        }
+
+        .strength-indicator p {
+            opacity: 0.95;
+            line-height: 1.5;
+        }
+
+        .combined-goals-list {
+            background: #f0f9ff;
+            border-left: 4px solid #3b82f6;
+            padding: 20px;
+            margin-bottom: 25px;
+            border-radius: 8px;
+        }
+
+        .combined-goals-list h3 {
+            color: #1e40af;
+            margin-bottom: 15px;
+            font-size: 18px;
+        }
+
+        .combined-goals-list ul {
+            list-style: none;
+            margin: 0;
+            padding: 0;
+        }
+
+        .combined-goals-list li {
+            padding: 8px 0;
+            color: #1e40af;
+            font-weight: 500;
+        }
+
+        .combined-goals-list li:before {
+            content: "✓ ";
+            color: #3b82f6;
+            font-weight: bold;
+            margin-right: 8px;
+        }
+
+        .interpretation {
+            background: #f0fdf4;
+            border-left: 4px solid #22c55e;
+            padding: 20px;
+            margin-bottom: 25px;
+            border-radius: 8px;
+        }
+
+        .interpretation h3 {
+            color: #166534;
+            margin-bottom: 10px;
+            font-size: 18px;
+        }
+
+        .interpretation p {
+            color: #15803d;
+            line-height: 1.6;
+            font-size: 15px;
+        }
+
+        .impact-preview {
+            background: #eff6ff;
+            border-left: 4px solid #3b82f6;
+            padding: 20px;
+            margin-bottom: 25px;
+            border-radius: 8px;
+        }
+
+        .impact-preview h3 {
+            color: #1e40af;
+            margin-bottom: 12px;
+            font-size: 18px;
+        }
+
+        .impact-item {
+            display: flex;
+            align-items: start;
+            margin-bottom: 10px;
+            color: #1e40af;
+        }
+
+        .impact-item:last-child {
+            margin-bottom: 0;
+        }
+
+        .impact-icon {
+            font-size: 20px;
+            margin-right: 10px;
+            flex-shrink: 0;
+        }
+
+        .impact-text {
+            line-height: 1.5;
+            font-size: 15px;
+        }
+
+        .changed-levers-summary {
+            background: #fef3c7;
+            border-left: 4px solid #fbbf24;
+            padding: 20px;
+            margin-bottom: 25px;
+            border-radius: 8px;
+        }
+
+        .changed-levers-summary h3 {
+            color: #78350f;
+            margin-bottom: 15px;
+            font-size: 18px;
+        }
+
+        .changed-levers-summary p {
+            color: #92400e;
+            margin-bottom: 12px;
+            font-size: 14px;
+        }
+
+        .changed-levers-list {
+            list-style: none;
+            margin-top: 10px;
+        }
+
+        .changed-levers-list li {
+            padding: 10px;
+            margin-bottom: 8px;
+            color: #78350f;
+            font-weight: 500;
+            background: white;
+            border-radius: 6px;
+            font-size: 15px;
+        }
+
+        .changed-levers-list li:last-child {
+            margin-bottom: 0;
+        }
+
+        .changed-levers-list .lever-label {
+            font-weight: 600;
+            color: #92400e;
+        }
+
+        .changed-levers-list .lever-change {
+            color: #78350f;
+            font-weight: 400;
+        }
+
+        .toggle-section {
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .toggle-button {
+            padding: 10px 20px;
+            background: #f3f4f6;
+            color: #4b5563;
+            border: 2px solid #e5e7eb;
+            border-radius: 8px;
+            font-size: 14px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .toggle-button.active {
+            background: #2563eb;
+            color: white;
+            border-color: #2563eb;
+        }
+
+        .toggle-button:hover:not(.active) {
+            background: #e5e7eb;
+        }
+
+        .comparison-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+
+        .comparison-table th {
+            background: #f9fafb;
+            padding: 15px;
+            text-align: left;
+            font-weight: 600;
+            color: #374151;
+            border-bottom: 2px solid #e5e7eb;
+            font-size: 14px;
+        }
+
+        .comparison-table td {
+            padding: 15px;
+            border-bottom: 1px solid #e5e7eb;
+            font-size: 15px;
+        }
+
+        .comparison-table tr:hover {
+            background: #f9fafb;
+        }
+
+        .lever-name {
+            font-weight: 500;
+            color: #1f2937;
+        }
+
+        .lever-description {
+            font-size: 13px;
+            color: #6b7280;
+            margin-top: 4px;
+            font-weight: 400;
+        }
+
+        .changed {
+            background: #fef3c7 !important;
+        }
+
+        .change-indicator {
+            display: inline-block;
+            padding: 4px 12px;
+            background: #fbbf24;
+            color: #78350f;
+            border-radius: 12px;
+            font-size: 12px;
+            font-weight: 600;
+            margin-left: 10px;
+        }
+
+        .value-current {
+            color: #6b7280;
+        }
+
+        .value-new {
+            color: #2563eb;
+            font-weight: 600;
+        }
+
+        .hidden {
+            display: none;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>SNAP Benefits: Explore Policy Options</h1>
+            <p>The Supplemental Nutrition Assistance Program helps millions of families afford nutritious food. Tell us what outcome you'd like to see, and we'll show you how the policy could be adjusted to achieve it.</p>
+        </div>
+
+        <div class="context-card">
+            <h3>What is SNAP?</h3>
+            <p>The Supplemental Nutrition Assistance Program (SNAP, formerly food stamps) helps low-income families purchase food. <strong>For FY 2026</strong> (October 2025 - September 2026):</p>
+            <p><strong>→ Maximum benefit for family of 4:</strong> $994/month (48 states + DC)</p>
+            <p><strong>→ Minimum benefit:</strong> $24/month for 1-2 person households</p>
+            <p><strong>→ Gross income limit:</strong> 130% of federal poverty line</p>
+            <p><strong>→ Net income limit:</strong> 100% of federal poverty line</p>
+
+            <div class="adjustment-toggle">
+                <h4>Data Adjustment for Full Participation</h4>
+                <p>Many eligible households don't participate in SNAP. Turn this on to see cost estimates that account for underreporting and assume 100% participation among eligible households.</p>
+                <div class="toggle-control">
+                    <label class="toggle-switch">
+                        <input type="checkbox" id="underreportingToggle" onchange="toggleUnderreporting()">
+                        <span class="slider"></span>
+                    </label>
+                    <span class="toggle-label">Adjust for underreporting & full take-up</span>
+                    <span class="adjustment-badge" id="adjustmentBadge" style="display: none;">ADJUSTED DATA</span>
+                </div>
+            </div>
+
+            <button class="show-structure-btn" onclick="toggleBenefitStructure()">
+                <span id="structureBtnText">See What This Policy Looks Like Under Current Practice by Family Size</span>
+                <span id="structureBtnIcon">▼</span>
+            </button>
+        </div>
+
+        <div id="benefitStructureSection" class="benefit-structure-section hidden">
+            <div class="structure-content">
+                <h2>SNAP Benefit Structure by Family Size (FY 2026)</h2>
+                <p style="color: #6b7280; margin-bottom: 30px;">Understanding maximum monthly benefits and income limits across different household sizes</p>
+
+                <h3 style="color: #1e3a8a; margin-bottom: 20px; font-size: 20px;">Maximum Monthly Benefits by Household Size</h3>
+                <div class="benefits-table-container">
+                    <table class="benefits-table">
+                        <thead>
+                            <tr>
+                                <th>Household Size</th>
+                                <th>Maximum Monthly Benefit</th>
+                                <th>Per Person</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>1 person</td>
+                                <td class="highlight-value">$298</td>
+                                <td>$298</td>
+                            </tr>
+                            <tr>
+                                <td>2 people</td>
+                                <td class="highlight-value">$546</td>
+                                <td>$273</td>
+                            </tr>
+                            <tr>
+                                <td>3 people</td>
+                                <td class="highlight-value">$785</td>
+                                <td>$262</td>
+                            </tr>
+                            <tr class="highlight-row">
+                                <td>4 people</td>
+                                <td class="highlight-value">$994</td>
+                                <td>$249</td>
+                            </tr>
+                            <tr>
+                                <td>5 people</td>
+                                <td class="highlight-value">$1,183</td>
+                                <td>$237</td>
+                            </tr>
+                            <tr>
+                                <td>6 people</td>
+                                <td class="highlight-value">$1,421</td>
+                                <td>$237</td>
+                            </tr>
+                            <tr>
+                                <td>7 people</td>
+                                <td class="highlight-value">$1,571</td>
+                                <td>$224</td>
+                            </tr>
+                            <tr>
+                                <td>8 people</td>
+                                <td class="highlight-value">$1,790</td>
+                                <td>$224</td>
+                            </tr>
+                            <tr>
+                                <td>Each additional person</td>
+                                <td class="highlight-value">+$219</td>
+                                <td>—</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+
+                <h3 style="color: #1e3a8a; margin: 40px 0 20px 0; font-size: 20px;">Income Eligibility Limits by Household Size</h3>
+                <div class="benefits-table-container">
+                    <table class="benefits-table">
+                        <thead>
+                            <tr>
+                                <th>Household Size</th>
+                                <th>Gross Monthly Income Limit (130% FPL)</th>
+                                <th>Net Monthly Income Limit (100% FPL)</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>1 person</td>
+                                <td>$1,632</td>
+                                <td>$1,255</td>
+                            </tr>
+                            <tr>
+                                <td>2 people</td>
+                                <td>$2,206</td>
+                                <td>$1,697</td>
+                            </tr>
+                            <tr>
+                                <td>3 people</td>
+                                <td>$2,780</td>
+                                <td>$2,138</td>
+                            </tr>
+                            <tr class="highlight-row">
+                                <td>4 people</td>
+                                <td>$3,354</td>
+                                <td>$2,580</td>
+                            </tr>
+                            <tr>
+                                <td>5 people</td>
+                                <td>$3,928</td>
+                                <td>$3,022</td>
+                            </tr>
+                            <tr>
+                                <td>6 people</td>
+                                <td>$4,502</td>
+                                <td>$3,464</td>
+                            </tr>
+                            <tr>
+                                <td>7 people</td>
+                                <td>$5,076</td>
+                                <td>$3,905</td>
+                            </tr>
+                            <tr>
+                                <td>8 people</td>
+                                <td>$5,650</td>
+                                <td>$4,347</td>
+                            </tr>
+                            <tr>
+                                <td>Each additional person</td>
+                                <td>+$574</td>
+                                <td>+$442</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+
+                <h3 style="color: #1e3a8a; margin: 40px 0 20px 0; font-size: 20px;">How Benefits Are Calculated</h3>
+                <div class="calculation-explainer">
+                    <div class="explainer-step">
+                        <div class="step-number">1</div>
+                        <div class="step-content">
+                            <h4>Start with Gross Income</h4>
+                            <p>All income before taxes and deductions</p>
+                        </div>
+                    </div>
+                    <div class="explainer-step">
+                        <div class="step-number">2</div>
+                        <div class="step-content">
+                            <h4>Apply Deductions</h4>
+                            <p>Standard deduction ($209), earned income deduction (20%), dependent care, medical expenses, and shelter costs</p>
+                        </div>
+                    </div>
+                    <div class="explainer-step">
+                        <div class="step-number">3</div>
+                        <div class="step-content">
+                            <h4>Calculate Net Income</h4>
+                            <p>This is what remains after all deductions</p>
+                        </div>
+                    </div>
+                    <div class="explainer-step">
+                        <div class="step-number">4</div>
+                        <div class="step-content">
+                            <h4>Determine Benefit Amount</h4>
+                            <p>Maximum allotment for household size minus 30% of net income</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="example-calculation">
+                    <h4>Example: Family of 4 with $2,000 Monthly Gross Income</h4>
+                    <div class="calc-row">
+                        <span class="calc-label">Gross Income:</span>
+                        <span class="calc-value">$2,000</span>
+                    </div>
+                    <div class="calc-row">
+                        <span class="calc-label">Standard Deduction:</span>
+                        <span class="calc-value">-$209</span>
+                    </div>
+                    <div class="calc-row">
+                        <span class="calc-label">20% Earned Income Deduction:</span>
+                        <span class="calc-value">-$400</span>
+                    </div>
+                    <div class="calc-row">
+                        <span class="calc-label">Shelter Deduction (example):</span>
+                        <span class="calc-value">-$300</span>
+                    </div>
+                    <div class="calc-row total-row">
+                        <span class="calc-label"><strong>Net Income:</strong></span>
+                        <span class="calc-value"><strong>$1,091</strong></span>
+                    </div>
+                    <div class="calc-row">
+                        <span class="calc-label">30% of Net Income:</span>
+                        <span class="calc-value">$327</span>
+                    </div>
+                    <div class="calc-row">
+                        <span class="calc-label">Maximum Benefit (family of 4):</span>
+                        <span class="calc-value">$994</span>
+                    </div>
+                    <div class="calc-row final-row">
+                        <span class="calc-label"><strong>Monthly SNAP Benefit:</strong></span>
+                        <span class="calc-value"><strong>$667</strong></span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="mode-selector">
+            <div class="mode-button active" id="singleGoalMode" onclick="switchMode('single')">
+                <h3>Single Goal</h3>
+                <p>Explore one policy change at a time</p>
+            </div>
+            <div class="mode-button" id="comprehensiveMode" onclick="switchMode('comprehensive')">
+                <h3>Build Comprehensive Policy</h3>
+                <p>Select multiple goals and see the strongest combined proposal</p>
+            </div>
+        </div>
+
+        <div id="singleModeSection" class="query-section">
+            <h2>What would you like to accomplish?</h2>
+            <p style="color: #6b7280; margin-bottom: 20px;">Choose a scenario below or describe your own goal in plain language</p>
+            
+            <div class="example-queries">
+                <div class="scenario-card" data-query="Increase maximum benefits to help families keep up with rising food costs">
+                    <div class="scenario-title">Increase maximum benefits</div>
+                    <div class="scenario-description">Help families afford more nutritious food</div>
+                </div>
+                
+                <div class="scenario-card" data-query="Increase minimum benefits so small households get meaningful support">
+                    <div class="scenario-title">Boost minimum benefits</div>
+                    <div class="scenario-description">Provide adequate support for 1-2 person households</div>
+                </div>
+                
+                <div class="scenario-card" data-query="Raise the gross income limit so working families don't lose benefits">
+                    <div class="scenario-title">Expand income eligibility</div>
+                    <div class="scenario-description">Help more working families qualify</div>
+                </div>
+            </div>
+
+            <div style="margin-top: 30px; padding-top: 30px; border-top: 2px solid #e5e7eb;">
+                <h3 style="color: #1e3a8a; margin-bottom: 15px; font-size: 18px;">Or describe your own idea:</h3>
+                <div class="input-wrapper">
+                    <input 
+                        type="text" 
+                        class="query-input" 
+                        id="policyQuery"
+                        placeholder="e.g., Help working families who struggle to afford healthy food..."
+                    />
+                    <button class="analyze-btn" id="analyzeBtn">See Changes</button>
+                </div>
+            </div>
+        </div>
+
+        <div id="comprehensiveModeSection" class="query-section hidden">
+            <h2>Select All Goals You Want to Achieve</h2>
+            <p style="color: #6b7280; margin-bottom: 20px;">Choose all the outcomes you'd like to see. We'll create the strongest policy that accomplishes all of them together.</p>
+            
+            <div class="goal-selection-grid">
+                <div class="goal-card" data-goal="increase-max" onclick="toggleGoal(this)">
+                    <div class="checkbox"></div>
+                    <div class="scenario-title">Increase maximum benefits</div>
+                    <div class="scenario-description">Raise benefit levels to match food costs</div>
+                </div>
+                
+                <div class="goal-card" data-goal="minimum-benefits" onclick="toggleGoal(this)">
+                    <div class="checkbox"></div>
+                    <div class="scenario-title">Boost minimum benefits</div>
+                    <div class="scenario-description">Ensure adequate support for small households</div>
+                </div>
+                
+                <div class="goal-card" data-goal="income-limits" onclick="toggleGoal(this)">
+                    <div class="checkbox"></div>
+                    <div class="scenario-title">Expand income eligibility</div>
+                    <div class="scenario-description">Help more working families qualify</div>
+                </div>
+
+                <div class="goal-card" data-goal="benefit-rate" onclick="toggleGoal(this)">
+                    <div class="checkbox"></div>
+                    <div class="scenario-title">Reduce benefit cliff</div>
+                    <div class="scenario-description">Improve work incentives</div>
+                </div>
+
+                <div class="goal-card" data-goal="deductions" onclick="toggleGoal(this)">
+                    <div class="checkbox"></div>
+                    <div class="scenario-title">Increase deductions</div>
+                    <div class="scenario-description">Better account for living expenses</div>
+                </div>
+
+                <div class="goal-card" data-goal="shelter-cap" onclick="toggleGoal(this)">
+                    <div class="checkbox"></div>
+                    <div class="scenario-title">Raise shelter deduction cap</div>
+                    <div class="scenario-description">Reflect actual housing costs</div>
+                </div>
+            </div>
+
+            <div class="build-action-bar">
+                <div class="selected-count">
+                    <span id="selectedCount">0</span> goals selected
+                </div>
+                <button class="clear-selections-btn" onclick="clearAllSelections()">Clear All</button>
+                <button class="build-policy-btn" id="buildPolicyBtn" onclick="buildComprehensivePolicy()" disabled>
+                    Build Comprehensive Policy
+                </button>
+            </div>
+
+            <div style="margin-top: 30px; padding-top: 30px; border-top: 2px solid #e5e7eb;">
+                <h3 style="color: #1e3a8a; margin-bottom: 15px; font-size: 18px;">Or describe your own comprehensive goal:</h3>
+                <div class="input-wrapper">
+                    <input 
+                        type="text" 
+                        class="query-input" 
+                        id="comprehensiveQuery"
+                        placeholder="e.g., Create a policy that helps working families while encouraging employment..."
+                    />
+                    <button class="analyze-btn" onclick="analyzeComprehensiveCustom()">See Changes</button>
+                </div>
+            </div>
+        </div>
+
+        <div id="loadingSection" class="loading hidden">
+            <div class="spinner"></div>
+            <p>Analyzing your goal and figuring out how to make it happen...</p>
+        </div>
+
+        <div id="resultsSection" class="results-section hidden">
+            <div class="strength-indicator" id="strengthIndicator">
+                <h3>Comprehensive Policy Strength</h3>
+                <p id="strengthText"></p>
+            </div>
+
+            <div class="combined-goals-list" id="combinedGoalsSection">
+                <h3>Goals Achieved by This Policy</h3>
+                <ul id="combinedGoalsList"></ul>
+            </div>
+
+            <div class="interpretation">
+                <h3>What This Does</h3>
+                <p id="interpretationText"></p>
+            </div>
+
+            <div class="impact-preview" id="impactSection">
+                <h3>Who This Helps</h3>
+                <div id="impactList"></div>
+            </div>
+
+            <div class="changed-levers-summary">
+                <h3>Policy Changes (<span id="changedCount">0</span> adjustments)</h3>
+                <p>Here are the specific policy adjustments needed to achieve this goal:</p>
+                <ul class="changed-levers-list" id="changedLeversList"></ul>
+            </div>
+
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
+                <h2 style="color: #1e3a8a; margin: 0;">Detailed Comparison</h2>
+                <div class="toggle-section">
+                    <button class="toggle-button active" id="changesOnlyBtn" onclick="toggleView(true)">
+                        Show Changes Only
+                    </button>
+                    <button class="toggle-button" id="allLeversBtn" onclick="toggleView(false)">
+                        Show All Parameters
+                    </button>
+                </div>
+            </div>
+            
+            <table class="comparison-table">
+                <thead>
+                    <tr>
+                        <th style="width: 40%;">Policy Parameter</th>
+                        <th style="width: 25%;">Current Policy (FY 2026)</th>
+                        <th style="width: 35%;">Your Proposal</th>
+                    </tr>
+                </thead>
+                <tbody id="comparisonTableBody">
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <script>
+        const policyLevers = [
+            { 
+                name: "Maximum Monthly Benefit (Family of 4)", 
+                description: "The maximum SNAP allotment for a 4-person household",
+                current: "$994", 
+                key: "maxBenefit4" 
+            },
+            { 
+                name: "Minimum Monthly Benefit", 
+                description: "Minimum benefit for 1-2 person households",
+                current: "$24", 
+                key: "minBenefit" 
+            },
+            { 
+                name: "Gross Income Limit", 
+                description: "Maximum gross income as % of federal poverty line",
+                current: "130%", 
+                key: "grossIncomeLimit" 
+            },
+            { 
+                name: "Net Income Limit", 
+                description: "Maximum net income as % of federal poverty line",
+                current: "100%", 
+                key: "netIncomeLimit" 
+            },
+            { 
+                name: "Asset Limit (General)", 
+                description: "Maximum countable resources for most households",
+                current: "$3,000", 
+                key: "assetLimit" 
+            },
+            { 
+                name: "Asset Limit (Elderly/Disabled)", 
+                description: "Maximum resources for households with elderly or disabled members",
+                current: "$4,500", 
+                key: "assetLimitElderly" 
+            },
+            { 
+                name: "Benefit Calculation Rate", 
+                description: "% of net income subtracted from maximum allotment",
+                current: "30%", 
+                key: "benefitRate" 
+            },
+            { 
+                name: "Standard Deduction (1-3 people)", 
+                description: "Standard deduction from gross income",
+                current: "$209", 
+                key: "standardDeduction" 
+            },
+            { 
+                name: "Earned Income Deduction", 
+                description: "% deduction from earned income",
+                current: "20%", 
+                key: "earnedIncomeDeduction" 
+            },
+            { 
+                name: "Dependent Care Deduction Cap", 
+                description: "Maximum deduction for dependent care costs",
+                current: "Actual costs", 
+                key: "dependentCareCap" 
+            },
+            { 
+                name: "Medical Expense Deduction Threshold", 
+                description: "Minimum medical expenses before deduction applies",
+                current: "$35/month", 
+                key: "medicalThreshold" 
+            },
+            { 
+                name: "Shelter Expense Deduction Cap", 
+                description: "Maximum allowable shelter expense deduction",
+                current: "$696", 
+                key: "shelterCap" 
+            },
+            { 
+                name: "Work Requirements (ABAWD Age Range)", 
+                description: "Age range subject to work requirements for able-bodied adults without dependents",
+                current: "18-54", 
+                key: "abawd AgRange" 
+            },
+            { 
+                name: "Broad-Based Categorical Eligibility", 
+                description: "Whether states can use BBCE to align with TANF eligibility",
+                current: "Allowed", 
+                key: "bbce" 
+            }
+        ];
+
+        const exampleTags = document.querySelectorAll('.example-tag');
+        const scenarioCards = document.querySelectorAll('.scenario-card');
+        const queryInput = document.getElementById('policyQuery');
+        const analyzeBtn = document.getElementById('analyzeBtn');
+        const loadingSection = document.getElementById('loadingSection');
+        const resultsSection = document.getElementById('resultsSection');
+
+        let selectedGoals = new Set();
+        let currentMode = 'single';
+        let showOnlyChanges = true;
+        let currentResults = null;
+        let underreportingAdjusted = false;
+        let structureVisible = false;
+
+        function toggleBenefitStructure() {
+            const section = document.getElementById('benefitStructureSection');
+            const btn = document.querySelector('.show-structure-btn');
+            const btnText = document.getElementById('structureBtnText');
+            
+            structureVisible = !structureVisible;
+            
+            if (structureVisible) {
+                section.classList.remove('hidden');
+                section.classList.add('visible');
+                btn.classList.add('open');
+                btnText.textContent = 'Hide Benefit Structure';
+            } else {
+                section.classList.remove('visible');
+                section.classList.add('hidden');
+                btn.classList.remove('open');
+                btnText.textContent = 'See What This Policy Looks Like Under Current Practice by Family Size';
+            }
+        }
+
+        function toggleUnderreporting() {
+            underreportingAdjusted = document.getElementById('underreportingToggle').checked;
+            const badge = document.getElementById('adjustmentBadge');
+            
+            if (underreportingAdjusted) {
+                badge.style.display = 'inline-block';
+            } else {
+                badge.style.display = 'none';
+            }
+            
+            // If results are showing, recalculate with new assumption
+            if (currentResults) {
+                displayResults(currentResults);
+            }
+        }
+
+        function getDataAssumptionText() {
+            if (underreportingAdjusted) {
+                return "IMPORTANT: Include cost estimates assuming 100% participation among all eligible households (accounting for underreporting and non-participation). Mention that this assumes full take-up.";
+            }
+            return "Use current participation rates for cost estimates.";
+        }
+
+        const goalDescriptions = {
+            'increase-max': 'Increase maximum SNAP benefits by 15% across all household sizes to better match current food costs',
+            'minimum-benefits': 'Increase minimum benefit from $24 to $50 per month to provide meaningful support for small households',
+            'income-limits': 'Raise gross income limit from 130% to 150% of poverty line to help more working families qualify',
+            'benefit-rate': 'Lower the benefit reduction rate from 30% to 25% to reduce the benefit cliff as families earn more',
+            'deductions': 'Increase standard deduction from $209 to $300 and raise earned income deduction from 20% to 25%',
+            'shelter-cap': 'Increase shelter expense deduction cap from $696 to $850 to better reflect actual housing costs'
+        };
+
+        function switchMode(mode) {
+            currentMode = mode;
+            
+            document.getElementById('singleGoalMode').classList.toggle('active', mode === 'single');
+            document.getElementById('comprehensiveMode').classList.toggle('active', mode === 'comprehensive');
+            
+            document.getElementById('singleModeSection').classList.toggle('hidden', mode !== 'single');
+            document.getElementById('comprehensiveModeSection').classList.toggle('hidden', mode !== 'comprehensive');
+            
+            resultsSection.classList.add('hidden');
+        }
+
+        function toggleGoal(card) {
+            const goal = card.dataset.goal;
+            
+            if (selectedGoals.has(goal)) {
+                selectedGoals.delete(goal);
+                card.classList.remove('selected');
+            } else {
+                selectedGoals.add(goal);
+                card.classList.add('selected');
+            }
+            
+            updateSelectedCount();
+        }
+
+        function updateSelectedCount() {
+            const count = selectedGoals.size;
+            document.getElementById('selectedCount').textContent = count;
+            document.getElementById('buildPolicyBtn').disabled = count === 0;
+        }
+
+        function clearAllSelections() {
+            selectedGoals.clear();
+            document.querySelectorAll('.goal-card').forEach(card => {
+                card.classList.remove('selected');
+            });
+            updateSelectedCount();
+        }
+
+        async function buildComprehensivePolicy() {
+            if (selectedGoals.size === 0) return;
+
+            const goals = Array.from(selectedGoals).map(goal => goalDescriptions[goal]);
+            const combinedQuery = `Create a comprehensive SNAP policy that achieves ALL of these goals: ${goals.join('; ')}`;
+
+            await analyzeComprehensiveQuery(combinedQuery);
+        }
+
+        async function analyzeComprehensiveCustom() {
+            const query = document.getElementById('comprehensiveQuery').value.trim();
+            if (!query) return;
+
+            await analyzeComprehensiveQuery(query);
+        }
+
+        async function analyzeComprehensiveQuery(query) {
+            analyzeBtn.disabled = true;
+            loadingSection.classList.remove('hidden');
+            resultsSection.classList.add('hidden');
+
+            try {
+                const response = await fetch('https://api.anthropic.com/v1/messages', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({
+                        model: 'claude-sonnet-4-20250514',
+                        max_tokens: 1500,
+                        messages: [{
+                            role: 'user',
+                            content: `You are a policy analysis assistant helping create a comprehensive SNAP policy that achieves multiple goals simultaneously.
+
+User's Combined Goals: "${query}"
+
+${getDataAssumptionText()}
+
+Current SNAP Policy (FY 2026):
+- Maximum benefit for family of 4: $994/month
+- Minimum benefit: $24/month for 1-2 person households
+- Gross income limit: 130% of federal poverty line
+- Net income limit: 100% of federal poverty line
+- Asset limit: $3,000 (or $4,500 for elderly/disabled)
+- Benefit calculation: Maximum allotment minus 30% of net income
+- Standard deduction: $209 for 1-3 person households
+- Earned income deduction: 20%
+- Shelter expense cap: $696
+
+Available Policy Adjustments:
+- maxBenefit4: Maximum monthly benefit for family of 4 (current: $994)
+- minBenefit: Minimum monthly benefit (current: $24)
+- grossIncomeLimit: Gross income limit as % of poverty (current: 130%)
+- netIncomeLimit: Net income limit as % of poverty (current: 100%)
+- assetLimit: General asset limit (current: $3,000)
+- assetLimitElderly: Asset limit for elderly/disabled (current: $4,500)
+- benefitRate: % of net income subtracted from max allotment (current: 30%)
+- standardDeduction: Standard deduction amount (current: $209)
+- earnedIncomeDeduction: % deduction from earned income (current: 20%)
+- shelterCap: Maximum shelter expense deduction (current: $696)
+
+Respond ONLY with a JSON object:
+{
+  "interpretation": "A 2-3 sentence overview of this comprehensive policy package and its overall approach to strengthening SNAP",
+  "strength": "A 1-2 sentence statement about the strength/ambition of this combined policy",
+  "goalsAchieved": [
+    "Brief description of how each selected goal is addressed"
+  ],
+  "impacts": [
+    "Concrete example of total benefit (e.g., 'A working family of 4 earning $30,000/year would receive $750/month instead of $600')",
+    "Another example showing cumulative effects"
+  ],
+  "changes": {
+    "leverKey1": "newValue1",
+    "leverKey2": "newValue2"
+  }
+}
+
+Create a cohesive policy that integrates all requested goals. Use realistic values based on similar proposals. The changes should work together harmoniously.`
+                        }]
+                    })
+                });
+
+                const data = await response.json();
+                const text = data.content.find(item => item.type === 'text')?.text || '';
+                
+                const jsonMatch = text.match(/\{[\s\S]*\}/);
+                if (jsonMatch) {
+                    const result = JSON.parse(jsonMatch[0]);
+                    result.isComprehensive = true;
+                    result.selectedGoals = Array.from(selectedGoals);
+                    currentResults = result;
+                    displayResults(result);
+                } else {
+                    throw new Error('Could not parse AI response');
+                }
+            } catch (error) {
+                console.error('Error:', error);
+                alert('There was an error building your policy. Please try again.');
+            } finally {
+                analyzeBtn.disabled = false;
+                loadingSection.classList.add('hidden');
+            }
+        }
+
+        scenarioCards.forEach(card => {
+            card.addEventListener('click', () => {
+                queryInput.value = card.dataset.query;
+                analyzePolicy();
+            });
+        });
+
+        exampleTags.forEach(tag => {
+            tag.addEventListener('click', () => {
+                queryInput.value = tag.dataset.query;
+                analyzePolicy();
+            });
+        });
+
+        analyzeBtn.addEventListener('click', analyzePolicy);
+        queryInput.addEventListener('keypress', (e) => {
+            if (e.key === 'Enter') {
+                analyzePolicy();
+            }
+        });
+
+        async function analyzePolicy() {
+            const query = queryInput.value.trim();
+            if (!query) return;
+
+            analyzeBtn.disabled = true;
+            loadingSection.classList.remove('hidden');
+            resultsSection.classList.add('hidden');
+
+            try {
+                const response = await fetch('https://api.anthropic.com/v1/messages', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({
+                        model: 'claude-sonnet-4-20250514',
+                        max_tokens: 1000,
+                        messages: [{
+                            role: 'user',
+                            content: `You are a policy analysis assistant helping everyday people understand how SNAP could be changed to achieve their goals.
+
+Policy Goal from User: "${query}"
+
+${getDataAssumptionText()}
+
+Current SNAP Policy (FY 2026):
+- Maximum benefit for family of 4: $994/month
+- Minimum benefit: $24/month for 1-2 person households
+- Gross income limit: 130% of federal poverty line
+- Net income limit: 100% of federal poverty line
+- Asset limit: $3,000 (or $4,500 for elderly/disabled)
+- Benefit calculation: Maximum allotment minus 30% of net income
+
+Available Policy Adjustments:
+- maxBenefit4: Maximum monthly benefit for family of 4 (current: $994)
+- minBenefit: Minimum monthly benefit (current: $24)
+- grossIncomeLimit: Gross income limit as % of poverty (current: 130%)
+- netIncomeLimit: Net income limit as % of poverty (current: 100%)
+- assetLimit: General asset limit (current: $3,000)
+- assetLimitElderly: Asset limit for elderly/disabled (current: $4,500)
+- benefitRate: % of net income subtracted from max allotment (current: 30%)
+- standardDeduction: Standard deduction amount (current: $209)
+- earnedIncomeDeduction: % deduction from earned income (current: 20%)
+- shelterCap: Maximum shelter expense deduction (current: $696)
+
+Respond ONLY with a JSON object:
+{
+  "interpretation": "A 2-3 sentence explanation in plain language about what changes you're making and WHO this helps. Focus on outcomes, not technical policy terms.",
+  "impacts": [
+    "One specific, relatable impact (e.g., 'A working family of 4 would receive an extra $100/month')",
+    "Another concrete example of who benefits"
+  ],
+  "changes": {
+    "leverKey1": "newValue1",
+    "leverKey2": "newValue2"
+  }
+}
+
+Be specific with values. Use realistic amounts based on similar policy proposals. Only change levers directly related to the user's goal.`
+                        }]
+                    })
+                });
+
+                const data = await response.json();
+                const text = data.content.find(item => item.type === 'text')?.text || '';
+                
+                const jsonMatch = text.match(/\{[\s\S]*\}/);
+                if (jsonMatch) {
+                    const result = JSON.parse(jsonMatch[0]);
+                    currentResults = result;
+                    displayResults(result);
+                } else {
+                    throw new Error('Could not parse AI response');
+                }
+            } catch (error) {
+                console.error('Error:', error);
+                alert('There was an error analyzing your policy. Please try again.');
+            } finally {
+                analyzeBtn.disabled = false;
+                loadingSection.classList.add('hidden');
+            }
+        }
+
+        function displayResults(result) {
+            const isComprehensive = result.isComprehensive || false;
+            
+            if (isComprehensive) {
+                document.getElementById('strengthIndicator').classList.remove('hidden');
+                document.getElementById('strengthText').textContent = result.strength || '';
+                
+                document.getElementById('combinedGoalsSection').classList.remove('hidden');
+                const goalsList = document.getElementById('combinedGoalsList');
+                goalsList.innerHTML = '';
+                (result.goalsAchieved || []).forEach(goal => {
+                    const li = document.createElement('li');
+                    li.textContent = goal;
+                    goalsList.appendChild(li);
+                });
+            } else {
+                document.getElementById('strengthIndicator').classList.add('hidden');
+                document.getElementById('combinedGoalsSection').classList.add('hidden');
+            }
+
+            document.getElementById('interpretationText').textContent = result.interpretation;
+
+            const impactSection = document.getElementById('impactSection');
+            if (result.impacts && result.impacts.length > 0) {
+                const impactList = document.getElementById('impactList');
+                impactList.innerHTML = '';
+                result.impacts.forEach(impact => {
+                    const div = document.createElement('div');
+                    div.className = 'impact-item';
+                    div.innerHTML = `
+                        <span class="impact-icon">→</span>
+                        <span class="impact-text">${impact}</span>
+                    `;
+                    impactList.appendChild(div);
+                });
+                impactSection.classList.remove('hidden');
+            } else {
+                impactSection.classList.add('hidden');
+            }
+
+            const changedLeversList = document.getElementById('changedLeversList');
+            changedLeversList.innerHTML = '';
+            
+            const changedCount = Object.keys(result.changes).length;
+            document.getElementById('changedCount').textContent = changedCount;
+            
+            Object.keys(result.changes).forEach(key => {
+                const lever = policyLevers.find(l => l.key === key);
+                if (lever) {
+                    const li = document.createElement('li');
+                    li.innerHTML = `
+                        <span class="lever-label">${lever.name}:</span>
+                        <span class="lever-change"> ${lever.current} → ${result.changes[key]}</span>
+                    `;
+                    changedLeversList.appendChild(li);
+                }
+            });
+
+            const tableBody = document.getElementById('comparisonTableBody');
+            tableBody.innerHTML = '';
+
+            let leversToShow = showOnlyChanges ? 
+                policyLevers.filter(lever => result.changes[lever.key] !== undefined) :
+                policyLevers;
+
+            leversToShow.forEach(lever => {
+                const tr = document.createElement('tr');
+                const hasChange = result.changes[lever.key] !== undefined;
+                
+                if (hasChange) {
+                    tr.classList.add('changed');
+                }
+
+                tr.innerHTML = `
+                    <td>
+                        <div class="lever-name">
+                            ${lever.name}
+                            ${hasChange ? '<span class="change-indicator">CHANGED</span>' : ''}
+                        </div>
+                        <div class="lever-description">${lever.description}</div>
+                    </td>
+                    <td class="value-current">${lever.current}</td>
+                    <td class="value-new">${hasChange ? result.changes[lever.key] : lever.current}</td>
+                `;
+                
+                tableBody.appendChild(tr);
+            });
+
+            resultsSection.classList.remove('hidden');
+            resultsSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        }
+
+        function toggleView(showChangesOnly) {
+            showOnlyChanges = showChangesOnly;
+            
+            document.getElementById('changesOnlyBtn').classList.toggle('active', showChangesOnly);
+            document.getElementById('allLeversBtn').classList.toggle('active', !showChangesOnly);
+            
+            if (currentResults) {
+                displayResults(currentResults);
+            }
+        }
+    </script>
+</body>
+</html>
