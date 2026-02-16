@@ -1,785 +1,155 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Jaclyn Sawyer</title>
-  <meta name="description" content="A personal landing page." />
-  <style>
-    /* ---- Theme tokens (default: light) ---- */
-    :root{
-      --bg: #f7f8fb;
-      --surface: #ffffff;
-      --surface-2: rgba(255,255,255,0.72);
-      --text: #0f172a;
-      --muted: #475569;
-      --border: rgba(15, 23, 42, 0.12);
-      --shadow: 0 12px 30px rgba(2, 6, 23, 0.10);
-      --shadow-soft: 0 10px 20px rgba(2,6,23,0.07);
-      --accent: #2563eb;
-      --accent-2: #16a34a;
-      --ring: rgba(37, 99, 235, 0.25);
-      --hero: radial-gradient(900px 360px at 20% 0%, rgba(37,99,235,0.18), transparent 60%),
-              radial-gradient(700px 320px at 90% 10%, rgba(22,163,74,0.14), transparent 55%);
-      --code: rgba(2, 6, 23, 0.06);
-      --chip: rgba(2,6,23,0.06);
-    }
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Your Name</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
 
-    /* ---- Dark mode overrides ---- */
-    [data-theme="dark"]{
-      --bg: #070a12;
-      --surface: rgba(255, 255, 255, 0.06);
-      --surface-2: rgba(255, 255, 255, 0.04);
-      --text: #e5e7eb;
-      --muted: rgba(229, 231, 235, 0.72);
-      --border: rgba(229, 231, 235, 0.18);
-      --shadow: 0 16px 40px rgba(0, 0, 0, 0.45);
-      --shadow-soft: 0 14px 30px rgba(0,0,0,0.35);
-      --accent: #60a5fa;
-      --accent-2: #34d399;
-      --ring: rgba(96, 165, 250, 0.28);
-      --hero: radial-gradient(900px 360px at 20% 0%, rgba(96,165,250,0.22), transparent 60%),
-              radial-gradient(700px 320px at 90% 10%, rgba(52,211,153,0.16), transparent 55%);
-      --code: rgba(255, 255, 255, 0.08);
-      --chip: rgba(255,255,255,0.09);
-    }
+        body {
+            font-family: Georgia, 'Times New Roman', serif;
+            line-height: 1.6;
+            color: #000;
+            background-color: #fff;
+            padding: 40px 20px;
+        }
 
-    /* ---- Base ---- */
-    *{ box-sizing: border-box; }
-    html{ scroll-behavior: smooth; }
-    body{
-      margin: 0;
-      font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, "Apple Color Emoji","Segoe UI Emoji";
-      background: var(--bg);
-      color: var(--text);
-      line-height: 1.5;
-    }
+        .container {
+            display: flex;
+            max-width: 1000px;
+            margin: 0 auto;
+            gap: 60px;
+        }
 
-    a{ color: inherit; text-decoration: none; }
-    a:focus-visible, button:focus-visible{
-      outline: none;
-      box-shadow: 0 0 0 4px var(--ring);
-      border-radius: 12px;
-    }
+        nav {
+            flex-shrink: 0;
+            width: 200px;
+            padding-top: 10px;
+        }
 
-    /* ---- Layout ---- */
-    .wrap{
-      max-width: 1040px;
-      margin: 0 auto;
-      padding: 24px 20px 90px;
-    }
+        nav a {
+            display: block;
+            color: #0000EE;
+            text-decoration: none;
+            margin-bottom: 8px;
+            font-size: 16px;
+        }
 
-    header{
-      position: sticky;
-      top: 0;
-      z-index: 10;
-      backdrop-filter: blur(10px);
-      background: color-mix(in srgb, var(--bg) 70%, transparent);
-      border-bottom: 1px solid var(--border);
-    }
+        nav a:visited {
+            color: #551A8B;
+        }
 
-    .nav{
-      max-width: 1040px;
-      margin: 0 auto;
-      padding: 14px 20px;
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      gap: 12px;
-    }
+        nav a:hover {
+            text-decoration: underline;
+        }
 
-    .brand{
-      display: flex;
-      align-items: center;
-      gap: 10px;
-      font-weight: 700;
-      letter-spacing: -0.01em;
-      white-space: nowrap;
-    }
+        .content {
+            flex: 1;
+            max-width: 600px;
+        }
 
-    .dot{
-      width: 10px;
-      height: 10px;
-      border-radius: 50%;
-      background: linear-gradient(135deg, var(--accent), var(--accent-2));
-      box-shadow: 0 0 0 4px color-mix(in srgb, var(--accent) 18%, transparent);
-    }
+        h1 {
+            font-size: 32px;
+            font-weight: normal;
+            margin-bottom: 20px;
+        }
 
-    .nav-links{
-      display: flex;
-      align-items: center;
-      gap: 8px;
-      flex-wrap: wrap;
-      justify-content: flex-end;
-    }
+        h2 {
+            font-size: 24px;
+            font-weight: normal;
+            margin-top: 30px;
+            margin-bottom: 15px;
+        }
 
-    .pill{
-      display: inline-flex;
-      align-items: center;
-      gap: 8px;
-      padding: 10px 12px;
-      border: 1px solid var(--border);
-      background: color-mix(in srgb, var(--surface) 88%, transparent);
-      border-radius: 999px;
-      box-shadow: 0 8px 20px rgba(2,6,23,0.05);
-      transition: transform .15s ease, border-color .15s ease, background .15s ease;
-    }
-    .pill:hover{
-      transform: translateY(-1px);
-      border-color: color-mix(in srgb, var(--accent) 35%, var(--border));
-    }
-    .pill small{ color: var(--muted); font-weight: 700; font-size: 11px; }
+        p {
+            margin-bottom: 15px;
+            font-size: 16px;
+        }
 
-    .toggle{
-      display: inline-flex;
-      align-items: center;
-      gap: 8px;
-      padding: 10px 12px;
-      border: 1px solid var(--border);
-      background: color-mix(in srgb, var(--surface) 88%, transparent);
-      border-radius: 999px;
-      cursor: pointer;
-      user-select: none;
-      transition: transform .15s ease, border-color .15s ease, background .15s ease;
-    }
-    .toggle:hover{
-      transform: translateY(-1px);
-      border-color: color-mix(in srgb, var(--accent) 35%, var(--border));
-    }
-    .icon{
-      width: 18px;
-      height: 18px;
-      display: inline-block;
-    }
-    .toggle span{
-      font-weight: 750;
-      letter-spacing: -0.01em;
-      color: var(--muted);
-      font-size: 13px;
-    }
+        img {
+            max-width: 100%;
+            height: auto;
+            margin: 20px 0;
+            display: block;
+        }
 
-    /* ---- Hero ---- */
-    .hero{
-      margin-top: 18px;
-      background: var(--hero);
-      border: 1px solid var(--border);
-      border-radius: 22px;
-      padding: 26px;
-      box-shadow: var(--shadow);
-      overflow: hidden;
-    }
+        em {
+            font-style: italic;
+            color: #666;
+        }
 
-    .hero-grid{
-      display: grid;
-      grid-template-columns: 1.2fr 0.8fr;
-      gap: 18px;
-      align-items: center;
-    }
+        a {
+            color: #0000EE;
+            text-decoration: none;
+        }
 
-    .hero h1{
-      margin: 0 0 10px;
-      font-size: clamp(26px, 3.2vw, 38px);
-      letter-spacing: -0.04em;
-      line-height: 1.08;
-    }
-    .hero p{
-      margin: 0 0 14px;
-      color: var(--muted);
-      max-width: 64ch;
-    }
+        a:visited {
+            color: #551A8B;
+        }
 
-    .chips{
-      display: flex;
-      flex-wrap: wrap;
-      gap: 8px;
-      margin-top: 12px;
-    }
-    .chip{
-      display: inline-flex;
-      align-items: center;
-      gap: 8px;
-      padding: 8px 10px;
-      border-radius: 999px;
-      border: 1px solid var(--border);
-      background: var(--chip);
-      color: var(--muted);
-      font-size: 13px;
-      font-weight: 650;
-    }
-    .chip-dot{
-      width: 7px; height: 7px; border-radius: 50%;
-      background: linear-gradient(135deg, var(--accent), var(--accent-2));
-    }
+        a:hover {
+            text-decoration: underline;
+        }
 
-    .hero-card{
-      border: 1px solid var(--border);
-      background: color-mix(in srgb, var(--surface-2) 90%, transparent);
-      border-radius: 18px;
-      padding: 16px;
-      box-shadow: var(--shadow-soft);
-      display: grid;
-      gap: 12px;
-    }
+        .image-credit {
+            font-size: 14px;
+            color: #666;
+            font-style: italic;
+            margin-top: -10px;
+            margin-bottom: 20px;
+        }
 
-    .avatar-row{
-      display: flex;
-      align-items: center;
-      gap: 12px;
-    }
-    .avatar{
-      width: 62px;
-      height: 62px;
-      border-radius: 16px;
-      border: 1px solid var(--border);
-      object-fit: cover;
-      box-shadow: 0 10px 20px rgba(2,6,23,0.12);
-      background: #ddd;
-    }
-    .who h2{
-      margin: 0;
-      font-size: 16px;
-      letter-spacing: -0.02em;
-    }
-    .who p{
-      margin: 2px 0 0;
-      font-size: 13px;
-      color: var(--muted);
-    }
+        /* Mobile responsive */
+        @media (max-width: 768px) {
+            .container {
+                flex-direction: column;
+                gap: 20px;
+            }
 
-    .cta-row{
-      display: flex;
-      flex-wrap: wrap;
-      gap: 10px;
-      margin-top: 4px;
-    }
-    .btn{
-      display: inline-flex;
-      align-items: center;
-      gap: 10px;
-      padding: 11px 14px;
-      border-radius: 14px;
-      border: 1px solid var(--border);
-      background: color-mix(in srgb, var(--surface) 92%, transparent);
-      box-shadow: 0 10px 22px rgba(2,6,23,0.06);
-      transition: transform .15s ease, border-color .15s ease;
-      font-weight: 750;
-    }
-    .btn.primary{
-      border-color: color-mix(in srgb, var(--accent) 45%, var(--border));
-      background: linear-gradient(135deg,
-        color-mix(in srgb, var(--accent) 85%, #ffffff 15%),
-        color-mix(in srgb, var(--accent-2) 55%, #ffffff 45%)
-      );
-      color: #0b1020;
-    }
-    [data-theme="dark"] .btn.primary{ color: #06101b; }
-    .btn:hover{
-      transform: translateY(-1px);
-      border-color: color-mix(in srgb, var(--accent) 40%, var(--border));
-    }
-
-    .mini-links{
-      display: flex;
-      flex-wrap: wrap;
-      gap: 10px;
-      color: var(--muted);
-      font-size: 13px;
-      font-weight: 650;
-    }
-    .mini-links a{
-      text-decoration: underline;
-      text-decoration-color: color-mix(in srgb, var(--muted) 45%, transparent);
-      text-underline-offset: 3px;
-    }
-    .mini-links a:hover{
-      color: var(--text);
-      text-decoration-color: color-mix(in srgb, var(--accent) 65%, transparent);
-    }
-
-    /* ---- Sections ---- */
-    section{
-      margin-top: 22px;
-      border: 1px solid var(--border);
-      border-radius: 22px;
-      background: color-mix(in srgb, var(--surface) 90%, transparent);
-      box-shadow: 0 10px 24px rgba(2,6,23,0.05);
-      overflow: hidden;
-    }
-    .section-inner{
-      padding: 22px;
-      display: grid;
-      gap: 10px;
-    }
-    .kicker{
-      display: inline-flex;
-      align-items: center;
-      gap: 10px;
-      font-weight: 800;
-      letter-spacing: -0.01em;
-    }
-    .badge{
-      font-size: 12px;
-      padding: 6px 10px;
-      border-radius: 999px;
-      border: 1px solid var(--border);
-      color: var(--muted);
-      background: color-mix(in srgb, var(--surface) 92%, transparent);
-    }
-    .section-inner p{ margin: 0; color: var(--muted); max-width: 74ch; }
-
-    .grid{
-      margin-top: 10px;
-      display: grid;
-      grid-template-columns: repeat(12, 1fr);
-      gap: 12px;
-    }
-    .card{
-      grid-column: span 6;
-      border: 1px solid var(--border);
-      border-radius: 18px;
-      padding: 14px;
-      background: color-mix(in srgb, var(--surface) 92%, transparent);
-    }
-    .card h3{
-      margin: 0 0 8px;
-      font-size: 15px;
-      letter-spacing: -0.01em;
-    }
-    .card p{
-      margin: 0;
-      color: var(--muted);
-      font-size: 14px;
-    }
-
-    .list{
-      margin: 0;
-      padding-left: 18px;
-      color: var(--muted);
-    }
-    .list li{ margin: 6px 0; }
-
-    .post{
-      grid-column: span 12;
-      display: grid;
-      gap: 10px;
-      padding: 16px;
-      border-radius: 18px;
-      border: 1px solid var(--border);
-      background: color-mix(in srgb, var(--surface) 92%, transparent);
-    }
-    .post-top{
-      display: flex;
-      align-items: baseline;
-      justify-content: space-between;
-      gap: 10px;
-      flex-wrap: wrap;
-    }
-    .post-title{
-      font-weight: 850;
-      letter-spacing: -0.01em;
-    }
-    .post-date{
-      font-size: 13px;
-      color: var(--muted);
-      font-weight: 650;
-    }
-    .post a{
-      color: var(--accent);
-      text-decoration: underline;
-      text-underline-offset: 3px;
-      text-decoration-color: color-mix(in srgb, var(--accent) 35%, transparent);
-    }
-    .post a:hover{
-      text-decoration-color: color-mix(in srgb, var(--accent) 80%, transparent);
-    }
-
-    .contact-row{
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 12px;
-      margin-top: 10px;
-    }
-    .contact-row .card{ grid-column: span 1; }
-
-    .copy{
-      display: inline-flex;
-      align-items: center;
-      gap: 8px;
-      font-weight: 750;
-      border: 1px solid var(--border);
-      background: color-mix(in srgb, var(--surface) 92%, transparent);
-      border-radius: 14px;
-      padding: 10px 12px;
-      cursor: pointer;
-    }
-    .copy:hover{ border-color: color-mix(in srgb, var(--accent) 40%, var(--border)); }
-
-    a {
-      color: var(--accent);
-      text-decoration: underline;
-      text-decoration-color: color-mix(in srgb, var(--accent) 35%, transparent);
-      text-underline-offset: 3px;
-      transition: color 0.15s ease, text-decoration-color 0.15s ease;
-    }
-    
-    a:hover {
-      color: color-mix(in srgb, var(--accent) 85%, var(--text));
-      text-decoration-color: color-mix(in srgb, var(--accent) 85%, transparent);
-    }
-    
-    a:focus-visible {
-      outline: none;
-      box-shadow: 0 0 0 4px var(--ring);
-      border-radius: 6px;
-    }
-
-
-    /* ---- Footer ---- */
-    footer{
-      margin-top: 26px;
-      color: var(--muted);
-      font-size: 13px;
-      display: flex;
-      justify-content: space-between;
-      gap: 10px;
-      flex-wrap: wrap;
-      padding: 0 2px;
-    }
-
-    @media (max-width: 860px){
-      .hero-grid{ grid-template-columns: 1fr; }
-    }
-    @media (max-width: 720px){
-      .card{ grid-column: span 12; }
-      .contact-row{ grid-template-columns: 1fr; }
-      .contact-row .card{ grid-column: span 1; }
-      .nav{ gap: 10px; }
-      .nav-links{ justify-content: flex-start; }
-    }
-
-    /* ---- Reduce motion ---- */
-    @media (prefers-reduced-motion: reduce){
-      html{ scroll-behavior: auto; }
-      .pill, .toggle, .btn{ transition: none; }
-    }
-  </style>
+            nav {
+                width: 100%;
+                padding-bottom: 20px;
+                border-bottom: 1px solid #ddd;
+            }
+        }
+    </style>
 </head>
-
 <body>
-  <header>
-    <div class="nav">
-      <div class="brand" aria-label="Site title">
-        <span class="dot" aria-hidden="true"></span>
-        <span>Jaclyn Sawyer</span>
-      </div>
+    <div class="container">
+        <nav>
+            <a href="/">[home]</a>
+            <a href="/about">[about]</a>
+            <a href="/portfolio">[portfolio]</a>
+            <a href="/services">[services]</a>
+            <a href="/blog">[blog]</a>
+            <a href="/contact">[contact]</a>
+        </nav>
 
-      <nav class="nav-links" aria-label="Top navigation">
-        <a class="pill" href="#section-1"><small>01</small> Prototypes</a>
-        <a class="pill" href="#section-2"><small>02</small> Section 2</a>
-        <a class="pill" href="#section-3"><small>03</small> Section 3</a>
+        <main class="content">
+        <h1>Your Name or Page Title</h1>
+        
+        <p>Your main introduction or bio text goes here. This is a simple, clean template with minimal styling that focuses on readability and content.</p>
 
-        <!-- Icon toggle near the links (sun/moon) -->
-        <button class="toggle" id="themeToggle" type="button" aria-label="Toggle dark mode">
-          <span class="icon" id="themeIcon" aria-hidden="true"></span>
-          <span id="themeLabel">Light</span>
-        </button>
-      </nav>
+        <h2>Section Heading</h2>
+        
+        <p>Add your section content here. You can include multiple paragraphs, links to other pages, or any other text-based content.</p>
+
+        <p>Another paragraph with more information. The style is intentionally minimal and timeless.</p>
+
+        <!-- Image placeholder -->
+        <img src="your-image.jpg" alt="Description of image">
+        <p class="image-credit"><em>photo credit or caption here</em></p>
+
+        <h2>Another Section</h2>
+        
+        <p>Continue adding sections as needed. The template uses a classic serif font and simple link styling for a clean, professional appearance.</p>
+
+        </main>
     </div>
-  </header>
-
-  <main class="wrap">
-    <!-- HERO -->
-    <!-- <div class="hero">
-      <div class="hero-grid">
-        <div>
-          <h1>Hi — I’m <span style="color: var(--accent);">Jaclyn Sawyer</span>.</h1>
-          <p>
-            
-          </p>
-
-          <div class="cta-row">
-            <a class="btn primary" href="#section-2">See Projects <span aria-hidden="true">→</span></a>
-            <a class="btn" href="#section-1">About</a>
-            <a class="btn" href="#section-3">Contact</a>
-          </div>
-
-          <div class="chips" aria-label="Topics">
-            <span class="chip"><span class="chip-dot" aria-hidden="true"></span> Product</span>
-            <span class="chip"><span class="chip-dot" aria-hidden="true"></span> Data</span>
-            <span class="chip"><span class="chip-dot" aria-hidden="true"></span> Civic Tech</span>
-            <span class="chip"><span class="chip-dot" aria-hidden="true"></span> Writing</span>
-            <span class="chip"><span class="chip-dot" aria-hidden="true"></span> Creative</span>
-          </div>
-        </div> -->
-
-        <!-- <aside class="hero-card" aria-label="Profile card"> -->
-          <!-- <div class="avatar-row">
-            <img
-              class="avatar"
-              alt="Profile image"
-              src="https://picsum.photos/seed/profile/160"
-              width="62"
-              height="62"
-              loading="lazy"
-            />
-            <div class="who">
-              <h2>Jaclyn Sawyer</h2>
-              <p>Doing good with less for more.</p>
-            </div>
-          </div> -->
-
-          <!-- <div class="mini-links" aria-label="Quick links">
-            <a href="#" title="GitHub">GitHub</a>
-            <a href="#" title="LinkedIn">LinkedIn</a>
-            <a href="#" title="Email">Email</a>
-            <a href="#" title="CV">CV</a>
-          </div> -->
-<!-- 
-          <div style="display:grid; gap:10px;">
-            <div style="font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, 'Liberation Mono', 'Courier New', monospace;
-                        background: var(--code); border: 1px solid var(--border); padding: 10px; border-radius: 14px; color: var(--muted); font-size: 13px;">
-
-            </div>
-          </div>
-        </aside> -->
-      <!-- </div>
-    </div> -->
-
-    <!-- SECTION 1: About -->
-    <section id="section-1" aria-label="Prototypes">
-      <div class="section-inner">
-        <div class="kicker">
-          <span class="badge">Prototypes</span>
-          <!-- <span>About</span> -->
-        </div>
-        <p>
-        </p>
-
-        <div class="grid">
-          <div class="card">
-            <h3>Prototype Links</h3>
-            <p><a href="ctc-internal-tool.html"> CTC Internal Tool</a></p>
-            <p><a href="AI_enabled_SNAP_guided_view.html"> AI Enabled SNAP Guided View</a></p>
-            <p><a href="AI_enabled_CTC_guided_view.html"> AI Enabled CTC Guided View</a></p>
-            <p><a href="enhanced_ctc_based_on_user_feedback.html"> Enhanced CTC Based On User Feedback</a></p>
-          </div>
-          <!-- <div class="card">
-            <h3>What I do</h3>
-            <p>
-              A concise description of your work. Example: product + data work, translating complex problems into usable tools.
-            </p>
-          </div>
-          <div class="card">
-            <h3>What I care about</h3>
-            <p>
-              A sentence or two on your themes: equity, usability, impact, durability, public interest tech, or whatever fits.
-            </p>
-          </div>
-          <div class="card">
-            <h3>Now</h3>
-            <p>
-              What you’re doing this season: a project, a research focus, a teaching role, a studio practice, etc.
-            </p>
-          </div>
-          <div class="card">
-            <h3>Toolbox</h3>
-            <p>
-              <span class="badge" style="margin-right:6px;">Python</span>
-              <span class="badge" style="margin-right:6px;">SQL</span>
-              <span class="badge" style="margin-right:6px;">Design</span>
-              <span class="badge">Policy</span>
-            </p>
-          </div> -->
-        </div>
-      </div>
-    </section>
-
-    <!-- SECTION 2: Projects -->
-    <!-- <section id="section-2" aria-label="Section 2">
-      <div class="section-inner">
-        <div class="kicker">
-          <span class="badge">Section 2</span>
-          <span>Projects</span>
-        </div>
-        <p>
-          Add a few featured projects with short descriptions and links. Keep it scannable.
-        </p>
-
-        <div class="grid">
-          <div class="card">
-            <h3>Project One</h3>
-            <p>
-              One sentence on what it is and why it matters. <a href="#">Read more</a>
-            </p>
-          </div>
-          <div class="card">
-            <h3>Project Two</h3>
-            <p>
-              One sentence on what you built and for whom. <a href="#">Read more</a>
-            </p>
-          </div>
-          <div class="card">
-            <h3>Project Three</h3>
-            <p>
-              A short description and a link to a demo or repo. <a href="#">View repo</a>
-            </p>
-          </div>
-          <div class="card">
-            <h3>Speaking / Teaching</h3>
-            <p>
-              Add talks, workshops, or courses here. <a href="#">See notes</a>
-            </p>
-          </div>
-        </div>
-
-        <div class="card" style="margin-top:12px;">
-          <h3>Projects I’m exploring</h3>
-          <ul class="list">
-            <li>Idea or experiment (one line).</li>
-            <li>Small tool, dataset, or prototype (one line).</li>
-            <li>Collaboration or community work (one line).</li>
-          </ul>
-        </div>
-      </div>
-    </section> -->
-
-    <!-- SECTION 3: Writing + Contact --><!--
-    <section id="section-3" aria-label="Section 3">
-      <div class="section-inner">
-        <div class="kicker">
-          <span class="badge">Section 3</span>
-          <span>Writing & Contact</span>
-        </div>
-        <p>
-          A simple “recent posts” area plus contact options. Replace the placeholders with real links.
-        </p>
-
-        <div class="grid" aria-label="Recent writing">
-          <article class="post">
-            <div class="post-top">
-              <div class="post-title">Post title one: a short, specific headline</div>
-              <div class="post-date">Jan 2026</div>
-            </div>
-            <div style="color: var(--muted);">
-              Two lines of context about what this post covers. <a href="#">Read</a>
-            </div>
-          </article>
-
-          <article class="post">
-            <div class="post-top">
-              <div class="post-title">Post title two: what I learned building X</div>
-              <div class="post-date">Dec 2025</div>
-            </div>
-            <div style="color: var(--muted);">
-              One or two sentences that make it easy to decide if it’s worth clicking. <a href="#">Read</a>
-            </div>
-          </article>
-
-          <article class="post">
-            <div class="post-top">
-              <div class="post-title">Post title three: notes on tools, care, and maintenance</div>
-              <div class="post-date">Nov 2025</div>
-            </div>
-            <div style="color: var(--muted);">
-              A short teaser. <a href="#">Read</a>
-            </div>
-          </article>
-        </div>
-
-        <div class="contact-row" aria-label="Contact">
-          <div class="card">
-            <h3>Say hello</h3>
-            <p>
-              Email: <a id="emailLink" href="mailto:hello@example.com">hello@example.com</a><br/>
-              Location: Your city (optional)
-            </p>
-            <div style="margin-top:10px;">
-              <button class="copy" id="copyEmail" type="button" aria-label="Copy email to clipboard">
-                Copy email
-              </button>
-              <span id="copyStatus" style="margin-left:10px; color: var(--muted); font-weight:650;"></span>
-            </div>
-          </div>
-
-          <div class="card">
-            <h3>Elsewhere</h3>
-            <p>
-              <a href="#" style="color: var(--accent); text-decoration: underline; text-underline-offset: 3px;">GitHub</a><br/>
-              <a href="#" style="color: var(--accent); text-decoration: underline; text-underline-offset: 3px;">LinkedIn</a><br/>
-              <a href="#" style="color: var(--accent); text-decoration: underline; text-underline-offset: 3px;">Newsletter</a>
-            </p>
-          </div>
-        </div>
-
-      </div>
-    </section> -->
-
-    <footer>
-      <span>© <span id="year"></span> Jaclyn Sawyer</span>
-      <span>Built with one HTML file · Light/Dark mode + saved preference</span>
-    </footer>
-  </main>
-
-  <script>
-    // --- Inline icons (sun / moon) as SVG strings ---
-    const icons = {
-      sun: `
-        <svg viewBox="0 0 24 24" width="18" height="18" fill="none" xmlns="http://www.w3.org/2000/svg">
-          <path d="M12 18a6 6 0 1 0 0-12 6 6 0 0 0 0 12Z" stroke="currentColor" stroke-width="1.8"/>
-          <path d="M12 2v2.4M12 19.6V22M4.2 4.2l1.7 1.7M18.1 18.1l1.7 1.7M2 12h2.4M19.6 12H22M4.2 19.8l1.7-1.7M18.1 5.9l1.7-1.7"
-                stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/>
-        </svg>
-      `,
-      moon: `
-        <svg viewBox="0 0 24 24" width="18" height="18" fill="none" xmlns="http://www.w3.org/2000/svg">
-          <path d="M20.3 14.5A7.8 7.8 0 0 1 9.5 3.7a7.9 7.9 0 1 0 10.8 10.8Z"
-                stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/>
-        </svg>
-      `
-    };
-
-    const root = document.documentElement;
-    const toggleBtn = document.getElementById("themeToggle");
-    const themeIcon = document.getElementById("themeIcon");
-    const themeLabel = document.getElementById("themeLabel");
-
-    function setTheme(theme) {
-      root.setAttribute("data-theme", theme);
-      const isDark = theme === "dark";
-      themeIcon.innerHTML = isDark ? icons.moon : icons.sun;
-      themeLabel.textContent = isDark ? "Dark" : "Light";
-      toggleBtn.setAttribute("aria-label", isDark ? "Switch to light mode" : "Switch to dark mode");
-      localStorage.setItem("theme", theme);
-    }
-
-    // Load saved theme or respect system preference
-    const saved = localStorage.getItem("theme");
-    const prefersDark = window.matchMedia && window.matchMedia("(prefers-color-scheme: dark)").matches;
-    setTheme(saved || (prefersDark ? "dark" : "light"));
-
-    toggleBtn.addEventListener("click", () => {
-      const current = root.getAttribute("data-theme") || "light";
-      setTheme(current === "dark" ? "light" : "dark");
-    });
-
-    // Footer year
-    document.getElementById("year").textContent = new Date().getFullYear();
-
-    // Copy email button
-    const email = "hello@example.com";
-    const copyBtn = document.getElementById("copyEmail");
-    const statusEl = document.getElementById("copyStatus");
-
-    copyBtn.addEventListener("click", async () => {
-      try {
-        await navigator.clipboard.writeText(email);
-        statusEl.textContent = "Copied!";
-        setTimeout(() => statusEl.textContent = "", 1400);
-      } catch (e) {
-        statusEl.textContent = "Copy failed (browser blocked).";
-        setTimeout(() => statusEl.textContent = "", 2000);
-      }
-    });
-  </script>
 </body>
 </html>
