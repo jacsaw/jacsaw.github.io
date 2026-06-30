@@ -14,6 +14,8 @@ let DATA = null;            // full parsed data.json
 let STATE_ABBR = null;      // { "California": "CA", ... }
 let activeMonthId = null;   // currently active monthId, e.g. "2025-07"
 let statePathMap = {};      // { "California": <path element>, ... }
+let selectedState = null;   // { name, abbr, pathEl } when a state is clicked
+const isDarkMode = matchMedia('(prefers-color-scheme: dark)').matches;
 
 /**
  * Entry point: fetch data.json, then build the timeline and map.
@@ -149,6 +151,79 @@ function directionLabel(direction) {
   return 'Informational';
 }
 
+function findUpdateById(updateId) {
+  for (const month of DATA.timeline) {
+    const found = month.updates.find(u => u.id === updateId);
+    if (found) return found;
+  }
+  return null;
+}
+
+function getPovertyChangesForMonth(monthEntry) {
+  if (!DATA.povertyRateChanges) return [];
+  const updateIds = new Set(monthEntry.updates.map(u => u.id));
+  return DATA.povertyRateChanges.filter(p => updateIds.has(p.relatedUpdateId));
+}
+
+function updatePovertyOverlay(monthEntry) {
+  const overlay = document.getElementById('poverty-overlay');
+  let changes = getPovertyChangesForMonth(monthEntry);
+
+  if (selectedState) {
+    changes = changes.filter(p => p.statesAffected.includes(selectedState.abbr));
+  }
+
+  if (!changes.length) {
+    overlay.classList.remove('show');
+    return;
+  }
+
+  const headerText = selectedState
+    ? `Poverty Rate — ${selectedState.name}`
+    : 'Poverty Rate Impact';
+
+  const entriesHtml = changes.map(p => {
+    const relatedUpdate = findUpdateById(p.relatedUpdateId);
+    const label = relatedUpdate ? relatedUpdate.category : '';
+    const delta = (p.newPovertyRate - p.priorPovertyRate).toFixed(1);
+    const isUp = parseFloat(delta) >= 0;
+    const deltaClass = isUp ? 'poverty-delta-up' : 'poverty-delta-down';
+    const symbol = isUp ? '▲' : '▼';
+    const sign = isUp ? '+' : '';
+    return `<div class="poverty-entry">
+      <div class="poverty-entry-label">${label}</div>
+      <div class="poverty-entry-rates">
+        <span class="poverty-before">${p.priorPovertyRate}%</span>
+        <span class="poverty-arrow">→</span>
+        <span class="poverty-after">${p.newPovertyRate}%</span>
+        <span class="poverty-delta ${deltaClass}">${symbol} ${sign}${delta}%</span>
+      </div>
+    </div>`;
+  }).join('');
+
+  overlay.innerHTML = `<div class="poverty-overlay-header">${headerText}</div>${entriesHtml}`;
+  overlay.classList.add('show');
+}
+
+function findLatestMonthIndexForState(abbr) {
+  let latestIdx = -1;
+  DATA.timeline.forEach((month, idx) => {
+    if (month.updates.some(u => u.statesAffected.includes(abbr))) latestIdx = idx;
+  });
+  return latestIdx;
+}
+
+function handleStateClick(stateName, pathEl) {
+  const abbr = STATE_ABBR[stateName];
+  if (!abbr) return;
+  const idx = findLatestMonthIndexForState(abbr);
+  if (idx === -1) return;
+  selectedState = { name: stateName, abbr, pathEl };
+  setActive(idx);
+  const block = document.querySelector(`.month-block[data-idx="${idx}"]`);
+  if (block) block.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+}
+
 /**
  * Mark the given timeline index as active, update the header panel,
  * and recolor the map to reflect that month's updates.
@@ -173,6 +248,7 @@ function setActive(idx) {
   document.getElementById('active-desc').textContent = firstUpdate.description;
 
   updateMap(monthEntry);
+  updatePovertyOverlay(monthEntry);
 }
 
 /**
@@ -192,9 +268,8 @@ function updateMap(monthEntry) {
     });
   });
 
-  const isDark = matchMedia('(prefers-color-scheme: dark)').matches;
   const colorFor = status => {
-    if (!status) return isDark ? '#333' : '#E0DED7';
+    if (!status) return isDarkMode ? '#333' : '#E0DED7';
     if (status === 'restrict') return '#D85A30';
     if (status === 'expand') return '#1D9E75';
     if (status === 'neutral') return '#378ADD';
@@ -214,10 +289,11 @@ function updateMap(monthEntry) {
  */
 function initMap() {
   const svg = d3.select('#map-svg');
-  const isDark = matchMedia('(prefers-color-scheme: dark)').matches;
   const projection = d3.geoAlbersUsa().scale(1220).translate([480, 290]);
   const pathGenerator = d3.geoPath(projection);
   const tooltip = document.getElementById('tooltip');
+  const defaultStroke = isDarkMode ? 'rgba(255,255,255,0.1)' : 'rgba(255,255,255,0.85)';
+  const selectedStroke = isDarkMode ? '#EDEBE4' : '#1A1A18';
 
   d3.json(STATES_TOPOJSON_URL).then(us => {
     const features = topojson.feature(us, us.objects.states).features;
@@ -227,13 +303,24 @@ function initMap() {
       .join('path')
       .attr('class', 'state-path')
       .attr('d', pathGenerator)
-      .attr('stroke', isDark ? 'rgba(255,255,255,0.1)' : 'rgba(255,255,255,0.85)')
+      .attr('stroke', defaultStroke)
       .attr('stroke-width', 0.6)
-      .attr('fill', isDark ? '#333' : '#E0DED7')
+      .attr('fill', isDarkMode ? '#333' : '#E0DED7')
       .on('mousemove', function (event, d) {
         showTooltip(event, d, tooltip);
       })
       .on('mouseleave', () => tooltip.classList.remove('show'))
+      .on('click', function (event, d) {
+        const stateName = d.properties && d.properties.name;
+        if (!stateName) return;
+        // Revert previous selection stroke
+        if (selectedState && selectedState.pathEl) {
+          d3.select(selectedState.pathEl).attr('stroke', defaultStroke).attr('stroke-width', 0.6);
+        }
+        // Apply selection stroke to clicked state
+        d3.select(this).attr('stroke', selectedStroke).attr('stroke-width', 2);
+        handleStateClick(stateName, this);
+      })
       .each(function (d) {
         if (d.properties && d.properties.name) {
           statePathMap[d.properties.name] = this;
@@ -241,6 +328,7 @@ function initMap() {
       });
 
     updateMap(DATA.timeline[0]);
+    updatePovertyOverlay(DATA.timeline[0]);
   });
 }
 
@@ -269,12 +357,22 @@ function showTooltip(event, feature, tooltip) {
     .map(u => `<div class="tooltip-detail">${u.category}: ${u.description.slice(0, 100)}…</div>`)
     .join('');
 
-  tooltip.innerHTML = `<strong>${stateName}</strong>${detailHtml}`;
+  const povertyChanges = getPovertyChangesForMonth(monthEntry)
+    .filter(p => p.statesAffected.includes(abbr));
+  const povertyHtml = povertyChanges.map(p => {
+    const delta = (p.newPovertyRate - p.priorPovertyRate).toFixed(1);
+    const isUp = parseFloat(delta) >= 0;
+    const sign = isUp ? '+' : '';
+    const cls = isUp ? 'tooltip-poverty-up' : 'tooltip-poverty-down';
+    return `<div class="tooltip-poverty">Poverty rate: ${p.priorPovertyRate}% → <span class="${cls}">${p.newPovertyRate}% (${sign}${delta}%)</span></div>`;
+  }).join('');
+
+  tooltip.innerHTML = `<strong>${stateName}</strong>${detailHtml}${povertyHtml}`;
 
   const x = event.clientX - rect.left + 12;
   const y = event.clientY - rect.top + 12;
   tooltip.style.left = Math.min(x, rect.width - 215) + 'px';
-  tooltip.style.top = Math.min(y, rect.height - 90) + 'px';
+  tooltip.style.top = Math.min(y, rect.height - 130) + 'px';
   tooltip.classList.add('show');
 }
 
@@ -289,6 +387,12 @@ function setupScrollSpy() {
   const observer = new IntersectionObserver(entries => {
     entries.forEach(entry => {
       if (entry.isIntersecting && entry.intersectionRatio >= 0.3) {
+        // Scrolling the timeline clears any state focus
+        if (selectedState && selectedState.pathEl) {
+          const defaultStroke = isDarkMode ? 'rgba(255,255,255,0.1)' : 'rgba(255,255,255,0.85)';
+          d3.select(selectedState.pathEl).attr('stroke', defaultStroke).attr('stroke-width', 0.6);
+          selectedState = null;
+        }
         setActive(Number(entry.target.dataset.idx));
       }
     });

@@ -80,3 +80,13 @@ One Big Beautiful Bill Act and secondary policy analysis (NACo, Ballotpedia,
 CBPP); these dates may shift as USDA issues further guidance and should be
 verified against FNS's official OBBB implementation page
 (https://www.fns.usda.gov/obbb) before being treated as final.
+
+### Poverty rate data
+
+The `povertyRateChanges` array in `data.json` contains **illustrative
+placeholder values only**. The `priorPovertyRate` and `newPovertyRate`
+figures are small fictional deltas used to prototype the future map overlay
+feature; they are not sourced poverty statistics and must not be treated as
+estimates. Before this feature is published, replace these values with real
+data from the U.S. Census Bureau's American Community Survey or the USDA
+Economic Research Service's state-level poverty estimates.

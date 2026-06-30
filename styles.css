@@ -272,6 +272,86 @@ html, body {
 #tooltip.show { opacity: 1; }
 #tooltip strong { font-weight: 500; display: block; margin-bottom: 2px; }
 #tooltip .tooltip-detail { margin-top: 3px; color: var(--color-text-secondary); }
+#tooltip .tooltip-poverty {
+  margin-top: 5px;
+  padding-top: 5px;
+  border-top: 0.5px solid var(--color-border-tertiary);
+  color: var(--color-text-secondary);
+}
+.tooltip-poverty-up   { color: #C0392B; font-weight: 500; }
+.tooltip-poverty-down { color: #1D9E75; font-weight: 500; }
+
+/* ---------- Poverty rate overlay ---------- */
+#poverty-overlay {
+  position: absolute;
+  bottom: 12px;
+  left: 12px;
+  background: var(--color-background-primary);
+  border: 0.5px solid var(--color-border-secondary);
+  border-radius: var(--border-radius-md);
+  padding: 8px 10px;
+  font-size: 11px;
+  line-height: 1.4;
+  color: var(--color-text-primary);
+  max-width: 230px;
+  z-index: 5;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.2s;
+}
+#poverty-overlay.show { opacity: 1; }
+
+.poverty-overlay-header {
+  font-size: 10px;
+  font-weight: 500;
+  color: var(--color-text-tertiary);
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  margin-bottom: 6px;
+}
+
+.poverty-entry { margin-bottom: 6px; }
+.poverty-entry:last-child { margin-bottom: 0; }
+
+.poverty-entry-label {
+  font-size: 10px;
+  font-weight: 500;
+  color: var(--color-text-secondary);
+  margin-bottom: 2px;
+}
+
+.poverty-entry-rates {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  flex-wrap: wrap;
+}
+
+.poverty-before {
+  font-size: 12px;
+  font-weight: 500;
+  color: var(--color-text-primary);
+}
+
+.poverty-arrow {
+  font-size: 11px;
+  color: var(--color-text-tertiary);
+}
+
+.poverty-after {
+  font-size: 12px;
+  font-weight: 500;
+  color: var(--color-text-primary);
+}
+
+.poverty-delta {
+  font-size: 10px;
+  font-weight: 500;
+  padding: 1px 5px;
+  border-radius: 20px;
+}
+.poverty-delta-up   { background: #FAECE7; color: #C0392B; }
+.poverty-delta-down { background: #E1F5EE; color: #085041; }
 
 /* ---------- Responsive ---------- */
 @media (max-width: 760px) {
