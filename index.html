@@ -1,155 +1,47 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Your Name</title>
-    <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-
-        body {
-            font-family: Georgia, 'Times New Roman', serif;
-            line-height: 1.6;
-            color: #000;
-            background-color: #fff;
-            padding: 40px 20px;
-        }
-
-        .container {
-            display: flex;
-            max-width: 1000px;
-            margin: 0 auto;
-            gap: 60px;
-        }
-
-        nav {
-            flex-shrink: 0;
-            width: 200px;
-            padding-top: 10px;
-        }
-
-        nav a {
-            display: block;
-            color: #0000EE;
-            text-decoration: none;
-            margin-bottom: 8px;
-            font-size: 16px;
-        }
-
-        nav a:visited {
-            color: #551A8B;
-        }
-
-        nav a:hover {
-            text-decoration: underline;
-        }
-
-        .content {
-            flex: 1;
-            max-width: 600px;
-        }
-
-        h1 {
-            font-size: 32px;
-            font-weight: normal;
-            margin-bottom: 20px;
-        }
-
-        h2 {
-            font-size: 24px;
-            font-weight: normal;
-            margin-top: 30px;
-            margin-bottom: 15px;
-        }
-
-        p {
-            margin-bottom: 15px;
-            font-size: 16px;
-        }
-
-        img {
-            max-width: 100%;
-            height: auto;
-            margin: 20px 0;
-            display: block;
-        }
-
-        em {
-            font-style: italic;
-            color: #666;
-        }
-
-        a {
-            color: #0000EE;
-            text-decoration: none;
-        }
-
-        a:visited {
-            color: #551A8B;
-        }
-
-        a:hover {
-            text-decoration: underline;
-        }
-
-        .image-credit {
-            font-size: 14px;
-            color: #666;
-            font-style: italic;
-            margin-top: -10px;
-            margin-bottom: 20px;
-        }
-
-        /* Mobile responsive */
-        @media (max-width: 768px) {
-            .container {
-                flex-direction: column;
-                gap: 20px;
-            }
-
-            nav {
-                width: 100%;
-                padding-bottom: 20px;
-                border-bottom: 1px solid #ddd;
-            }
-        }
-    </style>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>SNAP Eligibility Changes Under the One Big Beautiful Bill Act</title>
+  <link rel="stylesheet" href="styles.css">
 </head>
 <body>
-    <div class="container">
-        <nav>
-            <a href="/">[home]</a>
-            <a href="/about">[about]</a>
-            <a href="/portfolio">[portfolio]</a>
-            <a href="/services">[services]</a>
-            <a href="/blog">[blog]</a>
-            <a href="/contact">[contact]</a>
-        </nav>
 
-        <main class="content">
-        <h1>Your Name or Page Title</h1>
-        
-        <p>Your main introduction or bio text goes here. This is a simple, clean template with minimal styling that focuses on readability and content.</p>
+  <h1 class="sr-only">
+    SNAP eligibility changes under the One Big Beautiful Bill Act of 2025,
+    implementation timeline with US map
+  </h1>
 
-        <h2>Section Heading</h2>
-        
-        <p>Add your section content here. You can include multiple paragraphs, links to other pages, or any other text-based content.</p>
+  <div id="shell">
 
-        <p>Another paragraph with more information. The style is intentionally minimal and timeless.</p>
+    <!-- Timeline column -->
+    <div id="timeline-col"></div>
 
-        <!-- Image placeholder -->
-        <img src="your-image.jpg" alt="Description of image">
-        <p class="image-credit"><em>photo credit or caption here</em></p>
+    <!-- Map column -->
+    <div id="map-col">
+      <div id="map-header">
+        <div id="month-label">Loading…</div>
+        <span id="active-cat" class="event-tag tag-restrict"></span>
+        <div id="active-desc"></div>
+      </div>
 
-        <h2>Another Section</h2>
-        
-        <p>Continue adding sections as needed. The template uses a classic serif font and simple link styling for a clean, professional appearance.</p>
+      <div id="map-wrap">
+        <svg id="map-svg" viewBox="0 0 960 580" preserveAspectRatio="xMidYMid meet"></svg>
+        <div id="tooltip"></div>
+      </div>
 
-        </main>
+      <div id="legend"></div>
     </div>
+
+  </div>
+
+  <!-- Dependencies -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/d3/7.8.5/d3.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/topojson/3.0.2/topojson.min.js"></script>
+
+  <!-- App script (loads data.json, builds timeline + map) -->
+  <script src="script.js"></script>
+
 </body>
 </html>

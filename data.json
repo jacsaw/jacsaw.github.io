@@ -1,0 +1,287 @@
+{
+  "meta": {
+    "title": "SNAP Eligibility Changes Under the One Big Beautiful Bill Act of 2025",
+    "description": "Timeline of implementation events affecting SNAP (food assistance) eligibility by state, beginning with enactment of the One Big Beautiful Bill Act on July 4, 2025.",
+    "legend": [
+      { "status": "restrict", "label": "Restricts eligibility", "color": "#D85A30" },
+      { "status": "expand", "label": "State response / expansion", "color": "#1D9E75" },
+      { "status": "neutral", "label": "Litigation / informational", "color": "#378ADD" },
+      { "status": "none", "label": "No notable change", "color": "#E0DED7" }
+    ]
+  },
+  "stateAbbreviations": {
+    "Alabama": "AL", "Alaska": "AK", "Arizona": "AZ", "Arkansas": "AR",
+    "California": "CA", "Colorado": "CO", "Connecticut": "CT", "Delaware": "DE",
+    "Florida": "FL", "Georgia": "GA", "Hawaii": "HI", "Idaho": "ID",
+    "Illinois": "IL", "Indiana": "IN", "Iowa": "IA", "Kansas": "KS",
+    "Kentucky": "KY", "Louisiana": "LA", "Maine": "ME", "Maryland": "MD",
+    "Massachusetts": "MA", "Michigan": "MI", "Minnesota": "MN", "Mississippi": "MS",
+    "Missouri": "MO", "Montana": "MT", "Nebraska": "NE", "Nevada": "NV",
+    "New Hampshire": "NH", "New Jersey": "NJ", "New Mexico": "NM", "New York": "NY",
+    "North Carolina": "NC", "North Dakota": "ND", "Ohio": "OH", "Oklahoma": "OK",
+    "Oregon": "OR", "Pennsylvania": "PA", "Rhode Island": "RI", "South Carolina": "SC",
+    "South Dakota": "SD", "Tennessee": "TN", "Texas": "TX", "Utah": "UT",
+    "Vermont": "VT", "Virginia": "VA", "Washington": "WA", "West Virginia": "WV",
+    "Wisconsin": "WI", "Wyoming": "WY"
+  },
+  "timeline": [
+    {
+      "monthId": "2025-07",
+      "monthLabel": "July 4, 2025 — One Big Beautiful Bill signed",
+      "updates": [
+        {
+          "id": "2025-07-work-requirement-expansion",
+          "category": "Work requirement expansion",
+          "direction": "restrict",
+          "statesAffected": ["AL","AK","AZ","AR","CA","CO","CT","DE","FL","GA","HI","ID","IL","IN","IA","KS","KY","LA","ME","MD","MA","MI","MN","MS","MO","MT","NE","NV","NH","NJ","NM","NY","NC","ND","OH","OK","OR","PA","RI","SC","SD","TN","TX","UT","VT","VA","WA","WV","WI","WY"],
+          "description": "Work requirement age for able-bodied adults without dependents raised to 18 through 64 years old, previously 18 through 54. Parents whose youngest child is 14 or older are now subject to the three-month time limit. Effective immediately upon enactment in all states.",
+          "source": {
+            "label": "FNS Information Memo, Sept. 4, 2025",
+            "url": "https://www.usda.gov/sites/default/files/guidance-documents/fns.snap-obbb-implementation.pdf"
+          }
+        },
+        {
+          "id": "2025-07-noncitizen-eligibility-narrowed",
+          "category": "Noncitizen eligibility narrowed",
+          "direction": "restrict",
+          "statesAffected": ["CA","NY","TX","FL","IL","WA","OR","MN","CO","NM","NV","MD","MA","CT","NJ","RI","VT","ME","HI"],
+          "description": "Refugees, people granted asylum, trafficking survivors, and certain humanitarian parolees lose federal food assistance eligibility immediately. Only lawful permanent residents, Cuban-Haitian entrants, and Compacts of Free Association migrants remain eligible as noncitizens.",
+          "source": {
+            "label": "FNS Alien Eligibility Implementation Memo",
+            "url": "https://www.usda.gov/sites/default/files/guidance-documents/fns.snap-obbb-alien-eligibility.pdf"
+          }
+        },
+        {
+          "id": "2025-07-benefit-formula-frozen",
+          "category": "Benefit formula frozen",
+          "direction": "restrict",
+          "statesAffected": ["AL","AK","AZ","AR","CA","CO","CT","DE","FL","GA","HI","ID","IL","IN","IA","KS","KY","LA","ME","MD","MA","MI","MN","MS","MO","MT","NE","NV","NH","NJ","NM","NY","NC","ND","OH","OK","OR","PA","RI","SC","SD","TN","TX","UT","VT","VA","WA","WV","WI","WY"],
+          "description": "The 2021 Thrifty Food Plan, the grocery cost benchmark used to calculate monthly food assistance amounts, is permanently frozen as the baseline. Future updates must be cost-neutral starting October 2028, limiting the federal government's ability to adjust benefits for food inflation.",
+          "source": {
+            "label": "FNS Information Memo, Section 10101",
+            "url": "https://www.usda.gov/sites/default/files/guidance-documents/fns.snap-obbb-implementation.pdf"
+          }
+        }
+      ]
+    },
+    {
+      "monthId": "2025-08",
+      "monthLabel": "August 2025 — Federal guidance on utility allowances",
+      "updates": [
+        {
+          "id": "2025-08-utility-allowance-reduced",
+          "category": "Utility allowance reduced",
+          "direction": "restrict",
+          "statesAffected": ["AL","AK","AZ","AR","CA","CO","CT","DE","FL","GA","HI","ID","IL","IN","IA","KS","KY","LA","ME","MD","MA","MI","MN","MS","MO","MT","NE","NV","NH","NJ","NM","NY","NC","ND","OH","OK","OR","PA","RI","SC","SD","TN","TX","UT","VT","VA","WA","WV","WI","WY"],
+          "description": "The Food and Nutrition Service directs states not to include internet costs when calculating the Standard Utility Allowance for fiscal year 2026. This reduces the allowance amount, which in turn lowers food assistance benefit levels for households that use the standard utility deduction.",
+          "source": {
+            "label": "FNS Quality Control Variance Memo",
+            "url": "https://www.fns.usda.gov/snap/obbb-qas-variance-exclusion"
+          }
+        }
+      ]
+    },
+    {
+      "monthId": "2025-09",
+      "monthLabel": "September–October 2025 — States begin implementation",
+      "updates": [
+        {
+          "id": "2025-09-work-requirement-notices",
+          "category": "Work requirement notices sent",
+          "direction": "restrict",
+          "statesAffected": ["TN","GA","TX","FL","AL","MS","SC","NC","KY","AR","LA","IN","OH","ID","WY","SD","ND","NE","KS","OK","MO","WV"],
+          "description": "States begin mailing written notices to households newly subject to the work time limit, specifically adults ages 55 through 64 and parents whose youngest child is 14 through 17. Recipients have until October 31 to submit exemption verification or face enforcement beginning November 1.",
+          "source": {
+            "label": "FNS ABAWD Exceptions Implementation Memo, Oct. 3, 2025",
+            "url": "https://www.fns.usda.gov/snap/obbb-abawd-exemptions-implementation"
+          }
+        },
+        {
+          "id": "2025-09-state-funded-benefits-immigrants",
+          "category": "State-funded benefits for immigrants",
+          "direction": "expand",
+          "statesAffected": ["CA","WA","OR","NY","IL","MN","CO","MA","CT","NJ","VT","ME","NM","MD","RI"],
+          "description": "Several states begin planning or issuing state-funded food assistance to replace lost federal benefits for affected immigrants. California, New York, and Washington lead early implementation of state-only funded programs for refugees and people granted asylum who were cut from federal eligibility.",
+          "source": {
+            "label": "New York Attorney General letter to USDA, Nov. 19, 2025",
+            "url": "https://ag.ny.gov/sites/default/files/letters/letter-to-united-states-department-of-agriculture-on-non-citizen-guidance-letters-2025.pdf"
+          }
+        }
+      ]
+    },
+    {
+      "monthId": "2025-10",
+      "monthLabel": "October 2025 — Legal challenges filed",
+      "updates": [
+        {
+          "id": "2025-10-26-state-lawsuit",
+          "category": "26-state lawsuit filed",
+          "direction": "neutral",
+          "statesAffected": ["CA","MA","NY","IL","WA","OR","CO","MN","NJ","CT","MD","RI","VT","ME","NM","HI"],
+          "description": "Twenty-six states and the District of Columbia sue the U.S. Department of Agriculture on October 28, challenging the suspension of November 2025 benefits during the government shutdown. A Massachusetts federal judge finds the states likely to prevail and orders the administration to report by November 3 whether it will use contingency funds.",
+          "source": {
+            "label": "Commonwealth of Massachusetts v. USDA, Case 1:25-cv-13165",
+            "url": "https://clearinghouse.net/case/47087/"
+          }
+        },
+        {
+          "id": "2025-10-noncitizen-grace-period-expires",
+          "category": "Noncitizen grace period expires",
+          "direction": "restrict",
+          "statesAffected": ["AL","AK","AZ","AR","FL","GA","ID","IN","IA","KS","KY","LA","MI","MS","MO","MT","NE","NV","NH","NC","ND","OH","OK","PA","SC","SD","TN","TX","UT","VA","WV","WI","WY"],
+          "description": "Federal guidance issued October 31 confirms noncitizen eligibility changes take full effect November 1, 2025. States not covered by litigation begin removing newly ineligible noncitizens from food assistance rolls at their next recertification appointment.",
+          "source": {
+            "label": "FNS Alien Eligibility Implementation Memo, Oct. 31, 2025",
+            "url": "https://www.usda.gov/sites/default/files/guidance-documents/fns.snap-obbb-alien-eligibility.pdf"
+          }
+        }
+      ]
+    },
+    {
+      "monthId": "2025-11",
+      "monthLabel": "November 2025 — Work time limits begin",
+      "updates": [
+        {
+          "id": "2025-11-work-time-limit-enforcement",
+          "category": "Work time limit enforcement begins",
+          "direction": "restrict",
+          "statesAffected": ["TN","GA","TX","FL","AL","MS","SC","NC","KY","AR","LA","IN","OH","ID","WY","SD","ND","NE","KS","OK","MO","WV","VA","AK","AZ","MT","UT","NV","NH","PA","MI","IA"],
+          "description": "States begin counting November as the first month toward the three-month benefit time limit for newly covered adults, those ages 55 through 64 and parents of teenagers. Federal quality control error tracking begins for states that incorrectly pay benefits to people now subject to the time limit.",
+          "source": {
+            "label": "FNS ABAWD Waivers Implementation Memo, Oct. 3, 2025",
+            "url": "https://www.fns.usda.gov/snap/obbb-abawd-waivers-implementation"
+          }
+        },
+        {
+          "id": "2025-11-shutdown-delays-enforcement",
+          "category": "Government shutdown delays enforcement",
+          "direction": "neutral",
+          "statesAffected": ["AL","AK","AZ","AR","CA","CO","CT","DE","FL","GA","HI","ID","IL","IN","IA","KS","KY","LA","ME","MD","MA","MI","MN","MS","MO","MT","NE","NV","NH","NJ","NM","NY","NC","ND","OH","OK","OR","PA","RI","SC","SD","TN","TX","UT","VT","VA","WA","WV","WI","WY"],
+          "description": "A federal government shutdown and delayed November benefit release prompts the Food and Nutrition Service to instruct all states not to count November as a full month toward the time limit. The effective enforcement clock is paused nationwide for this month.",
+          "source": {
+            "label": "Feeding America Action, One Big Beautiful Bill FAQ",
+            "url": "https://feedingamericaaction.org/wp-content/uploads/FAQ_HR1.pdf"
+          }
+        }
+      ]
+    },
+    {
+      "monthId": "2025-12",
+      "monthLabel": "December 2025 — Broad rollout at recertification",
+      "updates": [
+        {
+          "id": "2025-12-work-requirements-recertification",
+          "category": "Work requirements enforced at recertification",
+          "direction": "restrict",
+          "statesAffected": ["AL","AZ","AR","CO","CT","DE","FL","GA","ID","IL","IN","IA","KS","KY","LA","MD","MA","MI","MN","MS","MO","MT","NE","NV","NH","NJ","NM","NC","ND","OH","OK","OR","PA","SC","SD","TN","TX","UT","VA","WV","WI","WY"],
+          "description": "Most states begin screening all food assistance recipients against the new work requirement rules at their next scheduled recertification. New applicants are screened immediately upon application. States that previously held geographic waivers face a contested November 2 waiver termination.",
+          "source": {
+            "label": "Propel, Full Guide to Work Requirements in 2026",
+            "url": "https://www.propel.app/snap/snap-work-requirements-full-guide/"
+          }
+        },
+        {
+          "id": "2025-12-nutrition-education-funding-ends",
+          "category": "Nutrition education funding ends",
+          "direction": "restrict",
+          "statesAffected": ["AL","AK","AZ","AR","CA","CO","CT","DE","FL","GA","HI","ID","IL","IN","IA","KS","KY","LA","ME","MD","MA","MI","MN","MS","MO","MT","NE","NV","NH","NJ","NM","NY","NC","ND","OH","OK","OR","PA","RI","SC","SD","TN","TX","UT","VT","VA","WA","WV","WI","WY"],
+          "description": "Federal funding for the Supplemental Nutrition Assistance Program Nutrition Education and Obesity Prevention grant program ends after fiscal year 2025. State nutrition education and obesity prevention programs must find alternative funding or scale back operations.",
+          "source": {
+            "label": "FNS Information Memo, Section 10107",
+            "url": "https://www.usda.gov/sites/default/files/guidance-documents/fns.snap-obbb-implementation.pdf"
+          }
+        }
+      ]
+    },
+    {
+      "monthId": "2026-01",
+      "monthLabel": "January 2026 — First benefit losses from work time limit",
+      "updates": [
+        {
+          "id": "2026-01-recipients-lose-benefits",
+          "category": "Recipients begin losing benefits",
+          "direction": "restrict",
+          "statesAffected": ["TN","GA","TX","FL","AL","MS","SC","NC","KY","AR","LA","IN","OH","ID","WY","SD","ND","NE","KS","OK","MO","WV","VA","AZ","MT","UT","PA","MI"],
+          "description": "The first wave of recipients who accumulated three countable months under the new work time limit rules begin losing food assistance eligibility. An estimated 750,000 people nationally face benefit termination in early 2026, concentrated in states without court-ordered protections.",
+          "source": {
+            "label": "No Kid Hungry, Summary of SNAP Changes in HR1",
+            "url": "https://www.bestpractices.nokidhungry.org/resource/summary-changes-snap-hr1"
+          }
+        },
+        {
+          "id": "2026-01-court-protection-extended",
+          "category": "Court protection extended for immigrants",
+          "direction": "expand",
+          "statesAffected": ["CA","WA","NY","MA","IL","OR","MN","CO","CT","NJ","MD","RI","VT","ME","NM","HI"],
+          "description": "Federal courts extend protections for noncitizen food assistance eligibility in plaintiff states. Refugees and people granted asylum in these states retain their benefits while litigation continues.",
+          "source": {
+            "label": "Civil Rights Litigation Clearinghouse, Case 47087",
+            "url": "https://clearinghouse.net/case/47087/"
+          }
+        }
+      ]
+    },
+    {
+      "monthId": "2026-10",
+      "monthLabel": "October 2026 — First inflation-adjusted benefit update",
+      "updates": [
+        {
+          "id": "2026-10-benefit-update-limited",
+          "category": "Benefit amount update limited",
+          "direction": "restrict",
+          "statesAffected": ["AL","AK","AZ","AR","CA","CO","CT","DE","FL","GA","HI","ID","IL","IN","IA","KS","KY","LA","ME","MD","MA","MI","MN","MS","MO","MT","NE","NV","NH","NJ","NM","NY","NC","ND","OH","OK","OR","PA","RI","SC","SD","TN","TX","UT","VT","VA","WA","WV","WI","WY"],
+          "description": "The first annual Thrifty Food Plan update under the One Big Beautiful Bill framework takes effect. Consumer price index adjustments apply, but the cost-neutrality restriction limits the Department of Agriculture's ability to reflect actual changes in nutritional food costs. Effective benefit levels remain flat or decline in real terms.",
+          "source": {
+            "label": "ASTHO, One Big Beautiful Bill Law Summary",
+            "url": "https://www.astho.org/advocacy/federal-government-affairs/leg-alerts/2025/one-big-beautiful-bill-law-summary/"
+          }
+        }
+      ]
+    },
+    {
+      "monthId": "2027-10",
+      "monthLabel": "October 2027 — Administrative cost shift to states",
+      "updates": [
+        {
+          "id": "2027-10-admin-cost-shift",
+          "category": "States absorb administrative costs",
+          "direction": "restrict",
+          "statesAffected": ["AL","AK","AZ","AR","CA","CO","CT","DE","FL","GA","HI","ID","IL","IN","IA","KS","KY","LA","ME","MD","MA","MI","MN","MS","MO","MT","NE","NV","NH","NJ","NM","NY","NC","ND","OH","OK","OR","PA","RI","SC","SD","TN","TX","UT","VT","VA","WA","WV","WI","WY"],
+          "description": "Federal reimbursement for food assistance administrative costs drops from 50 percent to 25 percent. States are now responsible for 75 percent of the cost of running eligibility offices, processing applications, and delivering benefits. Some states begin restricting office hours, reducing outreach, or cutting staffing to manage the new costs.",
+          "source": {
+            "label": "National Association of Counties, HR1 and SNAP",
+            "url": "https://www.naco.org/resource/hr-1-and-supplemental-nutrition-assistance-program-snap-what-counties-should-know"
+          }
+        }
+      ]
+    },
+    {
+      "monthId": "2028-10",
+      "monthLabel": "October 2028 — States begin paying share of benefit costs",
+      "updates": [
+        {
+          "id": "2028-10-benefit-cost-sharing-begins",
+          "category": "Benefit cost sharing begins",
+          "direction": "restrict",
+          "statesAffected": ["AL","AZ","AR","FL","GA","ID","IN","IA","KS","KY","LA","MS","MO","MT","NE","NV","NC","ND","OH","OK","SC","SD","TN","TX","UT","VA","WV","WI","WY"],
+          "description": "States with payment error rates above 6 percent, based on their 2025 and 2026 data, must now pay between 5 and 15 percent of food assistance benefit costs. An estimated 29 states face mandatory cost sharing. Some states reduce outreach and enrollment activities to lower their error rates and avoid higher cost obligations.",
+          "source": {
+            "label": "Ballotpedia, SNAP provisions of the One Big Beautiful Bill",
+            "url": "https://ballotpedia.org/Implementation_of_Supplemental_Nutrition_Assistance_Program_provisions_from_the_One_Big_Beautiful_Bill_Act_(2025)"
+          }
+        },
+        {
+          "id": "2028-10-low-error-states-exempt",
+          "category": "Low-error states retain full federal funding",
+          "direction": "neutral",
+          "statesAffected": ["CA","CO","CT","DE","HI","IL","MA","MD","ME","MI","MN","NH","NJ","NM","NY","OR","PA","RI","VT","WA"],
+          "description": "States with payment error rates below 6 percent retain 100 percent federal funding for food assistance benefits. Most qualifying states are in the Northeast and West Coast. Each state's cost-sharing obligation is determined by its payment accuracy data from fiscal years 2025 and 2026.",
+          "source": {
+            "label": "Center on Budget and Policy Priorities, Broad-Based Categorical Eligibility analysis",
+            "url": "https://www.cbpp.org/research/food-assistance/snaps-broad-based-categorical-eligibility-supports-working-families-and-0"
+          }
+        }
+      ]
+    }
+  ]
+}
