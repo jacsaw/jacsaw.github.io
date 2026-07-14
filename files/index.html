@@ -52,11 +52,19 @@
   }
   h1{
     font-family:'Oswald', sans-serif;
-    font-weight:700;
+    font-weight:300;
     font-size:clamp(26px, 3.2vw, 40px);
     line-height:1.08;
     margin:0 0 8px;
     max-width:640px;
+  }
+  header h2{
+    font-family:'Oswald', sans-serif;
+    font-weight:300;
+    font-size:clamp(16px, 2vw, 26px);
+    line-height:1.15;
+    margin:0 0 12px;
+    color:rgba(246,241,230,0.72);
   }
   header p{
     margin:0;
@@ -123,6 +131,7 @@
     font-size:12px;
     color:#6b6250;
     line-height:1.5;
+    min-height:6em;
     margin:2px 0 14px;
     max-width:64ch;
   }
@@ -146,7 +155,6 @@
   .legend .lbl{font-family:Arial, sans-serif;font-size:10.5px;color:#6b5f45;}
 
   /* --- Geo map --- */
-  .maparea{position:relative;}
   svg#usmap{width:100%;height:auto;display:block;}
   svg#usmap path{
     stroke:var(--paper);
@@ -328,7 +336,8 @@
   <header>
     <div>
       <div class="eyebrow">Addendum · Interactive Companion</div>
-      <h1>What tax credits and transfers do to poverty, state by state</h1>
+      <h1>The Role of Tax Credits and Transfers in Reducing State-Level Poverty:</h1>
+      <h2>A 50-State Analysis</h2>
       <p>Click any state on the map to see its full poverty picture — before and after Social Security, the EITC, SNAP, housing assistance, and eight other programs counted in the Supplemental Poverty Measure. Data: CPS ASEC 2022–2024 averages.</p>
     </div>
     <div class="source-tag">Wilson, Collyer, Curran &amp; Wimer (2025)<br>Center on Poverty &amp; Social Policy, Columbia</div>
@@ -361,13 +370,13 @@
         <div id="tooltip"></div>
         <div id="loadState" style="font-family:'IBM Plex Mono',monospace;font-size:12px;color:#6b5f45;padding:10px 2px;">Loading data/states_summary.csv and data/policies.csv…</div>
       </div>
-      <div class="map-foot">Actual state boundaries (U.S. Census Bureau 1:10m TopoJSON, Albers USA projection — Alaska &amp; Hawaii shown as standard insets). Fill shade encodes the metric selected above. Underlying numbers load live from <code>/data/states_summary.csv</code> and <code>/data/policies.csv</code> — edit those two files to refresh the whole page.</div>
+      <div class="map-foot">Actual state boundaries (U.S. Census Bureau 1:10m TopoJSON, Albers USA projection). Fill shade encodes the metric selected above. Underlying numbers load live from <code>/data/states_summary.csv</code> and <code>/data/policies.csv</code>.</div>
     </div>
 
     <!-- DETAIL PANEL -->
     <div class="panel" id="detailPanel">
       <div class="detail-empty">
-        <div class="big">Select a state to open its ledger</div>
+        <div class="big">Select a state to view its data</div>
         <ul>
           <li>Poverty rate, before &amp; after taxes/transfers, by age group</li>
           <li>Percentage-point reduction &amp; number of people moved out of poverty</li>
