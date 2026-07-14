@@ -1,0 +1,569 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Tax Credits &amp; Transfers — State Poverty Reduction Map</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Source+Serif+4:opsz,wght@8..60,400;8..60,600;8..60,700&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500;600&display=swap');
+
+  :root{
+    --ink:#131a24;
+    --paper:#f6f1e6;
+    --paper-dim:#ece4d3;
+    --navy:#0d1e33;
+    --gold-soft:#e7c27a;
+    --teal-4:#4f9b82;
+    --teal-5:#1f6e63;
+    --rule:#d8cdb4;
+    --shadow: 0 10px 30px rgba(13,30,51,0.18);
+  }
+  *{box-sizing:border-box;}
+  html,body{margin:0;padding:0;}
+  body{
+    background:var(--navy);
+    background-image:
+      radial-gradient(circle at 15% 10%, rgba(255,255,255,0.04), transparent 40%),
+      radial-gradient(circle at 85% 90%, rgba(255,255,255,0.03), transparent 45%);
+    color:var(--ink);
+    font-family:'IBM Plex Sans', sans-serif;
+    min-height:100vh;
+  }
+  .wrap{max-width:1360px;margin:0 auto;padding:28px 20px 60px;}
+
+  header{
+    color:var(--paper);
+    padding:6px 4px 22px;
+    border-bottom:1px solid rgba(246,241,230,0.18);
+    margin-bottom:22px;
+    display:flex;
+    justify-content:space-between;
+    align-items:flex-end;
+    gap:24px;
+    flex-wrap:wrap;
+  }
+  .eyebrow{
+    font-family:'IBM Plex Mono', monospace;
+    font-size:11px;
+    letter-spacing:0.16em;
+    text-transform:uppercase;
+    color:var(--gold-soft);
+    margin-bottom:10px;
+  }
+  h1{
+    font-family:'Source Serif 4', serif;
+    font-weight:700;
+    font-size:clamp(26px, 3.2vw, 40px);
+    line-height:1.08;
+    margin:0 0 8px;
+    max-width:640px;
+  }
+  header p{
+    margin:0;
+    max-width:520px;
+    font-size:14px;
+    line-height:1.55;
+    color:#d7dee6;
+  }
+  .source-tag{
+    font-family:'IBM Plex Mono', monospace;
+    font-size:11px;
+    color:#93a2b3;
+    text-align:right;
+    white-space:nowrap;
+  }
+
+  .layout{
+    display:grid;
+    grid-template-columns: 1.5fr 1fr;
+    gap:22px;
+    align-items:start;
+  }
+  @media (max-width: 980px){
+    .layout{grid-template-columns:1fr;}
+  }
+
+  .panel{
+    background:var(--paper);
+    border-radius:14px;
+    box-shadow:var(--shadow);
+    padding:20px 22px 24px;
+  }
+
+  /* --- Controls --- */
+  .controls{
+    display:flex;
+    flex-wrap:wrap;
+    gap:10px;
+    align-items:center;
+    margin-bottom:12px;
+  }
+  .controls .label{
+    font-family:'IBM Plex Mono', monospace;
+    font-size:10.5px;
+    letter-spacing:0.08em;
+    text-transform:uppercase;
+    color:#6b5f45;
+    margin-right:4px;
+  }
+  select#metricSelect{
+    font-family:'IBM Plex Sans', sans-serif;
+    font-size:13px;
+    font-weight:500;
+    padding:7px 10px;
+    border-radius:8px;
+    border:1px solid var(--rule);
+    background:#fff;
+    color:var(--ink);
+    cursor:pointer;
+  }
+  .metric-note{
+    font-size:12px;
+    color:#6b6250;
+    line-height:1.5;
+    margin:2px 0 14px;
+    max-width:64ch;
+  }
+
+  /* --- Legend --- */
+  .legend{
+    display:flex;
+    align-items:center;
+    gap:10px;
+    margin-bottom:12px;
+    flex-wrap:wrap;
+  }
+  .legend .ramp{
+    display:flex;
+    height:12px;
+    border-radius:3px;
+    overflow:hidden;
+    box-shadow:inset 0 0 0 1px rgba(0,0,0,0.08);
+  }
+  .legend .ramp span{width:22px;height:100%;}
+  .legend .lbl{font-family:'IBM Plex Mono', monospace;font-size:10.5px;color:#6b5f45;}
+
+  /* --- Geo map --- */
+  .maparea{position:relative;}
+  svg#usmap{width:100%;height:auto;display:block;}
+  svg#usmap path{
+    stroke:var(--paper);
+    stroke-width:1.1;
+    cursor:pointer;
+    transition: filter .12s ease, stroke-width .12s ease;
+  }
+  svg#usmap path:hover{
+    filter:brightness(1.12);
+    stroke:var(--ink);
+    stroke-width:1.6;
+  }
+  svg#usmap path.selected{
+    stroke:var(--ink);
+    stroke-width:2.4;
+  }
+  svg#usmap text.state-label{
+    font-family:'IBM Plex Mono', monospace;
+    font-size:9.5px;
+    font-weight:600;
+    fill:var(--ink);
+    pointer-events:none;
+    text-anchor:middle;
+    paint-order: stroke;
+    stroke: #ffffffaa;
+    stroke-width: 2px;
+  }
+
+  #tooltip{
+    position:fixed;
+    pointer-events:none;
+    background:var(--ink);
+    color:var(--paper);
+    font-family:'IBM Plex Mono', monospace;
+    font-size:11.5px;
+    padding:6px 9px;
+    border-radius:6px;
+    box-shadow:0 4px 12px rgba(0,0,0,0.3);
+    z-index:50;
+    display:none;
+    white-space:nowrap;
+  }
+
+  .map-foot{
+    font-size:11.5px;
+    color:#847a63;
+    margin-top:8px;
+    line-height:1.5;
+  }
+
+  /* --- Detail panel --- */
+  .detail-empty{
+    display:flex;
+    flex-direction:column;
+    align-items:flex-start;
+    justify-content:center;
+    min-height:420px;
+    color:#7a705a;
+  }
+  .detail-empty .big{
+    font-family:'Source Serif 4', serif;
+    font-size:22px;
+    color:var(--ink);
+    margin-bottom:8px;
+  }
+  .detail-empty ul{padding-left:18px; font-size:13px; line-height:1.7;}
+
+  .state-title{
+    display:flex;
+    align-items:baseline;
+    justify-content:space-between;
+    border-bottom:2px solid var(--ink);
+    padding-bottom:10px;
+    margin-bottom:14px;
+  }
+  .state-title h2{
+    font-family:'Source Serif 4', serif;
+    font-size:26px;
+    margin:0;
+  }
+  .state-title .rank{
+    font-family:'IBM Plex Mono', monospace;
+    font-size:11.5px;
+    color:#6b5f45;
+    text-align:right;
+  }
+
+  .stat-grid{
+    display:grid;
+    grid-template-columns:repeat(4,1fr);
+    gap:8px;
+    margin-bottom:16px;
+  }
+  .stat-grid .cell{
+    background:var(--paper-dim);
+    border-radius:8px;
+    padding:9px 8px;
+    text-align:center;
+  }
+  .stat-grid .cell .k{
+    font-family:'IBM Plex Mono', monospace;
+    font-size:10px;
+    text-transform:uppercase;
+    letter-spacing:.04em;
+    color:#6b5f45;
+    margin-bottom:4px;
+  }
+  .stat-grid .cell .v{
+    font-family:'IBM Plex Mono', monospace;
+    font-weight:600;
+    font-size:15px;
+    color:var(--ink);
+  }
+  .stat-grid .cell .v2{
+    font-size:10.5px;
+    color:#7a705a;
+    margin-top:2px;
+  }
+
+  table.detail-table{
+    width:100%;
+    border-collapse:collapse;
+    font-size:12.5px;
+    margin-bottom:18px;
+  }
+  table.detail-table th, table.detail-table td{
+    text-align:right;
+    padding:5px 6px;
+    font-family:'IBM Plex Mono', monospace;
+  }
+  table.detail-table th:first-child, table.detail-table td:first-child{
+    text-align:left;
+    font-family:'IBM Plex Sans', sans-serif;
+  }
+  table.detail-table thead th{
+    border-bottom:1.5px solid var(--ink);
+    font-family:'IBM Plex Sans', sans-serif;
+    font-weight:600;
+    font-size:11px;
+    color:#544b38;
+  }
+  table.detail-table tbody tr:nth-child(odd){background:rgba(19,26,36,0.035);}
+  table.detail-table tbody tr:last-child td{font-weight:600;}
+
+  h3.section-h{
+    font-family:'IBM Plex Sans', sans-serif;
+    font-size:12px;
+    text-transform:uppercase;
+    letter-spacing:.08em;
+    color:#544b38;
+    margin:0 0 10px;
+    border-bottom:1px solid var(--rule);
+    padding-bottom:6px;
+  }
+
+  .bars{display:flex;flex-direction:column;gap:6px;margin-bottom:6px;}
+  .bar-row{display:grid;grid-template-columns:96px 1fr 74px;align-items:center;gap:8px;}
+  .bar-row .pname{font-size:11.5px;color:var(--ink);}
+  .bar-track{background:rgba(19,26,36,0.08);border-radius:4px;height:13px;overflow:hidden;}
+  .bar-fill{height:100%;border-radius:4px;background:linear-gradient(90deg,var(--teal-5),var(--teal-4));}
+  .bar-num{font-family:'IBM Plex Mono', monospace;font-size:11px;text-align:right;color:#544b38;}
+
+  .footnote{
+    font-size:11px;
+    color:#8b8168;
+    margin-top:14px;
+    line-height:1.5;
+  }
+</style>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/5.4.1/papaparse.min.js"></script>
+</head>
+<body>
+<div class="wrap">
+
+  <header>
+    <div>
+      <div class="eyebrow">Addendum · Interactive Companion</div>
+      <h1>What tax credits and transfers do to poverty, state by state</h1>
+      <p>Click any state on the map to see its full poverty picture — before and after Social Security, the EITC, SNAP, housing assistance, and eight other programs counted in the Supplemental Poverty Measure. Data: CPS ASEC 2022–2024 averages.</p>
+    </div>
+    <div class="source-tag">Wilson, Collyer, Curran &amp; Wimer (2025)<br>Center on Poverty &amp; Social Policy, Columbia</div>
+  </header>
+
+  <div class="layout">
+
+    <!-- MAP PANEL -->
+    <div class="panel">
+      <div class="controls">
+        <span class="label">Color by</span>
+        <select id="metricSelect">
+          <option value="pptAll" selected>Poverty-point reduction, all taxes &amp; transfers (All people)</option>
+          <option value="rateAll">SPM poverty rate, after transfers (All people)</option>
+          <option value="preRateAll">SPM poverty rate, before transfers (All people)</option>
+          <option value="pptSenior">Poverty-point reduction (65+, driven by Social Security)</option>
+          <option value="pptChild">Poverty-point reduction (Under 18, driven by CTC/EITC)</option>
+        </select>
+      </div>
+      <div class="metric-note" id="metricNote"></div>
+
+      <div class="legend">
+        <span class="lbl" id="legendMin">low</span>
+        <div class="ramp" id="legendRamp"></div>
+        <span class="lbl" id="legendMax">high</span>
+      </div>
+
+      <div class="maparea">
+        <svg id="usmap" viewBox="-60 8 1025 605" xmlns="http://www.w3.org/2000/svg"></svg>
+        <div id="tooltip"></div>
+        <div id="loadState" style="font-family:'IBM Plex Mono',monospace;font-size:12px;color:#6b5f45;padding:10px 2px;">Loading data/states_summary.csv and data/policies.csv…</div>
+      </div>
+      <div class="map-foot">Actual state boundaries (U.S. Census Bureau 1:10m TopoJSON, Albers USA projection — Alaska &amp; Hawaii shown as standard insets). Fill shade encodes the metric selected above. Underlying numbers load live from <code>/data/states_summary.csv</code> and <code>/data/policies.csv</code> — edit those two files to refresh the whole page.</div>
+    </div>
+
+    <!-- DETAIL PANEL -->
+    <div class="panel" id="detailPanel">
+      <div class="detail-empty">
+        <div class="big">Select a state to open its ledger</div>
+        <ul>
+          <li>Poverty rate, before &amp; after taxes/transfers, by age group</li>
+          <li>Percentage-point reduction &amp; number of people moved out of poverty</li>
+          <li>Individual effect of each of 11 tax credits &amp; transfer programs</li>
+        </ul>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<script>
+
+/* ===================== METRIC DEFINITIONS ===================== */
+const METRICS = {
+  pptAll:   { label:"points reduced", get:s=>Math.abs(s.all[4]), fmt:s=>s.all[4].toFixed(1)+" pts", ramp:['#eef1e2','#c9dcc0','#8fbf9a','#4f9b82','#1f6e63','#0b4a45'],
+              note:"Percentage-point drop in the SPM poverty rate once all taxes and transfers counted in the SPM are added back in — the report's headline combined-effect measure. Darker states = larger share of the population pulled above the poverty line by policy." },
+  rateAll:  { label:"poverty rate (after)", get:s=>s.all[0], fmt:s=>s.all[0].toFixed(1)+"%", ramp:['#fdf3d6','#f6d98a','#e8ad4f','#cf7a2e','#a8501f','#7a2e18'],
+              note:"SPM poverty rate after taxes and transfers are counted — the rate people actually experience. Darker states = higher remaining poverty despite existing policy." },
+  preRateAll:{ label:"poverty rate (before)", get:s=>s.all[2], fmt:s=>s.all[2].toFixed(1)+"%", ramp:['#fdf3d6','#f6d98a','#e8ad4f','#cf7a2e','#a8501f','#7a2e18'],
+              note:"SPM poverty rate before any taxes or transfers are counted — the counterfactual baseline the report uses to isolate policy's effect." },
+  pptSenior:{ label:"points reduced, 65+", get:s=>Math.abs(s.s[4]), fmt:s=>s.s[4].toFixed(1)+" pts", ramp:['#eef1e2','#c9dcc0','#8fbf9a','#4f9b82','#1f6e63','#0b4a45'],
+              note:"Reduction for people 65+, overwhelmingly attributable to Social Security. Darker states show where Social Security is doing the heaviest lifting for older residents." },
+  pptChild: { label:"points reduced, under 18", get:s=>Math.abs(s.y[4]), fmt:s=>s.y[4].toFixed(1)+" pts", ramp:['#eef1e2','#c9dcc0','#8fbf9a','#4f9b82','#1f6e63','#0b4a45'],
+              note:"Reduction for children, driven mainly by the CTC, EITC, and SNAP. Darker states = states where refundable credits and food assistance cut child poverty the most." },
+};
+const SMALL_LABEL_SKIP = new Set(['RI','DE','CT','MA','NJ','MD','DC','VT','NH']);
+const GROUPS = ['all','youth','working','senior']; // matches states_summary.csv column prefixes
+const GROUP_KEY = {all:'all', youth:'y', working:'w', senior:'s'}; // internal short keys
+
+let STATES = {};
+let abbrList = [];
+
+/* ===================== LOAD DATA (CSV + geometry) ===================== */
+async function loadData(){
+  const loadEl = document.getElementById('loadState');
+  try{
+    const [geoRes, summaryRes, policyRes] = await Promise.all([
+      fetch('data/geometry.json'),
+      fetch('data/states_summary.csv'),
+      fetch('data/policies.csv'),
+    ]);
+    if(!geoRes.ok || !summaryRes.ok || !policyRes.ok) throw new Error('One or more data files did not load (check file paths / that you are running via a server, not file://).');
+
+    const geometry = await geoRes.json();
+    const summaryText = await summaryRes.text();
+    const policyText = await policyRes.text();
+
+    const summary = Papa.parse(summaryText, {header:true, dynamicTyping:true, skipEmptyLines:true}).data;
+    const policyRows = Papa.parse(policyText, {header:true, dynamicTyping:true, skipEmptyLines:true}).data;
+
+    STATES = {};
+    summary.forEach(r=>{
+      const abbr = r.abbr;
+      if(!abbr) return;
+      const geo = geometry[abbr] || {};
+      STATES[abbr] = {
+        name: r.name,
+        d: geo.d, cx: geo.cx, cy: geo.cy,
+        all: [r.all_rate, r.all_n, r.all_prerate, r.all_pren, r.all_ppt, r.all_moved],
+        y:   [r.youth_rate, r.youth_n, r.youth_prerate, r.youth_pren, r.youth_ppt, r.youth_moved],
+        w:   [r.working_rate, r.working_n, r.working_prerate, r.working_pren, r.working_ppt, r.working_moved],
+        s:   [r.senior_rate, r.senior_n, r.senior_prerate, r.senior_pren, r.senior_ppt, r.senior_moved],
+        policies: [],
+      };
+    });
+
+    policyRows
+      .filter(r=>r.abbr && STATES[r.abbr])
+      .sort((a,b)=>(a.rank||0)-(b.rank||0))
+      .forEach(r=>{
+        STATES[r.abbr].policies.push([r.policy, r.ppt, r.people_k]);
+      });
+
+    abbrList = Object.keys(STATES);
+    loadEl.style.display = 'none';
+    render();
+  }catch(err){
+    loadEl.textContent = 'Could not load data: ' + err.message;
+    loadEl.style.color = '#a8501f';
+    console.error(err);
+  }
+}
+
+/* ===================== BUILD MAP ===================== */
+const svg = document.getElementById('usmap');
+const tooltip = document.getElementById('tooltip');
+
+function colorScale(values, ramp){
+  const min = Math.min(...values), max = Math.max(...values);
+  return function(v){
+    if(max===min) return ramp[Math.floor(ramp.length/2)];
+    const t = (v-min)/(max-min);
+    const idx = Math.min(ramp.length-1, Math.floor(t*ramp.length));
+    return ramp[idx];
+  };
+}
+
+let currentMetricKey = 'pptAll';
+let selectedAbbr = null;
+
+function render(){
+  const m = METRICS[currentMetricKey];
+  const values = abbrList.map(a=>m.get(STATES[a]));
+  const scale = colorScale(values, m.ramp);
+
+  svg.innerHTML='';
+  const frag = document.createDocumentFragment();
+
+  abbrList.forEach(a=>{
+    const s = STATES[a];
+    if(!s.d) return; // skip if geometry missing for this abbr
+    const v = m.get(s);
+    const fill = scale(v);
+    const path = document.createElementNS('http://www.w3.org/2000/svg','path');
+    path.setAttribute('d', s.d);
+    path.setAttribute('fill', fill);
+    path.setAttribute('data-abbr', a);
+    if(a===selectedAbbr) path.classList.add('selected');
+    path.addEventListener('click', ()=>{ selectedAbbr=a; render(); renderDetail(a); });
+    path.addEventListener('mousemove', (e)=>{
+      tooltip.style.display='block';
+      tooltip.style.left=(e.clientX+14)+'px';
+      tooltip.style.top=(e.clientY+14)+'px';
+      tooltip.textContent = `${s.name}: ${m.fmt(s)}`;
+    });
+    path.addEventListener('mouseleave', ()=>{ tooltip.style.display='none'; });
+    frag.appendChild(path);
+  });
+
+  abbrList.forEach(a=>{
+    if(SMALL_LABEL_SKIP.has(a)) return;
+    const s = STATES[a];
+    if(!s.cx) return;
+    const t = document.createElementNS('http://www.w3.org/2000/svg','text');
+    t.setAttribute('x', s.cx);
+    t.setAttribute('y', s.cy);
+    t.setAttribute('class','state-label');
+    t.textContent = a;
+    frag.appendChild(t);
+  });
+
+  svg.appendChild(frag);
+
+  const legendRamp = document.getElementById('legendRamp');
+  legendRamp.innerHTML = m.ramp.map(c=>`<span style="background:${c}"></span>`).join('');
+  const minV = Math.min(...values), maxV = Math.max(...values);
+  document.getElementById('legendMin').textContent = (m.label.includes('rate')? minV.toFixed(1)+'%' : minV.toFixed(1));
+  document.getElementById('legendMax').textContent = (m.label.includes('rate')? maxV.toFixed(1)+'%' : maxV.toFixed(1));
+  document.getElementById('metricNote').textContent = m.note;
+}
+
+function rankOf(abbr, key){
+  const arr = abbrList.map(a=>({a, v: Math.abs(STATES[a][key][4])}));
+  arr.sort((x,y)=>y.v-x.v);
+  const idx = arr.findIndex(x=>x.a===abbr);
+  return `${idx+1} of ${arr.length}`;
+}
+function fmtN(n){ return Math.abs(n).toLocaleString('en-US'); }
+
+function renderDetail(abbr){
+  const s = STATES[abbr];
+  const panel = document.getElementById('detailPanel');
+  const maxPolicy = Math.max(...s.policies.map(p=>Math.abs(p[1])));
+  const rows = [['All people', s.all], ['Under 18', s.y], ['18–64', s.w], ['65+', s.s]];
+
+  panel.innerHTML = `
+    <div class="state-title">
+      <h2>${s.name}</h2>
+      <div class="rank">All-people reduction rank<br><strong>${rankOf(abbr,'all')}</strong> among states+DC</div>
+    </div>
+    <div class="stat-grid">
+      <div class="cell"><div class="k">Poverty rate</div><div class="v">${s.all[0].toFixed(1)}%</div><div class="v2">after transfers</div></div>
+      <div class="cell"><div class="k">Before transfers</div><div class="v">${s.all[2].toFixed(1)}%</div><div class="v2">pre-tax &amp; transfer</div></div>
+      <div class="cell"><div class="k">Point reduction</div><div class="v">${s.all[4].toFixed(1)}</div><div class="v2">percentage pts</div></div>
+      <div class="cell"><div class="k">People lifted out</div><div class="v">${fmtN(s.all[5])}</div><div class="v2">by all policy combined</div></div>
+    </div>
+    <h3 class="section-h">Poverty rate, before &amp; after — by age group</h3>
+    <table class="detail-table">
+      <thead><tr><th>Group</th><th>After (%)</th><th>Before (%)</th><th>Pt. reduction</th><th>People moved</th></tr></thead>
+      <tbody>
+        ${rows.map(r=>`<tr><td>${r[0]}</td><td>${r[1][0].toFixed(1)}</td><td>${r[1][2].toFixed(1)}</td><td>${r[1][4].toFixed(1)}</td><td>${fmtN(r[1][5])}</td></tr>`).join('')}
+      </tbody>
+    </table>
+    <h3 class="section-h">Effect of each program, all people (pct-point reduction)</h3>
+    <div class="bars">
+      ${s.policies.map(p=>`
+        <div class="bar-row">
+          <div class="pname">${p[0]}</div>
+          <div class="bar-track"><div class="bar-fill" style="width:${(Math.abs(p[1])/maxPolicy*100).toFixed(1)}%"></div></div>
+          <div class="bar-num">${p[1].toFixed(2)} pt · ${fmtN(p[2]*1000)}</div>
+        </div>`).join('')}
+    </div>
+    <div class="footnote">Program effects are estimated independently (each removed one at a time), so they do not sum exactly to the combined total above — consistent with the report's methodology. State totals are topcoded for disclosure avoidance and may not exactly match Census Bureau internal-data estimates.</div>
+  `;
+}
+
+document.getElementById('metricSelect').addEventListener('change', (e)=>{
+  currentMetricKey = e.target.value;
+  render();
+});
+
+loadData();
+</script>
+</body>
+</html>

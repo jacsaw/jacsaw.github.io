@@ -1,0 +1,562 @@
+abbr,rank,policy,ppt,people_k
+AL,1,"Social Security",-11.4,574
+AL,2,"EITC",-1.8,92
+AL,3,"SNAP",-1.5,76
+AL,4,"SSI",-1.2,60
+AL,5,"CTC",-1.1,57
+AL,6,"School Lunch",-0.4,21
+AL,7,"Housing Assistance",-0.4,18
+AL,8,"TANF/GA",-0.3,14
+AL,9,"Unemployment Ins.",-0.1,4
+AL,10,"Energy Assistance",-0.05,2
+AL,11,"WIC",-0.02,1
+AK,1,"Social Security",-5.7,41
+AK,2,"CTC",-1,7
+AK,3,"SNAP",-0.9,7
+AK,4,"SSI",-0.7,5
+AK,5,"EITC",-0.5,4
+AK,6,"Housing Assistance",-0.5,3
+AK,7,"TANF/GA",-0.4,3
+AK,8,"School Lunch",-0.4,3
+AK,9,"Energy Assistance",-0.2,2
+AK,10,"Unemployment Ins.",-0.02,0.3
+AK,11,"WIC",-0.02,0.5
+AZ,1,"Social Security",-9.7,713
+AZ,2,"EITC",-1.1,79
+AZ,3,"CTC",-0.9,65
+AZ,4,"SNAP",-0.9,65
+AZ,5,"Housing Assistance",-0.5,36
+AZ,6,"School Lunch",-0.3,25
+AZ,7,"SSI",-0.3,24
+AZ,8,"WIC",-0.1,9
+AZ,9,"Unemployment Ins.",-0.1,7
+AZ,10,"Energy Assistance",-0.03,1
+AZ,11,"TANF/GA",-0.02,1
+AR,1,"Social Security",-11.1,333
+AR,2,"EITC",-1.7,52
+AR,3,"CTC",-1,31
+AR,4,"SNAP",-0.9,27
+AR,5,"SSI",-0.9,26
+AR,6,"School Lunch",-0.8,25
+AR,7,"Housing Assistance",-0.5,14
+AR,8,"Unemployment Ins.",-0.1,3
+AR,9,"WIC",-0.1,3
+AR,10,"Energy Assistance",-0.03,1
+AR,11,"TANF/GA",-0.03,1
+CA,1,"Social Security",-6.5,2543
+CA,2,"Housing Assistance",-1.4,535
+CA,3,"CTC",-1.3,499
+CA,4,"EITC",-1.1,430
+CA,5,"SNAP",-0.9,356
+CA,6,"SSI",-0.8,297
+CA,7,"TANF/GA",-0.4,144
+CA,8,"School Lunch",-0.4,139
+CA,9,"Unemployment Ins.",-0.2,73
+CA,10,"Energy Assistance",-0.1,24
+CA,11,"WIC",-0.02,16
+CO,1,"Social Security",-6.9,404
+CO,2,"EITC",-0.8,44
+CO,3,"SSI",-0.7,38
+CO,4,"Housing Assistance",-0.6,36
+CO,5,"CTC",-0.4,23
+CO,6,"SNAP",-0.3,20
+CO,7,"School Lunch",-0.2,10
+CO,8,"Unemployment Ins.",-0.03,3
+CO,9,"TANF/GA",-0.02,1
+CO,10,"Energy Assistance",-0.02,0.5
+CO,11,"WIC",-0.02,0.5
+CT,1,"Social Security",-8.4,306
+CT,2,"Housing Assistance",-1.4,49
+CT,3,"SNAP",-1.2,45
+CT,4,"CTC",-0.9,34
+CT,5,"EITC",-0.7,25
+CT,6,"SSI",-0.7,25
+CT,7,"School Lunch",-0.5,17
+CT,8,"Unemployment Ins.",-0.2,8
+CT,9,"Energy Assistance",-0.1,4
+CT,10,"WIC",-0.1,3
+CT,11,"TANF/GA",-0.02,1
+DE,1,"Social Security",-11,114
+DE,2,"EITC",-2,21
+DE,3,"CTC",-1.6,17
+DE,4,"SNAP",-1.2,12
+DE,5,"School Lunch",-1,11
+DE,6,"Housing Assistance",-0.8,8
+DE,7,"SSI",-0.4,4
+DE,8,"Energy Assistance",-0.1,1
+DE,9,"Unemployment Ins.",-0.1,1
+DE,10,"TANF/GA",-0.02,0.3
+DE,11,"WIC",-0.02,0.4
+DC,1,"Social Security",-5.8,39
+DC,2,"Housing Assistance",-2.1,15
+DC,3,"SNAP",-1.1,7
+DC,4,"CTC",-1,7
+DC,5,"EITC",-0.7,5
+DC,6,"SSI",-0.7,5
+DC,7,"School Lunch",-0.6,4
+DC,8,"TANF/GA",-0.5,3
+DC,9,"Energy Assistance",-0.1,0.3
+DC,10,"WIC",-0.02,0.2
+DC,11,"Unemployment Ins.",-0.02,0.2
+FL,1,"Social Security",-10,2281
+FL,2,"CTC",-1.2,285
+FL,3,"EITC",-1.2,265
+FL,4,"SNAP",-0.9,203
+FL,5,"SSI",-0.8,186
+FL,6,"Housing Assistance",-0.4,102
+FL,7,"School Lunch",-0.4,98
+FL,8,"WIC",-0.1,25
+FL,9,"Unemployment Ins.",-0.1,16
+FL,10,"TANF/GA",-0.1,12
+FL,11,"Energy Assistance",-0.02,1
+GA,1,"Social Security",-7.9,875
+GA,2,"EITC",-1.9,212
+GA,3,"CTC",-1.6,175
+GA,4,"SNAP",-1.1,125
+GA,5,"School Lunch",-0.7,81
+GA,6,"SSI",-0.7,78
+GA,7,"Housing Assistance",-0.3,32
+GA,8,"WIC",-0.2,24
+GA,9,"TANF/GA",-0.1,13
+GA,10,"Unemployment Ins.",-0.03,4
+GA,11,"Energy Assistance",-0.03,4
+HI,1,"Social Security",-7.9,113
+HI,2,"Housing Assistance",-2.6,37
+HI,3,"SNAP",-2.1,29
+HI,4,"CTC",-1.2,17
+HI,5,"EITC",-1.1,15
+HI,6,"SSI",-0.4,6
+HI,7,"School Lunch",-0.4,5
+HI,8,"TANF/GA",-0.2,3
+HI,9,"Unemployment Ins.",-0.1,1
+HI,10,"WIC",-0.02,1
+HI,11,"Energy Assistance",-0.02,0.2
+ID,1,"Social Security",-9.4,185
+ID,2,"CTC",-1.1,21
+ID,3,"EITC",-0.8,15
+ID,4,"SNAP",-0.7,13
+ID,5,"SSI",-0.6,12
+ID,6,"School Lunch",-0.3,6
+ID,7,"Housing Assistance",-0.3,5
+ID,8,"TANF/GA",-0.1,2
+ID,9,"WIC",-0.1,1
+ID,10,"Unemployment Ins.",-0.1,1
+ID,11,"Energy Assistance",-0.02,0.3
+IL,1,"Social Security",-7.9,994
+IL,2,"CTC",-1.1,141
+IL,3,"SNAP",-1.1,138
+IL,4,"EITC",-1,121
+IL,5,"Housing Assistance",-0.7,83
+IL,6,"SSI",-0.3,43
+IL,7,"TANF/GA",-0.3,36
+IL,8,"School Lunch",-0.2,31
+IL,9,"Unemployment Ins.",-0.1,13
+IL,10,"WIC",-0.1,10
+IL,11,"Energy Assistance",-0.1,10
+IN,1,"Social Security",-10.1,693
+IN,2,"EITC",-1.2,83
+IN,3,"CTC",-1.2,82
+IN,4,"SSI",-0.5,37
+IN,5,"SNAP",-0.5,34
+IN,6,"School Lunch",-0.3,18
+IN,7,"Housing Assistance",-0.2,12
+IN,8,"WIC",-0.1,4
+IN,9,"Energy Assistance",-0.03,3
+IN,10,"TANF/GA",-0.02,1
+IN,11,"Unemployment Ins.",-0.02,0.5
+IA,1,"Social Security",-7.8,249
+IA,2,"EITC",-1.2,39
+IA,3,"CTC",-0.7,23
+IA,4,"SSI",-0.5,17
+IA,5,"SNAP",-0.5,16
+IA,6,"Housing Assistance",-0.5,16
+IA,7,"School Lunch",-0.4,14
+IA,8,"TANF/GA",-0.1,3
+IA,9,"Unemployment Ins.",-0.1,2
+IA,10,"Energy Assistance",-0.1,2
+IA,11,"WIC",-0.02,2
+KS,1,"Social Security",-7.8,227
+KS,2,"EITC",-1.6,46
+KS,3,"CTC",-0.9,27
+KS,4,"SNAP",-0.9,26
+KS,5,"School Lunch",-0.6,18
+KS,6,"SSI",-0.6,16
+KS,7,"Housing Assistance",-0.6,16
+KS,8,"Energy Assistance",-0.2,5
+KS,9,"WIC",-0.1,2
+KS,10,"Unemployment Ins.",-0.1,2
+KS,11,"TANF/GA",-0.02,1
+KY,1,"Social Security",-12.2,547
+KY,2,"SSI",-1.7,79
+KY,3,"EITC",-1.5,66
+KY,4,"SNAP",-1.3,60
+KY,5,"School Lunch",-0.8,38
+KY,6,"CTC",-0.7,31
+KY,7,"WIC",-0.3,14
+KY,8,"Housing Assistance",-0.2,8
+KY,9,"Unemployment Ins.",-0.2,8
+KY,10,"TANF/GA",-0.1,6
+KY,11,"Energy Assistance",-0.1,4
+LA,1,"Social Security",-9.6,435
+LA,2,"SNAP",-1.9,88
+LA,3,"EITC",-1.8,80
+LA,4,"CTC",-1.2,56
+LA,5,"SSI",-1.1,49
+LA,6,"School Lunch",-0.9,40
+LA,7,"Housing Assistance",-0.4,19
+LA,8,"TANF/GA",-0.2,10
+LA,9,"WIC",-0.1,5
+LA,10,"Unemployment Ins.",-0.1,3
+LA,11,"Energy Assistance",-0.02,2
+ME,1,"Social Security",-13.5,188
+ME,2,"SNAP",-1.6,23
+ME,3,"SSI",-1.3,18
+ME,4,"EITC",-0.7,10
+ME,5,"Housing Assistance",-0.4,6
+ME,6,"CTC",-0.4,5
+ME,7,"Energy Assistance",-0.4,5
+ME,8,"Unemployment Ins.",-0.3,4
+ME,9,"School Lunch",-0.2,3
+ME,10,"TANF/GA",-0.1,1
+ME,11,"WIC",-0.02,0.4
+MD,1,"Social Security",-6.4,400
+MD,2,"CTC",-1.4,85
+MD,3,"SNAP",-1,61
+MD,4,"SSI",-0.9,59
+MD,5,"Housing Assistance",-0.9,53
+MD,6,"EITC",-0.5,32
+MD,7,"School Lunch",-0.4,25
+MD,8,"WIC",-0.1,8
+MD,9,"TANF/GA",-0.1,5
+MD,10,"Unemployment Ins.",-0.1,5
+MD,11,"Energy Assistance",-0.02,1
+MA,1,"Social Security",-7.2,498
+MA,2,"Housing Assistance",-2.1,143
+MA,3,"SNAP",-1.2,85
+MA,4,"SSI",-1,70
+MA,5,"EITC",-0.8,56
+MA,6,"CTC",-0.6,39
+MA,7,"Unemployment Ins.",-0.2,15
+MA,8,"TANF/GA",-0.2,12
+MA,9,"School Lunch",-0.1,10
+MA,10,"Energy Assistance",-0.02,3
+MA,11,"WIC",-0.02,0.5
+MI,1,"Social Security",-9.8,977
+MI,2,"EITC",-1.5,154
+MI,3,"SNAP",-1.4,135
+MI,4,"CTC",-1,102
+MI,5,"SSI",-0.9,94
+MI,6,"Housing Assistance",-0.9,88
+MI,7,"School Lunch",-0.5,50
+MI,8,"TANF/GA",-0.1,11
+MI,9,"Energy Assistance",-0.1,11
+MI,10,"WIC",-0.1,7
+MI,11,"Unemployment Ins.",-0.02,4
+MN,1,"Social Security",-9.1,522
+MN,2,"Housing Assistance",-0.6,37
+MN,3,"SSI",-0.5,30
+MN,4,"CTC",-0.5,29
+MN,5,"SNAP",-0.5,29
+MN,6,"EITC",-0.5,28
+MN,7,"TANF/GA",-0.1,7
+MN,8,"School Lunch",-0.1,7
+MN,9,"Energy Assistance",-0.1,4
+MN,10,"Unemployment Ins.",-0.1,3
+MN,11,"WIC",-0.02,0.5
+MS,1,"Social Security",-13.8,400
+MS,2,"EITC",-1.9,56
+MS,3,"SSI",-1.7,48
+MS,4,"SNAP",-1.3,38
+MS,5,"CTC",-1.2,34
+MS,6,"School Lunch",-0.8,24
+MS,7,"Housing Assistance",-0.5,14
+MS,8,"Energy Assistance",-0.3,9
+MS,9,"WIC",-0.3,7
+MS,10,"TANF/GA",-0.1,3
+MS,11,"Unemployment Ins.",-0.02,0.3
+MO,1,"Social Security",-8.5,520
+MO,2,"EITC",-1.7,107
+MO,3,"SNAP",-1.5,94
+MO,4,"CTC",-1.2,74
+MO,5,"Housing Assistance",-0.6,34
+MO,6,"SSI",-0.5,29
+MO,7,"School Lunch",-0.3,16
+MO,8,"Unemployment Ins.",-0.2,9
+MO,9,"TANF/GA",-0.1,6
+MO,10,"Energy Assistance",-0.02,1
+MO,11,"WIC",-0.02,1
+MT,1,"Social Security",-9.9,112
+MT,2,"EITC",-1.4,16
+MT,3,"CTC",-1,11
+MT,4,"SNAP",-0.6,6
+MT,5,"SSI",-0.5,6
+MT,6,"Housing Assistance",-0.4,4
+MT,7,"School Lunch",-0.3,3
+MT,8,"TANF/GA",-0.2,3
+MT,9,"Energy Assistance",-0.1,1
+MT,10,"WIC",-0.02,1
+MT,11,"Unemployment Ins.",-0.02,0.5
+NE,1,"Social Security",-7.8,154
+NE,2,"CTC",-0.8,16
+NE,3,"EITC",-0.8,16
+NE,4,"SNAP",-0.5,11
+NE,5,"SSI",-0.5,10
+NE,6,"School Lunch",-0.2,3
+NE,7,"Housing Assistance",-0.2,3
+NE,8,"TANF/GA",-0.1,2
+NE,9,"Energy Assistance",-0.1,2
+NE,10,"WIC",-0.1,1
+NE,11,"Unemployment Ins.",-0.02,0.5
+NV,1,"Social Security",-7.7,249
+NV,2,"EITC",-1.1,34
+NV,3,"CTC",-0.7,24
+NV,4,"SSI",-0.6,20
+NV,5,"SNAP",-0.6,20
+NV,6,"Housing Assistance",-0.5,16
+NV,7,"School Lunch",-0.1,3
+NV,8,"Unemployment Ins.",-0.1,2
+NV,9,"Energy Assistance",-0.02,1
+NV,10,"TANF/GA",-0.02,0.5
+NV,11,"WIC",-0.02,0.5
+NH,1,"Social Security",-9.5,131
+NH,2,"Housing Assistance",-0.8,11
+NH,3,"CTC",-0.5,7
+NH,4,"SSI",-0.4,6
+NH,5,"SNAP",-0.4,6
+NH,6,"EITC",-0.2,3
+NH,7,"TANF/GA",-0.1,2
+NH,8,"Energy Assistance",-0.1,1
+NH,9,"School Lunch",-0.02,0.5
+NH,10,"Unemployment Ins.",-0.02,0.4
+NH,11,"WIC",-0.02,0.4
+NJ,1,"Social Security",-7,652
+NJ,2,"CTC",-1.5,137
+NJ,3,"EITC",-1.4,127
+NJ,4,"Housing Assistance",-1.2,110
+NJ,5,"SNAP",-1.1,99
+NJ,6,"SSI",-0.8,70
+NJ,7,"School Lunch",-0.4,39
+NJ,8,"Unemployment Ins.",-0.3,24
+NJ,9,"WIC",-0.2,14
+NJ,10,"TANF/GA",-0.1,13
+NJ,11,"Energy Assistance",-0.1,6
+NM,1,"Social Security",-11.3,238
+NM,2,"SNAP",-2.2,47
+NM,3,"EITC",-1.4,29
+NM,4,"School Lunch",-0.9,20
+NM,5,"SSI",-0.9,18
+NM,6,"CTC",-0.8,18
+NM,7,"Housing Assistance",-0.8,16
+NM,8,"TANF/GA",-0.3,5
+NM,9,"WIC",-0.1,1
+NM,10,"Energy Assistance",-0.1,1
+NM,11,"Unemployment Ins.",-0.02,1
+NY,1,"Social Security",-8.2,1590
+NY,2,"Housing Assistance",-2,381
+NY,3,"SNAP",-1.9,367
+NY,4,"EITC",-1.5,283
+NY,5,"CTC",-1.3,245
+NY,6,"SSI",-1.2,230
+NY,7,"School Lunch",-0.3,54
+NY,8,"TANF/GA",-0.2,47
+NY,9,"Unemployment Ins.",-0.2,32
+NY,10,"WIC",-0.2,30
+NY,11,"Energy Assistance",-0.1,10
+NC,1,"Social Security",-10,1080
+NC,2,"EITC",-1.6,168
+NC,3,"SNAP",-1.2,127
+NC,4,"CTC",-1.1,115
+NC,5,"SSI",-0.7,73
+NC,6,"School Lunch",-0.4,43
+NC,7,"Housing Assistance",-0.4,39
+NC,8,"Unemployment Ins.",-0.1,6
+NC,9,"TANF/GA",-0.02,5
+NC,10,"Energy Assistance",-0.02,4
+NC,11,"WIC",-0.02,3
+ND,1,"Social Security",-6.7,52
+ND,2,"SNAP",-1,8
+ND,3,"Housing Assistance",-0.8,6
+ND,4,"EITC",-0.6,5
+ND,5,"SSI",-0.3,3
+ND,6,"CTC",-0.3,2
+ND,7,"TANF/GA",-0.3,2
+ND,8,"Energy Assistance",-0.1,1
+ND,9,"Unemployment Ins.",-0.1,1
+ND,10,"School Lunch",-0.02,0.3
+ND,11,"WIC",-0.02,0.3
+OH,1,"Social Security",-10,1168
+OH,2,"EITC",-1.1,122
+OH,3,"SSI",-1,121
+OH,4,"SNAP",-0.9,103
+OH,5,"CTC",-0.8,89
+OH,6,"Housing Assistance",-0.5,53
+OH,7,"School Lunch",-0.2,29
+OH,8,"Energy Assistance",-0.1,17
+OH,9,"WIC",-0.1,15
+OH,10,"TANF/GA",-0.1,8
+OH,11,"Unemployment Ins.",-0.02,5
+OK,1,"Social Security",-8.4,334
+OK,2,"EITC",-1.9,73
+OK,3,"SNAP",-1.6,63
+OK,4,"CTC",-1.4,57
+OK,5,"SSI",-1.1,42
+OK,6,"School Lunch",-1,38
+OK,7,"Housing Assistance",-0.3,11
+OK,8,"TANF/GA",-0.1,6
+OK,9,"Energy Assistance",-0.1,5
+OK,10,"WIC",-0.1,4
+OK,11,"Unemployment Ins.",-0.02,1
+OR,1,"Social Security",-8.3,350
+OR,2,"SNAP",-1.3,55
+OR,3,"CTC",-1,44
+OR,4,"EITC",-0.9,40
+OR,5,"Housing Assistance",-0.8,33
+OR,6,"SSI",-0.7,30
+OR,7,"School Lunch",-0.2,10
+OR,8,"TANF/GA",-0.2,8
+OR,9,"Unemployment Ins.",-0.1,5
+OR,10,"Energy Assistance",-0.1,3
+OR,11,"WIC",-0.02,0.5
+PA,1,"Social Security",-9.4,1196
+PA,2,"SNAP",-1.4,180
+PA,3,"EITC",-1.1,139
+PA,4,"CTC",-1.1,138
+PA,5,"SSI",-1,126
+PA,6,"Housing Assistance",-0.7,88
+PA,7,"School Lunch",-0.3,43
+PA,8,"Unemployment Ins.",-0.2,20
+PA,9,"TANF/GA",-0.1,18
+PA,10,"Energy Assistance",-0.1,15
+PA,11,"WIC",-0.02,0.5
+RI,1,"Social Security",-9.2,100
+RI,2,"SNAP",-1.3,14
+RI,3,"Housing Assistance",-1.1,12
+RI,4,"SSI",-1,11
+RI,5,"EITC",-0.9,10
+RI,6,"CTC",-0.5,5
+RI,7,"Unemployment Ins.",-0.3,3
+RI,8,"School Lunch",-0.1,1
+RI,9,"Energy Assistance",-0.02,0.4
+RI,10,"TANF/GA",-0.02,0.4
+RI,11,"WIC",-0.02,0.3
+SC,1,"Social Security",-10.7,575
+SC,2,"EITC",-1.4,74
+SC,3,"SNAP",-1,55
+SC,4,"CTC",-1,53
+SC,5,"SSI",-0.6,32
+SC,6,"Housing Assistance",-0.3,15
+SC,7,"School Lunch",-0.2,12
+SC,8,"TANF/GA",-0.1,4
+SC,9,"WIC",-0.1,3
+SC,10,"Unemployment Ins.",-0.02,1
+SC,11,"Energy Assistance",-0.02,0.5
+SD,1,"Social Security",-7,63
+SD,2,"SNAP",-1.1,10
+SD,3,"Housing Assistance",-0.8,7
+SD,4,"SSI",-0.6,5
+SD,5,"EITC",-0.4,4
+SD,6,"CTC",-0.4,4
+SD,7,"Energy Assistance",-0.1,1
+SD,8,"TANF/GA",-0.1,1
+SD,9,"School Lunch",-0.02,0.3
+SD,10,"Unemployment Ins.",-0.02,0.3
+SD,11,"WIC",-0.02,0.3
+TN,1,"Social Security",-9.4,666
+TN,2,"EITC",-1.2,86
+TN,3,"CTC",-0.8,59
+TN,4,"SNAP",-0.8,58
+TN,5,"SSI",-0.7,51
+TN,6,"Housing Assistance",-0.6,45
+TN,7,"School Lunch",-0.3,19
+TN,8,"TANF/GA",-0.1,4
+TN,9,"Unemployment Ins.",-0.02,3
+TN,10,"Energy Assistance",-0.02,3
+TN,11,"WIC",-0.02,0.5
+TX,1,"Social Security",-6.7,2046
+TX,2,"CTC",-1.8,546
+TX,3,"EITC",-1.7,527
+TX,4,"SNAP",-0.9,266
+TX,5,"School Lunch",-0.5,155
+TX,6,"SSI",-0.5,151
+TX,7,"Housing Assistance",-0.4,110
+TX,8,"Unemployment Ins.",-0.2,53
+TX,9,"TANF/GA",-0.02,10
+TX,10,"WIC",-0.02,9
+TX,11,"Energy Assistance",-0.02,5
+UT,1,"Social Security",-4.9,168
+UT,2,"CTC",-1.3,44
+UT,3,"EITC",-1,33
+UT,4,"SNAP",-0.5,18
+UT,5,"School Lunch",-0.2,8
+UT,6,"Housing Assistance",-0.2,6
+UT,7,"SSI",-0.2,5
+UT,8,"Energy Assistance",-0.1,3
+UT,9,"WIC",-0.1,3
+UT,10,"Unemployment Ins.",-0.1,2
+UT,11,"TANF/GA",-0.02,1
+VT,1,"Social Security",-10.7,68
+VT,2,"SNAP",-1,6
+VT,3,"Housing Assistance",-0.8,5
+VT,4,"SSI",-0.7,4
+VT,5,"EITC",-0.4,2
+VT,6,"TANF/GA",-0.2,2
+VT,7,"CTC",-0.2,1
+VT,8,"School Lunch",-0.1,1
+VT,9,"Energy Assistance",-0.1,1
+VT,10,"Unemployment Ins.",-0.02,0.2
+VT,11,"WIC",-0.02,0.3
+VA,1,"Social Security",-8.1,694
+VA,2,"EITC",-0.7,65
+VA,3,"SNAP",-0.7,61
+VA,4,"CTC",-0.7,59
+VA,5,"Housing Assistance",-0.6,56
+VA,6,"SSI",-0.4,33
+VA,7,"School Lunch",-0.2,14
+VA,8,"TANF/GA",-0.1,10
+VA,9,"Unemployment Ins.",-0.1,9
+VA,10,"Energy Assistance",-0.1,8
+VA,11,"WIC",-0.1,6
+WA,1,"Social Security",-8.2,645
+WA,2,"Housing Assistance",-1,75
+WA,3,"CTC",-0.8,64
+WA,4,"SNAP",-0.8,62
+WA,5,"EITC",-0.7,54
+WA,6,"SSI",-0.4,34
+WA,7,"TANF/GA",-0.2,17
+WA,8,"School Lunch",-0.2,14
+WA,9,"Unemployment Ins.",-0.2,12
+WA,10,"Energy Assistance",-0.02,2
+WA,11,"WIC",-0.02,0.5
+WV,1,"Social Security",-14.8,258
+WV,2,"SSI",-1.7,30
+WV,3,"SNAP",-1.7,29
+WV,4,"CTC",-0.8,13
+WV,5,"EITC",-0.7,13
+WV,6,"Housing Assistance",-0.5,9
+WV,7,"School Lunch",-0.5,8
+WV,8,"Energy Assistance",-0.1,1
+WV,9,"Unemployment Ins.",-0.1,1
+WV,10,"WIC",-0.1,1
+WV,11,"TANF/GA",-0.02,0.3
+WI,1,"Social Security",-9.7,563
+WI,2,"CTC",-1.5,88
+WI,3,"EITC",-1.3,76
+WI,4,"SNAP",-0.8,47
+WI,5,"SSI",-0.7,43
+WI,6,"School Lunch",-0.3,15
+WI,7,"Housing Assistance",-0.2,10
+WI,8,"TANF/GA",-0.1,5
+WI,9,"Energy Assistance",-0.02,2
+WI,10,"Unemployment Ins.",-0.02,1
+WI,11,"WIC",-0.02,0.5
+WY,1,"Social Security",-9.3,53
+WY,2,"EITC",-1,5
+WY,3,"SNAP",-0.8,5
+WY,4,"CTC",-0.7,4
+WY,5,"SSI",-0.6,3
+WY,6,"Housing Assistance",-0.3,1
+WY,7,"School Lunch",-0.2,1
+WY,8,"TANF/GA",-0.1,1
+WY,9,"Energy Assistance",-0.02,0.3
+WY,10,"Unemployment Ins.",-0.02,0.3
+WY,11,"WIC",-0.02,0.3

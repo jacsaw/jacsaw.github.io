@@ -1,0 +1,53 @@
+# macOS
+.DS_Store
+
+# Node
+node_modules/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# Python
+__pycache__/
+*.py[cod]
+*.pyo
+*.pyd
+venv/
+ENV/
+env/
+
+# Virtualenv
+.venv/
+
+# Environments
+.env
+.env.*
+
+# Build / distribution
+dist/
+build/
+.cache/
+coverage/
+*.egg-info/
+
+# IDEs and editors
+.idea/
+.vscode/
+*.sublime-project
+*.sublime-workspace
+
+# Jekyll / GitHub Pages
+_site/
+.sass-cache/
+.jekyll-cache/
+
+# Logs
+*.log
+
+# OS files
+Thumbs.db
+ehthumbs.db
+Desktop.ini
+
+# Claude
+CLAUDE.md
