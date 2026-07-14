@@ -29,6 +29,7 @@ build/
 .cache/
 coverage/
 *.egg-info/
+*.zip
 
 # IDEs and editors
 .idea/
