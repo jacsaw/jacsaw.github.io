@@ -8,10 +8,10 @@
 
   :root{
     --ink:#131a24;
-    --paper:#f6f1e6;
-    --paper-dim:#ece4d3;
+    --paper:#FFF;
+    --paper-dim:#eff1f1;
     --navy:#0d1e33;
-    --gold-soft:#e7c27a;
+    --gold-soft:#81d2f8;
     --teal-4:#4f9b82;
     --teal-5:#1f6e63;
     --rule:#d8cdb4;
@@ -95,7 +95,6 @@
 
   .panel{
     background:var(--paper);
-    border-radius:14px;
     box-shadow:var(--shadow);
     padding:20px 22px 24px;
   }
@@ -164,8 +163,6 @@
   }
   svg#usmap path:hover{
     filter:brightness(1.12);
-    stroke:var(--ink);
-    stroke-width:1.6;
   }
   svg#usmap path.selected{
     stroke:var(--ink);
@@ -182,6 +179,30 @@
     stroke: #ffffffaa;
     stroke-width: 2px;
   }
+  /* --- Callout leaders for small NE states --- */
+  .callout-group { cursor: pointer; }
+  .callout-group line, .callout-group circle {
+    stroke: #9a8e78;
+    stroke-width: 0.9;
+    fill: none;
+    transition: stroke 0.12s;
+  }
+  .callout-group circle { fill: #9a8e78; }
+  .callout-label-text {
+    font-family: 'Oswald', sans-serif;
+    font-size: 9.5px;
+    font-weight: 500;
+    fill: #6b5f45;
+    text-anchor: start;
+  }
+  .callout-group:hover line,
+  .callout-group:hover circle { stroke: var(--ink); }
+  .callout-group:hover circle { fill: var(--ink); }
+  .callout-group:hover .callout-label-text { fill: var(--ink); font-weight: 700; }
+  .callout-group.callout-selected line,
+  .callout-group.callout-selected circle { stroke: var(--ink); }
+  .callout-group.callout-selected circle { fill: var(--ink); }
+  .callout-group.callout-selected .callout-label-text { fill: var(--ink); font-weight: 700; }
 
   #tooltip{
     position:fixed;
@@ -435,7 +456,7 @@ async function loadData(){
       const geo = geometry[abbr] || {};
       STATES[abbr] = {
         name: r.name,
-        d: geo.d, cx: geo.cx, cy: geo.cy,
+        d: geo.d, cx: geo.cx, cy: geo.cy, lx: geo.lx, ly: geo.ly,
         all: [r.all_rate, r.all_n, r.all_prerate, r.all_pren, r.all_ppt, r.all_moved],
         y:   [r.youth_rate, r.youth_n, r.youth_prerate, r.youth_pren, r.youth_ppt, r.youth_moved],
         w:   [r.working_rate, r.working_n, r.working_prerate, r.working_pren, r.working_ppt, r.working_moved],
@@ -486,6 +507,8 @@ function render(){
   svg.innerHTML='';
   const frag = document.createDocumentFragment();
 
+  let selectedPath = null;
+
   abbrList.forEach(a=>{
     const s = STATES[a];
     if(!s.d) return; // skip if geometry missing for this abbr
@@ -497,15 +520,33 @@ function render(){
     path.setAttribute('data-abbr', a);
     if(a===selectedAbbr) path.classList.add('selected');
     path.addEventListener('click', ()=>{ selectedAbbr=a; render(); renderDetail(a); });
+    path.addEventListener('mouseenter', ()=>{
+      hoverOverlay.setAttribute('d', s.d);
+      hoverOverlay.style.display = '';
+    });
     path.addEventListener('mousemove', (e)=>{
       tooltip.style.display='block';
       tooltip.style.left=(e.clientX+14)+'px';
       tooltip.style.top=(e.clientY+14)+'px';
       tooltip.textContent = `${s.name}: ${m.fmt(s)}`;
     });
-    path.addEventListener('mouseleave', ()=>{ tooltip.style.display='none'; });
-    frag.appendChild(path);
+    path.addEventListener('mouseleave', ()=>{
+      tooltip.style.display='none';
+      hoverOverlay.style.display = 'none';
+    });
+    if(a===selectedAbbr){ selectedPath = path; } else { frag.appendChild(path); }
   });
+  // Selected path appended last so its outline renders above all other paths
+  if(selectedPath) frag.appendChild(selectedPath);
+
+  // Hover overlay: always topmost, pointer-events:none so clicks pass through
+  const hoverOverlay = document.createElementNS('http://www.w3.org/2000/svg','path');
+  hoverOverlay.setAttribute('fill', 'none');
+  hoverOverlay.setAttribute('stroke', '#131a24');
+  hoverOverlay.setAttribute('stroke-width', '1.8');
+  hoverOverlay.setAttribute('pointer-events', 'none');
+  hoverOverlay.style.display = 'none';
+  frag.appendChild(hoverOverlay);
 
   abbrList.forEach(a=>{
     if(SMALL_LABEL_SKIP.has(a)) return;
@@ -517,6 +558,65 @@ function render(){
     t.setAttribute('class','state-label');
     t.textContent = a;
     frag.appendChild(t);
+  });
+
+  // Callout leaders for small NE states — drawn last so they render on top
+  ['VT','NH','MA','RI','CT','NJ','DE','MD','DC'].forEach(a=>{
+    const s = STATES[a];
+    if(!s || !s.lx) return;
+    const grp = document.createElementNS('http://www.w3.org/2000/svg','g');
+    grp.setAttribute('class','callout-group'+(a===selectedAbbr?' callout-selected':''));
+
+    // Anchor dot on the state centroid
+    const dot = document.createElementNS('http://www.w3.org/2000/svg','circle');
+    dot.setAttribute('cx',s.cx); dot.setAttribute('cy',s.cy); dot.setAttribute('r','2.5');
+    dot.setAttribute('pointer-events','none');
+
+    // Diagonal leader line
+    const leader = document.createElementNS('http://www.w3.org/2000/svg','line');
+    leader.setAttribute('x1',s.cx); leader.setAttribute('y1',s.cy);
+    leader.setAttribute('x2',s.lx); leader.setAttribute('y2',s.ly);
+    leader.setAttribute('pointer-events','none');
+
+    // Short horizontal tick at label end
+    const tick = document.createElementNS('http://www.w3.org/2000/svg','line');
+    tick.setAttribute('x1',s.lx); tick.setAttribute('y1',s.ly);
+    tick.setAttribute('x2',s.lx+9); tick.setAttribute('y2',s.ly);
+    tick.setAttribute('pointer-events','none');
+
+    // Invisible hitbox to make the label area easy to click
+    const hitbox = document.createElementNS('http://www.w3.org/2000/svg','rect');
+    hitbox.setAttribute('x',s.lx); hitbox.setAttribute('y',s.ly-9);
+    hitbox.setAttribute('width','36'); hitbox.setAttribute('height','18');
+    hitbox.setAttribute('fill','transparent');
+
+    // State abbreviation label
+    const lbl = document.createElementNS('http://www.w3.org/2000/svg','text');
+    lbl.setAttribute('x',s.lx+12); lbl.setAttribute('y',s.ly+3.5);
+    lbl.setAttribute('class','callout-label-text');
+    lbl.setAttribute('pointer-events','none');
+    lbl.textContent = a;
+
+    grp.appendChild(dot); grp.appendChild(leader); grp.appendChild(tick);
+    grp.appendChild(hitbox); grp.appendChild(lbl);
+
+    grp.addEventListener('click',()=>{ selectedAbbr=a; render(); renderDetail(a); });
+    grp.addEventListener('mouseenter',()=>{
+      hoverOverlay.setAttribute('d',s.d);
+      hoverOverlay.style.display='';
+    });
+    grp.addEventListener('mousemove',(e)=>{
+      tooltip.style.display='block';
+      tooltip.style.left=(e.clientX+14)+'px';
+      tooltip.style.top=(e.clientY+14)+'px';
+      tooltip.textContent=`${s.name}: ${m.fmt(s)}`;
+    });
+    grp.addEventListener('mouseleave',()=>{
+      hoverOverlay.style.display='none';
+      tooltip.style.display='none';
+    });
+
+    frag.appendChild(grp);
   });
 
   svg.appendChild(frag);
