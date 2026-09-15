@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -190,15 +191,19 @@
   .cat:last-child{border-bottom:none;}
   .cat-head{padding:12px 18px 6px;font-size:13px;font-weight:700;color:var(--navy);}
   table.stat-table{width:100%;border-collapse:collapse;}
-  table.stat-table th{text-align:left;font-size:11px;color:var(--ink-soft);font-weight:700;padding:4px 18px;}
-  table.stat-table td{padding:5px 18px;font-size:13.5px;}
+  table.stat-table th{text-align:left;font-size:11px;color:var(--ink-soft);font-weight:700;padding:4px 8px;}
+  table.stat-table th[colspan]{text-align:center;border-bottom:1px solid var(--line);padding-bottom:6px;}
+  table.stat-table th[rowspan]{vertical-align:bottom;}
+  table.stat-table th.ref-col{color:var(--ref-text);}
+  table.stat-table th.needs-col{color:var(--amber);}
+  table.stat-table td{padding:5px 8px;font-size:13px;}
   table.stat-table td input{
     width:100%;border:1px solid transparent;background:transparent;font-family:var(--mono);
-    font-size:13px;padding:4px 6px;border-radius:3px;color:var(--ink);
+    font-size:12.5px;padding:4px 5px;border-radius:3px;color:var(--ink);text-align:center;
   }
   table.stat-table td input:hover{border-color:var(--line);}
   table.stat-table td input:focus{border-color:var(--navy);outline:none;background:var(--navy-soft);}
-  table.stat-table td.label-cell input{font-family:var(--sans);}
+  table.stat-table td.label-cell input{font-family:var(--sans);text-align:left;}
   table.stat-table td input.ref-input{
     background:var(--ref-bg);color:var(--ref-text);cursor:default;
   }
@@ -209,7 +214,7 @@
     background:var(--needs-bg);border-color:var(--needs-border);
   }
   table.stat-table td input.needs-input:hover{border-color:var(--amber);}
-  table.stat-table th.ref-col{color:var(--ref-text);}
+  .diff-cell{text-align:center;}
   .diff-pos{color:var(--brick);font-family:var(--mono);}
   .diff-neg{color:var(--navy);font-family:var(--mono);}
   .diff-zero{color:var(--ink-soft);font-family:var(--mono);}
@@ -271,7 +276,7 @@
     <div class="panel">
       <div class="panel-head">
         <h2>Poverty rate comparison</h2>
-        <button class="add-btn" id="reset-stats-btn" title="Reload the 2024 figures and clear any entries">Reset to defaults</button>
+        <button class="add-btn" id="reset-stats-btn" title="Reload the default 2025 figures and clear any 2026 entries">Reset to defaults</button>
       </div>
       <div id="stats-list"></div>
     </div>
@@ -291,12 +296,17 @@ const DEFAULT_PROJECTS = [
   { id:"p4", title:"State Report", owner:"D. / Y. (w/ C.Y. & O.)", stage:0, updatedAt:null },
 ];
 
+// Each row tracks:
+//   r25 / c25   -> 2025 Released Census Report   (Rate / Count)   - reference, greyed out
+//   m25r / m25c -> 2025 CPS-ASEC Microdata        (Rate / Count)   - reference, greyed out
+//   r26 / c26   -> 2026 Released Census Report    (Rate / Count)   - fill in today, highlighted
+//   m26r / m26c -> 2026 CPS-ASEC Microdata         (Rate / Count)   - fill in today, highlighted
 const DEFAULT_STATS = {
-  overall: { title:"Supplemental poverty rates", addable:false, rows:[{label:"Overall", report:"", microdata:"", cy2025:"", cy2024:"12.9"}] },
-  age: { title:"SPM by age", addable:true, rows:[
-      {label:"Children", report:"", microdata:"", cy2025:"", cy2024:"13.4"},
-      {label:"Working age", report:"", microdata:"", cy2025:"", cy2024:"12.2"},
-      {label:"Elderly", report:"", microdata:"", cy2025:"", cy2024:"15.0"}
+  spm: { title:"SPM Poverty Rates", addable:true, rows:[
+      {label:"Overall",      r25:"12.90%", c25:"43,690", m25r:"12.9%", m25c:"", r26:"", c26:"", m26r:"", m26c:""},
+      {label:"Children",     r25:"13.40%", c25:"9,744",  m25r:"13.3%", m25c:"", r26:"", c26:"", m26r:"", m26c:""},
+      {label:"Working age",  r25:"12.20%", c25:"24,720", m25r:"12.2%", m25c:"", r26:"", c26:"", m26r:"", m26c:""},
+      {label:"Elderly",      r25:"15.00%", c25:"9,223",  m25r:"15.0%", m25c:"", r26:"", c26:"", m26r:"", m26c:""}
     ]}
 };
 
@@ -478,14 +488,16 @@ function renderProjects(){
   renderHero();
 }
 
-function computeDiff(report, microdata){
-  const r = parseFloat(report), m = parseFloat(microdata);
-  if(isNaN(r) || isNaN(m)) return {text:"—", cls:"diff-zero"};
-  const d = (m - r);
+function diffRates(aStr, bStr){
+  const a = parseFloat(aStr), b = parseFloat(bStr);
+  if(isNaN(a) || isNaN(b)) return {text:"—", cls:"diff-zero"};
+  const d = (a - b);
   const cls = d === 0 ? "diff-zero" : (d > 0 ? "diff-pos" : "diff-neg");
   const sign = d > 0 ? "+" : "";
   return {text: `${sign}${d.toFixed(1)} pp`, cls};
 }
+
+const NEEDS_FIELDS = ['r26','c26','m26r','m26c'];
 
 function renderStats(){
   const container = document.getElementById('stats-list');
@@ -495,23 +507,44 @@ function renderStats(){
     catEl.className = 'cat';
     let rowsHtml = "";
     cat.rows.forEach((row, i)=>{
-      const diff = computeDiff(row.cy2024, row.cy2025);
+      const diffReport = diffRates(row.r25, row.r26);
+      const diffMicro = diffRates(row.m25r, row.m26r);
       const needsClass = v => (!v || !v.trim()) ? 'needs-input' : '';
       rowsHtml += `
         <tr>
           <td class="label-cell"><input data-cat="${key}" data-idx="${i}" data-field="label" value="${row.label}" placeholder="Label"/></td>
-          <td><input class="${needsClass(row.report)}" data-cat="${key}" data-idx="${i}" data-field="report" value="${row.report}" placeholder="—"/></td>
-          <td><input class="${needsClass(row.microdata)}" data-cat="${key}" data-idx="${i}" data-field="microdata" value="${row.microdata}" placeholder="—"/></td>
-          <td><input class="${needsClass(row.cy2025)}" data-cat="${key}" data-idx="${i}" data-field="cy2025" value="${row.cy2025||''}" placeholder="—"/></td>
-          <td><input class="ref-input" data-cat="${key}" data-idx="${i}" data-field="cy2024" value="${row.cy2024||''}" placeholder="—" readonly/></td>
-          <td class="diff-cell ${diff.cls}">${diff.text}</td>
+          <td><input class="ref-input" data-cat="${key}" data-idx="${i}" data-field="r25" value="${row.r25||''}" placeholder="—" readonly/></td>
+          <td><input class="ref-input" data-cat="${key}" data-idx="${i}" data-field="c25" value="${row.c25||''}" placeholder="—" readonly/></td>
+          <td><input class="ref-input" data-cat="${key}" data-idx="${i}" data-field="m25r" value="${row.m25r||''}" placeholder="—" readonly/></td>
+          <td><input class="ref-input" data-cat="${key}" data-idx="${i}" data-field="m25c" value="${row.m25c||''}" placeholder="—" readonly/></td>
+          <td><input class="${needsClass(row.r26)}" data-cat="${key}" data-idx="${i}" data-field="r26" value="${row.r26||''}" placeholder="—"/></td>
+          <td><input class="${needsClass(row.c26)}" data-cat="${key}" data-idx="${i}" data-field="c26" value="${row.c26||''}" placeholder="—"/></td>
+          <td class="diff-cell diff-cell-a ${diffReport.cls}">${diffReport.text}</td>
+          <td><input class="${needsClass(row.m26r)}" data-cat="${key}" data-idx="${i}" data-field="m26r" value="${row.m26r||''}" placeholder="—"/></td>
+          <td><input class="${needsClass(row.m26c)}" data-cat="${key}" data-idx="${i}" data-field="m26c" value="${row.m26c||''}" placeholder="—"/></td>
+          <td class="diff-cell diff-cell-b ${diffMicro.cls}">${diffMicro.text}</td>
           <td>${cat.addable ? `<button class="del-btn" data-cat="${key}" data-idx="${i}" title="Remove row">&times;</button>` : ""}</td>
         </tr>`;
     });
     catEl.innerHTML = `
       <div class="cat-head"><span>${cat.title}</span></div>
       <table class="stat-table">
-        <tr><th style="width:22%">&nbsp;</th><th>Report</th><th>Microdata</th><th>2025 CPS ASEC</th><th class="ref-col">2024 CPS ASEC</th><th>Diff</th><th></th></tr>
+        <tr>
+          <th rowspan="2" style="width:13%">&nbsp;</th>
+          <th colspan="2" class="ref-col">2025 Released Census Report</th>
+          <th colspan="2" class="ref-col">2025 CPS-ASEC Microdata</th>
+          <th colspan="2" class="needs-col">2026 Released Census Report</th>
+          <th rowspan="2">Diff<br><span style="font-weight:400;">(2025 Report &minus; 2026 Report)</span></th>
+          <th colspan="2" class="needs-col">2026 CPS-ASEC Microdata</th>
+          <th rowspan="2">Diff<br><span style="font-weight:400;">(2025 Micro &minus; 2026 Micro)</span></th>
+          <th rowspan="2"></th>
+        </tr>
+        <tr>
+          <th class="ref-col">Rate</th><th class="ref-col">Count</th>
+          <th class="ref-col">Rate</th><th class="ref-col">Count</th>
+          <th class="needs-col">Rate</th><th class="needs-col">Count</th>
+          <th class="needs-col">Rate</th><th class="needs-col">Count</th>
+        </tr>
         ${rowsHtml}
       </table>
       ${cat.addable ? `<div class="row-actions"><button class="add-row-btn add-btn" data-cat="${key}">+ add row</button></div>` : ""}
@@ -520,22 +553,29 @@ function renderStats(){
   });
 
   container.querySelectorAll('input').forEach(inp=>{
+    if(inp.readOnly) return;
     inp.addEventListener('input', (e)=>{
       const {cat, idx, field} = e.target.dataset;
       stats[cat].rows[idx][field] = e.target.value;
       saveStats();
-      if(field !== 'label' && field !== 'cy2024'){
+      if(NEEDS_FIELDS.includes(field)){
         e.target.classList.toggle('needs-input', !e.target.value.trim());
       }
-      const diffCell = e.target.closest('tr').querySelector('.diff-cell');
-      const diff = computeDiff(stats[cat].rows[idx].cy2024, stats[cat].rows[idx].cy2025);
-      diffCell.textContent = diff.text;
-      diffCell.className = `diff-cell ${diff.cls}`;
+      const row = stats[cat].rows[idx];
+      const diffReport = diffRates(row.r25, row.r26);
+      const diffMicro = diffRates(row.m25r, row.m26r);
+      const tr = e.target.closest('tr');
+      const cellA = tr.querySelector('.diff-cell-a');
+      const cellB = tr.querySelector('.diff-cell-b');
+      cellA.textContent = diffReport.text;
+      cellA.className = `diff-cell diff-cell-a ${diffReport.cls}`;
+      cellB.textContent = diffMicro.text;
+      cellB.className = `diff-cell diff-cell-b ${diffMicro.cls}`;
     });
   });
   container.querySelectorAll('.add-row-btn').forEach(btn=>{
     btn.addEventListener('click', ()=>{
-      stats[btn.dataset.cat].rows.push({label:"", report:"", microdata:""});
+      stats[btn.dataset.cat].rows.push({label:"", r25:"", c25:"", m25r:"", m25c:"", r26:"", c26:"", m26r:"", m26c:""});
       renderStats();
       saveStats();
     });
@@ -551,7 +591,7 @@ function renderStats(){
 }
 
 document.getElementById('reset-stats-btn').addEventListener('click', ()=>{
-  if(confirm('Reset the comparison table to the default 2024 figures? This clears anything typed into Report, Microdata, or 2025 CPS ASEC.')){
+  if(confirm('Reset the comparison table to the default 2025 figures? This clears anything typed into the 2026 Report or 2026 Microdata columns.')){
     stats = JSON.parse(JSON.stringify(DEFAULT_STATS));
     renderStats();
     saveStats();
@@ -560,5 +600,4 @@ document.getElementById('reset-stats-btn').addEventListener('click', ()=>{
 
 loadState();
 </script>
-</body>
-</html>
+</body></html>
