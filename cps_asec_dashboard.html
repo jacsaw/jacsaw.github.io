@@ -328,33 +328,33 @@ function flashSaved(){
   flashSaved._t = setTimeout(()=>el.classList.remove('show'), 900);
 }
 
-async function loadState(){
+function loadState(){
   try{
-    const p = await window.storage.get('projects', false);
-    projects = p ? JSON.parse(p.value) : DEFAULT_PROJECTS;
+    const p = localStorage.getItem('projects');
+    projects = p ? JSON.parse(p) : DEFAULT_PROJECTS;
   }catch(e){ projects = DEFAULT_PROJECTS; }
   try{
-    const s = await window.storage.get('stats', false);
-    stats = s ? JSON.parse(s.value) : DEFAULT_STATS;
+    const s = localStorage.getItem('stats');
+    stats = s ? JSON.parse(s) : DEFAULT_STATS;
   }catch(e){ stats = DEFAULT_STATS; }
   try{
-    const c = await window.storage.get('counters', false);
-    counters = c ? JSON.parse(c.value) : DEFAULT_COUNTERS;
+    const c = localStorage.getItem('counters');
+    counters = c ? JSON.parse(c) : DEFAULT_COUNTERS;
   }catch(e){ counters = DEFAULT_COUNTERS; }
   renderProjects();
   renderStats();
   renderCounters();
 }
-async function saveProjects(){
-  try{ await window.storage.set('projects', JSON.stringify(projects), false); flashSaved(); }
+function saveProjects(){
+  try{ localStorage.setItem('projects', JSON.stringify(projects)); flashSaved(); }
   catch(e){ console.error('Failed to save projects', e); }
 }
-async function saveStats(){
-  try{ await window.storage.set('stats', JSON.stringify(stats), false); flashSaved(); }
+function saveStats(){
+  try{ localStorage.setItem('stats', JSON.stringify(stats)); flashSaved(); }
   catch(e){ console.error('Failed to save stats', e); }
 }
-async function saveCounters(){
-  try{ await window.storage.set('counters', JSON.stringify(counters), false); flashSaved(); }
+function saveCounters(){
+  try{ localStorage.setItem('counters', JSON.stringify(counters)); flashSaved(); }
   catch(e){ console.error('Failed to save counters', e); }
 }
 
