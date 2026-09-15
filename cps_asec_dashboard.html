@@ -293,12 +293,11 @@ const DEFAULT_PROJECTS = [
 
 const DEFAULT_STATS = {
   overall: { title:"Supplemental poverty rates", addable:false, rows:[{label:"Overall", report:"", microdata:"", cy2025:"", cy2024:"12.9"}] },
-  age: { title:"Poverty rate by age", addable:true, rows:[
+  age: { title:"SPM by age", addable:true, rows:[
       {label:"Children", report:"", microdata:"", cy2025:"", cy2024:"13.4"},
       {label:"Working age", report:"", microdata:"", cy2025:"", cy2024:"12.2"},
       {label:"Elderly", report:"", microdata:"", cy2025:"", cy2024:"15.0"}
-    ]},
-  state: { title:"Poverty rate by state", addable:true, rows:[] }
+    ]}
 };
 
 let projects = null;
@@ -496,23 +495,23 @@ function renderStats(){
     catEl.className = 'cat';
     let rowsHtml = "";
     cat.rows.forEach((row, i)=>{
-      const diff = computeDiff(row.report, row.microdata);
+      const diff = computeDiff(row.cy2024, row.cy2025);
       const needsClass = v => (!v || !v.trim()) ? 'needs-input' : '';
       rowsHtml += `
         <tr>
           <td class="label-cell"><input data-cat="${key}" data-idx="${i}" data-field="label" value="${row.label}" placeholder="Label"/></td>
           <td><input class="${needsClass(row.report)}" data-cat="${key}" data-idx="${i}" data-field="report" value="${row.report}" placeholder="—"/></td>
           <td><input class="${needsClass(row.microdata)}" data-cat="${key}" data-idx="${i}" data-field="microdata" value="${row.microdata}" placeholder="—"/></td>
-          <td class="${diff.cls}">${diff.text}</td>
           <td><input class="${needsClass(row.cy2025)}" data-cat="${key}" data-idx="${i}" data-field="cy2025" value="${row.cy2025||''}" placeholder="—"/></td>
           <td><input class="ref-input" data-cat="${key}" data-idx="${i}" data-field="cy2024" value="${row.cy2024||''}" placeholder="—" readonly/></td>
+          <td class="diff-cell ${diff.cls}">${diff.text}</td>
           <td>${cat.addable ? `<button class="del-btn" data-cat="${key}" data-idx="${i}" title="Remove row">&times;</button>` : ""}</td>
         </tr>`;
     });
     catEl.innerHTML = `
       <div class="cat-head"><span>${cat.title}</span></div>
       <table class="stat-table">
-        <tr><th style="width:26%">&nbsp;</th><th>Report</th><th>Microdata</th><th>Diff</th><th>2025 CPS ASEC</th><th class="ref-col">2024 CPS ASEC</th><th></th></tr>
+        <tr><th style="width:22%">&nbsp;</th><th>Report</th><th>Microdata</th><th>2025 CPS ASEC</th><th class="ref-col">2024 CPS ASEC</th><th>Diff</th><th></th></tr>
         ${rowsHtml}
       </table>
       ${cat.addable ? `<div class="row-actions"><button class="add-row-btn add-btn" data-cat="${key}">+ add row</button></div>` : ""}
@@ -528,10 +527,10 @@ function renderStats(){
       if(field !== 'label' && field !== 'cy2024'){
         e.target.classList.toggle('needs-input', !e.target.value.trim());
       }
-      const diffCell = e.target.closest('tr').querySelector('td:nth-child(4)');
-      const diff = computeDiff(stats[cat].rows[idx].report, stats[cat].rows[idx].microdata);
+      const diffCell = e.target.closest('tr').querySelector('.diff-cell');
+      const diff = computeDiff(stats[cat].rows[idx].cy2024, stats[cat].rows[idx].cy2025);
       diffCell.textContent = diff.text;
-      diffCell.className = diff.cls;
+      diffCell.className = `diff-cell ${diff.cls}`;
     });
   });
   container.querySelectorAll('.add-row-btn').forEach(btn=>{
