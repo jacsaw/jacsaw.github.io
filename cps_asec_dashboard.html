@@ -215,6 +215,7 @@
   }
   table.stat-table td input.needs-input:hover{border-color:var(--amber);}
   .diff-cell{text-align:center;}
+  .diff-arrow{font-size:10px;font-weight:400;color:var(--ink-soft);}
   .diff-pos{color:var(--brick);font-family:var(--mono);}
   .diff-neg{color:var(--navy);font-family:var(--mono);}
   .diff-zero{color:var(--ink-soft);font-family:var(--mono);}
@@ -490,11 +491,15 @@ function renderProjects(){
 
 function diffRates(aStr, bStr){
   const a = parseFloat(aStr), b = parseFloat(bStr);
-  if(isNaN(a) || isNaN(b)) return {text:"—", cls:"diff-zero"};
+  if(isNaN(a) || isNaN(b)) return {html: "—", cls:"diff-zero"};
   const d = (a - b);
   const cls = d === 0 ? "diff-zero" : (d > 0 ? "diff-pos" : "diff-neg");
   const sign = d > 0 ? "+" : "";
-  return {text: `${sign}${d.toFixed(1)} pp`, cls};
+  // d = 2025 - 2026, so d > 0 means the rate went down; d < 0 means it went up
+  const arrow = d === 0 ? "" : (d > 0 ? "↓" : "↑");
+  const label = d === 0 ? "no change" : (d > 0 ? "decreased" : "increased");
+  const html = `${sign}${d.toFixed(1)} pp<br><span class="diff-arrow">${arrow} ${label}</span>`;
+  return {html, cls};
 }
 
 const NEEDS_FIELDS = ['r26','c26','m26r','m26c'];
@@ -519,10 +524,10 @@ function renderStats(){
           <td><input class="ref-input" data-cat="${key}" data-idx="${i}" data-field="m25c" value="${row.m25c||''}" placeholder="—" readonly/></td>
           <td><input class="${needsClass(row.r26)}" data-cat="${key}" data-idx="${i}" data-field="r26" value="${row.r26||''}" placeholder="—"/></td>
           <td><input class="${needsClass(row.c26)}" data-cat="${key}" data-idx="${i}" data-field="c26" value="${row.c26||''}" placeholder="—"/></td>
-          <td class="diff-cell diff-cell-a ${diffReport.cls}">${diffReport.text}</td>
+          <td class="diff-cell diff-cell-a ${diffReport.cls}">${diffReport.html}</td>
           <td><input class="${needsClass(row.m26r)}" data-cat="${key}" data-idx="${i}" data-field="m26r" value="${row.m26r||''}" placeholder="—"/></td>
           <td><input class="${needsClass(row.m26c)}" data-cat="${key}" data-idx="${i}" data-field="m26c" value="${row.m26c||''}" placeholder="—"/></td>
-          <td class="diff-cell diff-cell-b ${diffMicro.cls}">${diffMicro.text}</td>
+          <td class="diff-cell diff-cell-b ${diffMicro.cls}">${diffMicro.html}</td>
           <td>${cat.addable ? `<button class="del-btn" data-cat="${key}" data-idx="${i}" title="Remove row">&times;</button>` : ""}</td>
         </tr>`;
     });
@@ -567,9 +572,9 @@ function renderStats(){
       const tr = e.target.closest('tr');
       const cellA = tr.querySelector('.diff-cell-a');
       const cellB = tr.querySelector('.diff-cell-b');
-      cellA.textContent = diffReport.text;
+      cellA.innerHTML = diffReport.html;
       cellA.className = `diff-cell diff-cell-a ${diffReport.cls}`;
-      cellB.textContent = diffMicro.text;
+      cellB.innerHTML = diffMicro.html;
       cellB.className = `diff-cell diff-cell-b ${diffMicro.cls}`;
     });
   });
